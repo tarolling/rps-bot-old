@@ -36,5 +36,3 @@ module.exports = (p1Choice, p2Choice) => {
             }
     }
 };
-
-export default module.exports;

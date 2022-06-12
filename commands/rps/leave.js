@@ -6,7 +6,7 @@ module.exports = {
         name: 'leave',
         description: 'Leave the queue.',
         options: [],
-        default_member_permissions: (1 << 11) // 0x0000000000000800 - send messages
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         const { user, channel } = interaction;

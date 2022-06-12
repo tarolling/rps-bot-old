@@ -157,5 +157,3 @@ module.exports = async (queue, interaction) => {
     if (Object.keys(ranks).includes(rank)) await adjustElo(queue, interaction);
     deleteQueue(id, true);
 };
-
-export default module.exports;

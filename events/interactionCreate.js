@@ -1,10 +1,9 @@
-import { Interaction } from 'discord.js';
-import ranks from '../config/ranks';
+const ranks = require('../config/ranks');
 
 module.exports = {
     name: 'interactionCreate',
     once: false,
-    async execute(interaction: Interaction) {
+    async execute(interaction) {
         if (!interaction.isCommand() || !interaction.channel) return; 
         if (!(Object.keys(ranks).includes(interaction.channel.name)) && interaction.commandName !== 'register') {
             await interaction.reply({ content: 'You cannot execute commands in this channel.', ephemeral: true });
@@ -22,5 +21,3 @@ module.exports = {
         }
     }
 };
-
-export default module.exports;
