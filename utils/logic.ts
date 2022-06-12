@@ -14,6 +14,7 @@ module.exports = (p1Choice, p2Choice) => {
                 case 'Scissors':
                     return 'p1';
             }
+            break;
         case 'Paper':
             switch (p2Choice) {
                 case 'Rock':
@@ -23,6 +24,7 @@ module.exports = (p1Choice, p2Choice) => {
                 case 'Scissors':
                     return 'p2';
             }
+            break;
         case 'Scissors':
             switch (p2Choice) {
                 case 'Rock':
@@ -34,3 +36,5 @@ module.exports = (p1Choice, p2Choice) => {
             }
     }
 };
+
+export default module.exports;

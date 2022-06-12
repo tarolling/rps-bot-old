@@ -10,4 +10,6 @@ module.exports = (queue) => {
         description: `Player in queue: <@!${Object.keys(playerIdsIndexed)[0]}>`,
         footer
     };
-}
+};
+
+export default module.exports;

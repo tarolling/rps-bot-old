@@ -37,3 +37,5 @@ module.exports = () => {
         footer
     };
 };
+
+export default module.exports;

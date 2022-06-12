@@ -140,3 +140,5 @@ module.exports = {
     displayRankQueue,
     deleteQueue
 };
+
+export default module.exports;
