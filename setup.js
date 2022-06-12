@@ -1,9 +1,7 @@
 const fs = require('fs');
 const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
-const generatePermissions = require('./utils/generatePermissions');
+const { Routes } = require('discord-api-types/v10');
 const { MODE_ARG } = require('./config/settings.json');
-const { SlashCommandBuilder } = require('@discordjs/builders');
 
 module.exports = () => {
     const token = (process.argv[MODE_ARG] === 'main' || !process.argv[MODE_ARG]) ? process.env.MAIN_TOKEN : process.env.DEV_TOKEN;
@@ -23,7 +21,7 @@ module.exports = () => {
 
     const rest = new REST({ version: '10' }).setToken(token);
     
-    // 
+    // Application command permissions have moved to UI as of 04/27/22
     rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
         .then(() => console.log('Successfully registered application commands.'))
         .catch(console.error);
