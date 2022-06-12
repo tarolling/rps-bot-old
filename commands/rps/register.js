@@ -12,7 +12,7 @@ module.exports = {
                 required: true
             }
         ],
-        default_permission: true
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         try {

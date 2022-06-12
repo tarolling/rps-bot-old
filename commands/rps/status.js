@@ -6,7 +6,7 @@ module.exports = {
         name: 'status',
         description: 'Display the status of the queue.',
         options: [],
-        default_permission: true
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         const { channel } = interaction;

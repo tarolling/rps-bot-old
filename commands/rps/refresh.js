@@ -5,7 +5,7 @@ module.exports = {
         name: 'refresh',
         description: 'Refresh the leaderboards.',
         options: [],
-        default_permission: true
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         try {

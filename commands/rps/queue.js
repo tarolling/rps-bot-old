@@ -16,7 +16,7 @@ module.exports = {
                 max_value: 60
             }
         ],
-        default_permission: true
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         const { user, channel } = interaction;

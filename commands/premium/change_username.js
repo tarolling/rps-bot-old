@@ -12,7 +12,8 @@ module.exports = {
                 required: true
             }
         ],
-        default_permission: false
+        default_member_permissions: (1 << 35) // 0x0000000800000000 - ability to create public threads
+        // idk how else to distinguish Premium members from normal ones based on perms, its kinda stupid
     },
     async execute(interaction) {
         try {

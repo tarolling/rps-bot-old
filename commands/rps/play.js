@@ -14,7 +14,7 @@ module.exports = {
                 required: true
             }
         ],
-        default_permission: false
+        default_member_permissions: 0x0
     },
     async execute(interaction) {
         const target = interaction.options.getUser('user');
