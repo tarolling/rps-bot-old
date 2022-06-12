@@ -1,7 +1,6 @@
-import { Interaction } from 'discord.js';
-import { footer } from '../../config/embeds';
+const { footer } = require('../../config/embeds');
 
-module.exports = (interaction: Interaction) => {
+module.exports = (interaction) => {
     return {
         color: null,
         title: 'New Challenger Approaching',
@@ -9,5 +8,3 @@ module.exports = (interaction: Interaction) => {
         footer
     };
 };
-
-export default module.exports;

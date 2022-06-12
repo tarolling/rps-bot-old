@@ -13,5 +13,3 @@ module.exports = (member, rank, dm) => {
         footer
     };
 };
-
-export default module.exports;

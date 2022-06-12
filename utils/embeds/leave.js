@@ -1,5 +1,5 @@
-import ranks from '../../config/ranks';
-import { footer } from '../../config/embeds';
+const ranks = require('../../config/ranks');
+const { footer } = require('../../config/embeds');
 
 module.exports = (queue, interaction) => {
     const { playerIdsIndexed, lobby: { rank } } = queue;

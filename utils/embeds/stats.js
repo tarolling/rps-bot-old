@@ -29,5 +29,3 @@ module.exports = (data) => {
         footer
     }
 };
-
-export default module.exports;

@@ -15,5 +15,3 @@ module.exports = (queue, interaction) => {
         footer
     };
 };
-
-export default module.exports;
