@@ -2,7 +2,7 @@
 .gitignore
 *.env
 *.txt
-.eslintrc.json
+.eslint*
 TODO
 
 ## Folders

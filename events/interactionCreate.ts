@@ -1,4 +1,4 @@
-const ranks = require('../config/ranks');
+import ranks from '../config/ranks';
 
 module.exports = {
     name: 'interactionCreate',

@@ -4,9 +4,9 @@ const { Routes } = require('discord-api-types/v10');
 const { MODE_ARG } = require('./config/settings.json');
 
 module.exports = () => {
-    const token = (process.argv[MODE_ARG] === 'main' || !process.argv[MODE_ARG]) ? process.env.MAIN_TOKEN : process.env.DEV_TOKEN;
-    const clientId = (process.argv[MODE_ARG] === 'main' || !process.argv[MODE_ARG]) ? process.env.MAIN_CLIENT_ID : process.env.DEV_CLIENT_ID;
-    const guildId = (process.argv[MODE_ARG] === 'main' || !process.argv[MODE_ARG]) ? process.env.MAIN_GUILD_ID : process.env.DEV_GUILD_ID;
+    const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+    const clientId = (!process.argv[MODE_ARG]) ? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
+    const guildId = (!process.argv[MODE_ARG]) ? process.env.PROD_GUILD_ID : process.env.DEV_GUILD_ID;
 
     const commands = [];
     const commandFolders = fs.readdirSync('./commands');
