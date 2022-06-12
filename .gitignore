@@ -1,0 +1,6 @@
+.env
+.txt
+.json
+
+/.vscode
+/node_modules

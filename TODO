@@ -1,0 +1,4 @@
+MAIN:
+>   Pass a member into the queue instead of a user
+>   Make set.js have more control over player data
+>   Integrate sigma values into elo

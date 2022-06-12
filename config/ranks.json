@@ -1,0 +1,62 @@
+{
+    "novice": {
+        "queue": [],
+        "color": 4215,
+        "elo": {
+            "placement": 1000,
+            "demo_placement": 1100,
+            "promotion": 1200,
+            "demotion": null
+        }
+    },
+    "expert": {
+        "queue": [],
+        "color": 9568256,
+        "elo": {
+            "placement": 1300,
+            "demo_placement": 1400,
+            "promotion": 1500,
+            "demotion": 1100
+        }
+    },
+    "master": {
+        "queue": [],
+        "color": 2138112,
+        "elo": {
+            "placement": 1600,
+            "demo_placement": 1700,
+            "promotion": 1800,
+            "demotion": 1400
+        }
+    },
+    "grandmaster": {
+        "queue": [],
+        "color": 14856,
+        "elo": {
+            "placement": 1900,
+            "demo_placement": 2000,
+            "promotion": 2100,
+            "demotion": 1700
+        }
+    },
+    "ultimate": {
+        "queue": [],
+        "color": 4915270,
+        "elo": {
+            "placement": 2200,
+            "demo_placement": 2300,
+            "promotion": 2400,
+            "demotion": 2000
+        }
+    },
+    "infinity": {
+        "queue": [],
+        "color": 16777215,
+        "elo": {
+            "placement": 2500,
+            "demo_placement": null,
+            "promotion": null,
+            "demotion": null
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "new-rps-bot",
+  "description": "A bot that lets users play rock, paper, scissors against each other.",
+  "version": "6.0.0",
+  "author": "taro#4158",
+  "main": "start.js",
+  "scripts": {
+    "start": "node -r dotenv/config start.js main",
+    "dev": "node -r dotenv/config start.js dev",
+    "lint": "eslint --ext .js,.json src test",
+    "fix": "eslint --ext .js,.json src test --fix",
+    "precommit": "npm run lint && npm run test"
+  },
+  "dependencies": {
+    "@discordjs/rest": "^0.5.0",
+    "browser-sync": "^2.27.10",
+    "discord-api-types": "^0.33.5",
+    "discord.js": "^13.8.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "mongodb": "^4.7.0",
+    "node": "^17.7.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.17.0"
+  }
+}
