@@ -1,7 +1,10 @@
-.env
-.txt
-.json
+## Files
+.gitignore
+*.env
+*.txt
 TODO
 
+## Folders
+/.git
 /.vscode
 /node_modules
