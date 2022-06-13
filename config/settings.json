@@ -1,6 +1,6 @@
 {
     "MODE_ARG": 2,
-    "K": 100,
+    "K": 60,
     "adjustFactor": 10,
     "defaultElo": 1000,
     "defaultRank": "Novice",

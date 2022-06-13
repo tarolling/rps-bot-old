@@ -23,7 +23,7 @@ module.exports = {
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
         
-        let queue = addPlayerToQueue(interaction.user, `challenge-${interaction.user.id}`);
+        let queue = addPlayerToQueue(interaction.user, 'challenge');
         let acceptBtn = {
             type: 'BUTTON',
             label: 'Accept',
@@ -68,12 +68,12 @@ module.exports = {
                 row.components = [acceptBtn, declineBtn];
                 if (i.customId === 'Accept') {
                     sentMsg.edit({ components: [row] });
-                    queue = addPlayerToQueue(target, `challenge-${interaction.user.id}`);
+                    queue = addPlayerToQueue(target, 'challenge');
                     game(queue, interaction);
                 } else {
                     sentMsg.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
                     interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
-                    deleteQueue(queue);
+                    deleteQueue('challenge', queue.lobby.id, false);
                 }
             })
             .catch(() => {

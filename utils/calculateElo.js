@@ -17,6 +17,6 @@ module.exports = (p1Elo, p2Elo, p1Sigma, p2Sigma) => {
         expectedLoss = larger / (larger + smaller);
     }
     
-    // returns in the format: [winner's increment, loser's increment]
+    // Return format: [winner's increment, loser's increment]
     return [Math.round(K * (1 - expectedWin)), Math.round((K * (0 - expectedLoss)) + (K / adjustFactor))];
 };

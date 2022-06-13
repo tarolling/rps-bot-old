@@ -155,5 +155,5 @@ module.exports = async (queue, interaction) => {
 
     console.log(`Lobby ${id} Results | ${p1.user.username}: ${p1.score} | ${p2.user.username}: ${p2.score} | Games Played: ${queue.game.number}`);
     if (Object.keys(ranks).includes(rank)) await adjustElo(queue, interaction);
-    deleteQueue(id, true);
+    deleteQueue(rank, id, true);
 };

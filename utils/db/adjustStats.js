@@ -1,7 +1,7 @@
 const MongoClient = require('mongodb').MongoClient;
 const uri = process.env.DB_URI;
 
-module.exports = async (queue, interaction) => {
+module.exports = async (queue) => {
     const { game: { p1, p2 } } = queue;
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     

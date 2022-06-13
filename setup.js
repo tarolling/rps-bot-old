@@ -32,6 +32,7 @@ module.exports = () => {
     for (const rank in ranks) {
         global[`${rank}Queue`] = [];
     }
+    global.challengeQueue = [];
 
     // Global lobby ID
     global.lobbyId = 1;
