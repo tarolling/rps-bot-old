@@ -1,2 +1,4 @@
 node_modules
 .vscode
+setup.js
+start.js
