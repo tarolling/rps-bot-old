@@ -5,7 +5,7 @@
   "author": "taro#4158",
   "main": "start.js",
   "scripts": {
-    "start": "node -r dotenv/config start.js main",
+    "start": "node -r dotenv/config start.js",
     "dev": "node -r dotenv/config start.js dev",
     "lint": "eslint --ext .js,.json src test",
     "fix": "eslint --ext .js,.json src test --fix",
