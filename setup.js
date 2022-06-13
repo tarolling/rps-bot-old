@@ -30,7 +30,9 @@ module.exports = () => {
 
     // Initializing rank queues
     for (const rank in ranks) {
-        console.log(rank);
+        global[`${rank}Queue`] = [];
     }
-    console.log(process);
+
+    // Global lobby ID
+    global.lobbyId = 1;
 };

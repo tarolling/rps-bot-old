@@ -6,17 +6,17 @@ module.exports = {
         name: 'leave',
         description: 'Leave the queue.',
         options: [],
-        default_member_permissions: 0x0
+        default_member_permissions: (1 << 11) // SEND_MESSAGES
     },
     async execute(interaction) {
         const { user, channel } = interaction;
         const queue = await removePlayerFromQueue(user, channel.name);
         if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
-        const { playerIdsIndexed, lobby: { id } } = queue;
+        const { playerIdsIndexed, lobby: { id, rank } } = queue;
 
         await interaction.reply({ embeds: [leave(queue, interaction)] });
 
-        if (Object.keys(playerIdsIndexed).length === 0) deleteQueue(id, false);
+        if (Object.keys(playerIdsIndexed).length === 0) deleteQueue(rank, id, false);
     }
 };

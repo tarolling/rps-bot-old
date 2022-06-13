@@ -13,7 +13,7 @@ module.exports = {
                 required: false
             }
         ],
-        default_member_permissions: 0x0
+        default_member_permissions: (1 << 11) // SEND_MESSAGES
     },
     async execute(interaction) {
         try {

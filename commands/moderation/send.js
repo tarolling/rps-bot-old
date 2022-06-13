@@ -5,7 +5,7 @@ module.exports = {
         name: 'send',
         description: 'Sends an embed.',
         options: [],
-        default_member_permissions: (1 << 3) // 0x0000000000000008 - admin
+        default_member_permissions: (1 << 3) // ADMINISTRATOR
     },
     async execute(interaction) {
         const rulesChannel = interaction.guild.channels.cache.find(c => c.name === 'rules');

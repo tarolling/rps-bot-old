@@ -20,7 +20,7 @@ module.exports = {
                 max_value: 3500
             }
         ],
-        default_member_permissions: (1 << 3) // 0x0000000000000008 - admin
+        default_member_permissions: (1 << 3) // ADMINISTRATOR
     },
     async execute(interaction) {
         try {
