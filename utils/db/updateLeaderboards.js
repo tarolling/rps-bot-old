@@ -3,7 +3,6 @@ const capitalize = require('../capitalize');
 const { leaderboard } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
-require('dotenv').config();
 const uri = process.env.DB_URI;
 
 module.exports = async (interaction) => {

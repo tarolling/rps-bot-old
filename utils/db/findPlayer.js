@@ -1,5 +1,4 @@
 const MongoClient = require('mongodb').MongoClient;
-require('dotenv').config();
 const uri = process.env.DB_URI;
 
 module.exports = async (id) => {

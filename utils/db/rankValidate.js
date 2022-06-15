@@ -4,7 +4,6 @@ const adjustStats = require('./adjustStats');
 const { promotion, demotion } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
-require('dotenv').config();
 const uri = process.env.DB_URI;
 
 module.exports = async (queue, interaction) => {
@@ -69,5 +68,5 @@ module.exports = async (queue, interaction) => {
         await dbClient.close();
     }
 
-    await adjustStats(queue, interaction);
+    await adjustStats(queue);
 };

@@ -1,12 +1,32 @@
 {
-    "novice": {
+    "recruit": {
+        "queue": [],
+        "color": 9125135,
+        "elo": {
+            "placement": 400,
+            "demo_placement": 500,
+            "promotion": 600,
+            "demotion": null
+        }
+    },
+    "apprentice": {
+        "queue": [],
+        "color": 11382189,
+        "elo": {
+            "placement": 700,
+            "demo_placement": 800,
+            "promotion": 900,
+            "demotion": 500
+        }
+    },
+    "veteran": {
         "queue": [],
         "color": 4215,
         "elo": {
             "placement": 1000,
             "demo_placement": 1100,
             "promotion": 1200,
-            "demotion": null
+            "demotion": 800
         }
     },
     "expert": {
