@@ -1,6 +1,5 @@
 {
     "recruit": {
-        "queue": [],
         "color": 9125135,
         "elo": {
             "placement": 400,
@@ -10,7 +9,6 @@
         }
     },
     "apprentice": {
-        "queue": [],
         "color": 11382189,
         "elo": {
             "placement": 700,
@@ -20,7 +18,6 @@
         }
     },
     "veteran": {
-        "queue": [],
         "color": 4215,
         "elo": {
             "placement": 1000,
@@ -30,7 +27,6 @@
         }
     },
     "expert": {
-        "queue": [],
         "color": 9568256,
         "elo": {
             "placement": 1300,
@@ -40,7 +36,6 @@
         }
     },
     "master": {
-        "queue": [],
         "color": 2138112,
         "elo": {
             "placement": 1600,
@@ -50,7 +45,6 @@
         }
     },
     "grandmaster": {
-        "queue": [],
         "color": 14856,
         "elo": {
             "placement": 1900,
@@ -60,7 +54,6 @@
         }
     },
     "ultimate": {
-        "queue": [],
         "color": 4915270,
         "elo": {
             "placement": 2200,
@@ -70,7 +63,6 @@
         }
     },
     "infinity": {
-        "queue": [],
         "color": 16777215,
         "elo": {
             "placement": 2500,
