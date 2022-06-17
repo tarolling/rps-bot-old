@@ -3,5 +3,5 @@
     "K": 60,
     "adjustFactor": 10,
     "defaultElo": 1000,
-    "defaultRank": "Novice"
+    "defaultRank": "Veteran"
 }
