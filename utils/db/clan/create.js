@@ -4,32 +4,38 @@ const uri = process.env.DB_URI;
 
 module.exports = async (interaction) => {
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    const playerQuery = { members: interaction.user.id };
+    const userId = interaction.user.id;
+    const playerQuery = { members: userId };
 
     const clanName = interaction.options.getString('clan_name');
+    const clanAbbr = interaction.options.getString('abbreviation').toUpperCase();
     const clanQuery = { name: { $regex: clanName, $options: 'i' } };
 
-    const doc = { name: clanName, members: [interaction.user.id] };
+    const doc = { leader: userId, name: clanName, abbreviation: clanAbbr, members: [userId] };
 
     try {
         await dbClient.connect();
-        const collection = dbClient.db('rps').collection('clans');
+        const clanCollection = dbClient.db('rps').collection('clans');
+        const playerCollection = dbClient.db('rps').collection('players');
 
-        let validation = await collection.findOne(playerQuery);
+        let validation = await clanCollection.findOne(playerQuery);
         if (validation) {
             interaction.editReply({ content: `You are already part of this clan -> ${validation.name}` });
             return null;
         }
 
-        validation = await collection.findOne(clanQuery);
+        validation = await clanCollection.findOne(clanQuery);
         if (validation) {
             interaction.editReply({ content: 'This clan already exists.' });
             return null;
         }
 
-        await collection.insertOne(doc);
+        await clanCollection.insertOne(doc);
         interaction.editReply({ content: `You have successfully created ${clanName}!` });
-        return clanName;
+
+        let playerName = await playerCollection.findOne({ user_id: userId });
+        playerName = playerName?.username;
+        return (playerName) ? `[${clanAbbr}] ${playerName}` : null;
     } catch (err) {
         console.error(err);
     } finally {
