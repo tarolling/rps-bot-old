@@ -6,8 +6,11 @@ const ranks = require('./config/ranks.json');
 
 module.exports = () => {
     // Initializing slash commands
+    // eslint-disable-next-line
     const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+    // eslint-disable-next-line
     const clientId = (!process.argv[MODE_ARG]) ? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
+    // eslint-disable-next-line
     const guildId = (!process.argv[MODE_ARG]) ? process.env.PROD_GUILD_ID : process.env.DEV_GUILD_ID;
 
     const commands = [];

@@ -2,6 +2,7 @@ const fs = require('fs');
 const { Client, Collection, Intents } = require('discord.js');
 const { MODE_ARG } = require('./config/settings.json');
 
+// eslint-disable-next-line
 const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
 
 const client = new Client({

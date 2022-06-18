@@ -2,6 +2,7 @@ const { addValues } = require('./values');
 const { defaultRank } = require('../../config/settings.json');
 
 const MongoClient = require('mongodb').MongoClient;
+// eslint-disable-next-line
 const uri = process.env.DB_URI;
 
 module.exports = async (interaction) => {

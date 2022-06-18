@@ -4,6 +4,7 @@ const adjustStats = require('./adjustStats');
 const { promotion, demotion } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
+// eslint-disable-next-line
 const uri = process.env.DB_URI;
 
 module.exports = async (queue, interaction) => {

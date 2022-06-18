@@ -3,6 +3,7 @@ const capitalize = require('../capitalize');
 const { leaderboard } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
+// eslint-disable-next-line
 const uri = process.env.DB_URI;
 
 module.exports = async (interaction) => {
