@@ -51,11 +51,14 @@ module.exports = async (queue, interaction) => {
         // Sends the embed to the players and pushes the messages into an array for button interaction collection
         let games = [];
         let gameResults = {};
-        for (const player of players) {
-            await player.send({ embeds: [game(queue)], components: [row] })
+        
+        await p1.user.send({ embeds: [game(queue)], components: [row] })
             .then(msg => games.push(msg))
             .catch(console.error);
-        }
+
+        await p2.user.send({ embeds: [game(queue)], components: [row] })
+            .then(msg => games.push(msg))
+            .catch(console.error);
 
         let filter = (i) => {
             i.deferUpdate();
