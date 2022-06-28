@@ -1,6 +1,5 @@
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../capitalize');
-const adjustStats = require('./adjustStats');
 const { promotion, demotion } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
@@ -68,6 +67,4 @@ module.exports = async (queue, interaction) => {
     } finally {
         await dbClient.close();
     }
-
-    await adjustStats(queue);
 };

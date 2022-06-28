@@ -1,10 +1,9 @@
-const logic = require('./logic');
-const adjustElo = require('./db/adjustElo');
-const ranks = require('../config/ranks.json');
-const capitalize = require('./capitalize');
+const { adjustStats, adjustElo, rankValidate } = require('./db');
 const { game, gameWin, gameLoss, gameDraw, results, waiting } = require('./embeds');
 const { deleteQueue } = require('./manageQueues');
-
+const logic = require('./logic');
+const ranks = require('../config/ranks.json');
+const capitalize = require('./capitalize');
 
 module.exports = async (queue, interaction) => {
     let { players, game: { p1, p2 }, lobby: { id, rank } } = queue;
@@ -145,7 +144,7 @@ module.exports = async (queue, interaction) => {
         if (interaction.guild.available) {
             let resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
             if (results) {
-                resultsChannel.send({ embeds: [results(queue)] });
+                await resultsChannel.send({ embeds: [results(queue)] });
             } else {
                 interaction.guild.channels.create('results', { type: 'text' })
                     .then(c => c.send({ embeds: [results(queue)] }))
@@ -157,6 +156,10 @@ module.exports = async (queue, interaction) => {
     }
 
     console.log(`Lobby ${id} Results | ${p1.user.username}: ${p1.score} | ${p2.user.username}: ${p2.score} | Games Played: ${queue.game.number}`);
-    if (Object.keys(ranks).includes(rank)) await adjustElo(queue, interaction);
+    if (Object.keys(ranks).includes(rank)) {
+        await adjustElo(queue);
+        await rankValidate(queue, interaction);
+        await adjustStats(queue);
+    }
     deleteQueue(rank, id, true);
 };
