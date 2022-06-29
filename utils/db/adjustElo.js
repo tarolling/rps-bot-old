@@ -12,15 +12,24 @@ module.exports = async (queue) => {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        let p1Elo, p2Elo;
+        let winner, loser;
 
-        await collection.findOne({ user_id: p1.user.id })
-            .then(player => p1Elo = player.elo);
-        await collection.findOne({ user_id: p2.user.id })
-            .then(player => p2Elo = player.elo);
+        if (p1.score === 3) {
+            winner = p1.user;
+            loser = p2.user;
+        } else {
+            winner = p2.user;
+            loser = p1.user;
+        }
 
-        const winner = p1.score === 3 ? p1.user : (p2.score === 3 ? p2.user : null);
-        const incArr = calculateElo(p1Elo, p2Elo);
+        let winnerElo, loserElo;
+
+        await collection.findOne({ user_id: winner.id })
+            .then(player => winnerElo = player.elo);
+        await collection.findOne({ user_id: loser.id })
+            .then(player => loserElo = player.elo);
+
+        const incArr = calculateElo(winnerElo, loserElo);
         const p1Incr = winner === p1.user ? incArr[0] : incArr[1];
         const p2Incr = winner === p2.user ? incArr[0] : incArr[1];
 
