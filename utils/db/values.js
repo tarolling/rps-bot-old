@@ -26,7 +26,7 @@ const addValues = (interaction) => {
     };
 };
 
-const resetValues = () => {
+const careerResetValues = () => {
     return {
         $set: {
             clan: "N/A",
@@ -52,7 +52,24 @@ const resetValues = () => {
     };
 };
 
+const seasonResetValues = () => {
+    return {
+        $set: {
+            elo: defaultElo,
+            sigma: 0,
+            rank: defaultRank,
+            season_games: 0,
+            season_wins: 0,
+            season_losses: 0,
+            season_win_pct: 0,
+            current_streak: 0,
+            season_peak_elo: defaultElo
+        }
+    };
+};
+
 module.exports = {
     addValues,
-    resetValues
+    careerResetValues,
+    seasonResetValues
 };
