@@ -1,4 +1,4 @@
-const { K, adjustFactor } = require('../config/settings.json');
+const { K, minInc, maxInc } = require('../config/settings.json');
 
 module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {
     // sigma values will be decreased depending on each other
@@ -16,7 +16,16 @@ module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {
         expectedWin = smaller / (larger + smaller);
         expectedLoss = larger / (larger + smaller);
     }
+
+    let winInc = Math.round(K * (1 - expectedWin));
+    let loseInc = Math.round(K * (0 - expectedLoss));
+
+    winInc = (winInc < minInc) ? minInc :
+        ((winInc > maxInc) ? maxInc : winInc);
+
+    loseInc = (Math.abs(loseInc) < minInc) ? -minInc :
+        ((Math.abs(loseInc) > maxInc) ? -maxInc : loseInc);
     
     // Return format: [winner's increment, loser's increment]
-    return [Math.round(K * (1 - expectedWin)), Math.round((K * (0 - expectedLoss)) + (K / adjustFactor))];
+    return [winInc, loseInc];
 };

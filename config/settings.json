@@ -1,7 +1,8 @@
 {
     "MODE_ARG": 2,
-    "K": 48,
-    "adjustFactor": 8,
+    "K": 36,
+    "minInc": 5,
+    "maxInc": 15,
     "defaultElo": 1000,
     "defaultRank": "Veteran",
     "defaultTimeout": 10
