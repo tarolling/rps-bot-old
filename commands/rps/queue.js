@@ -34,10 +34,11 @@ module.exports = {
 
         const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
 
-        interaction.reply({
-            content: (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) ? `<@&${rankRole.id}>` : null,
-            embeds: [queueEmbed(queue, interaction)]
-        }).catch(console.error);
+        await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
+
+        if (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) {
+            await interaction.channel.send({ content: `<@&${rankRole.id}>` });
+        }
         
         if (players.length === 2) await game(queue, interaction);
     }

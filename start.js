@@ -11,6 +11,12 @@ const client = new Client({
         Intents.FLAGS.GUILD_MEMBERS,
         Intents.FLAGS.GUILD_MESSAGES
     ],
+    allowedMentions: {
+        parse: [
+            'users',
+            'roles'
+        ]
+    },
     partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
     presence: {
         status: 'dnd',

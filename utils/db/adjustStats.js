@@ -10,8 +10,15 @@ module.exports = async (queue) => {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        const winner = p1.score === 3 ? p1.user : (p2.score === 3 ? p2.user : null);
-        const loser = p1.score === 3 ? p2.user : (p2.score === 3 ? p1.user : null);
+        let winner, loser;
+
+        if (p1.score > p2.score) {
+            winner = p1.user;
+            loser = p2.user;
+        } else if (p2.score > p1.score) {
+            winner = p2.user;
+            loser = p1.user;
+        } else return; // Tie
 
         const winnerDoc = await collection.findOne({ user_id: winner.id });
         const loserDoc = await collection.findOne({ user_id: loser.id });

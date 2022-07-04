@@ -2,7 +2,7 @@
     "MODE_ARG": 2,
     "K": 36,
     "minInc": 5,
-    "maxInc": 15,
+    "maxInc": 20,
     "defaultElo": 1000,
     "defaultRank": "Veteran",
     "defaultTimeout": 10
