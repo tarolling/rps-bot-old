@@ -39,8 +39,10 @@ module.exports = async (queue, interaction) => {
             winnerRank = await capitalize(winnerRank);
             const addRole = guild.roles.cache.find(r => r.name === winnerNewRank);
             const removeRole = guild.roles.cache.find(r => r.name === winnerRank);
+            const removePingRole = guild.roles.cache.find(r => r.name.includes(' Ping'));
             if (addRole) await winnerMember.roles.add(addRole);
             if (removeRole) await winnerMember.roles.remove(removeRole);
+            if (removePingRole) await winnerMember.roles.remove(removePingRole);
 
             const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
             if (channel) await channel.send({ embeds: [promotion(winnerMember, winnerNewRank, false)] });
@@ -55,8 +57,10 @@ module.exports = async (queue, interaction) => {
             loserRank = await capitalize(loserRank);
             const addRole = guild.roles.cache.find(r => r.name === loserNewRank);
             const removeRole = guild.roles.cache.find(r => r.name === loserRank);
+            const removePingRole = guild.roles.cache.find(r => r.name.includes(' Ping'));
             if (addRole) await loserMember.roles.add(addRole);
             if (removeRole) await loserMember.roles.remove(removeRole);
+            if (removePingRole) await loserMember.roles.remove(removePingRole);
 
             const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
             if (channel) await channel.send({ embeds: [demotion(loserMember, loserNewRank, false)] });
