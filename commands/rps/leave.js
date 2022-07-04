@@ -17,6 +17,6 @@ module.exports = {
 
         await interaction.reply({ embeds: [leave(queue, interaction)] });
 
-        if (Object.keys(playerIdsIndexed).length === 0) deleteQueue(rank, id, false);
+        if (Object.keys(playerIdsIndexed).length === 0) await deleteQueue(rank, id, false);
     }
 };

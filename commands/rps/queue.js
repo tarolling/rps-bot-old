@@ -39,6 +39,6 @@ module.exports = {
             embeds: [queueEmbed(queue, interaction)]
         }).catch(console.error);
         
-        if (players.length === 2) game(queue, interaction);
+        if (players.length === 2) await game(queue, interaction);
     }
 };

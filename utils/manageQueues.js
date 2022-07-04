@@ -1,4 +1,4 @@
-const createQueue = (rank) => {
+const createQueue = async (rank) => {
     return {
         players: [],
         playerIdsIndexed: {},
@@ -29,7 +29,7 @@ const createQueue = (rank) => {
 * Case 3: Player is already in the queue -> Return queue.
 * Case 4: Player is not in a queue -> Add player to queue.
 */
-const addPlayerToQueue = (player, rank, timeout) => {
+const addPlayerToQueue = async (player, rank, timeout) => {
     const rankQueue = global[`${rank}Queue`];
 
     if (!rankQueue.length) {
@@ -76,7 +76,7 @@ const addPlayerToQueue = (player, rank, timeout) => {
     return newQueue;
 };
 
-const removePlayerFromQueue = (player, rank) => {
+const removePlayerFromQueue = async (player, rank) => {
     const rankQueue = global[`${rank}Queue`];
 
     const queue = rankQueue.find(queue => queue.lobby.rank === rank);
@@ -99,19 +99,19 @@ const removePlayerFromQueue = (player, rank) => {
     return undefined;
 };
 
-const findPlayerQueue = (player, rank) => {
+const findPlayerQueue = async (player, rank) => {
     const rankQueue = global[`${rank}Queue`];
     const playerQueue = rankQueue.find(queue => queue.players.find(p => p.id === player.id));
     return playerQueue ? playerQueue : undefined;   
 };
 
-const displayRankQueue = (rank) => {
+const displayRankQueue = async (rank) => {
     const rankQueue = global[`${rank}Queue`];
     const notFullQueue = rankQueue.find(queue => (Object.keys(queue.playerIdsIndexed).length < 2));
     return (notFullQueue) ? notFullQueue : undefined;
 };
 
-const deleteQueue = (rank, id, complete) => {
+const deleteQueue = async (rank, id, complete) => {
     const rankQueue = global[`${rank}Queue`];
     const index = rankQueue.findIndex(queue => queue.lobby.id === id);
     rankQueue.splice(index, 1);

@@ -161,5 +161,5 @@ module.exports = async (queue, interaction) => {
         await rankValidate(queue, interaction);
         await adjustStats(queue);
     }
-    deleteQueue(rank, id, true);
+    await deleteQueue(rank, id, true);
 };
