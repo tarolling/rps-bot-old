@@ -33,7 +33,7 @@ const addPlayerToQueue = async (player, rank, timeout) => {
     const rankQueue = global[`${rank}Queue`];
 
     if (!rankQueue.length) {
-        const newQueue = createQueue(rank);
+        const newQueue = await createQueue(rank);
         newQueue.players.push(player);
         newQueue.playerIdsIndexed[player.id] = player;
         if (timeout) {
@@ -64,7 +64,7 @@ const addPlayerToQueue = async (player, rank, timeout) => {
         return notFullQueue;
     }
 
-    const newQueue = createQueue(rank);
+    const newQueue = await createQueue(rank);
     newQueue.players.push(player);
     newQueue.playerIdsIndexed[player.id] = player;
     if (timeout) {
