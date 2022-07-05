@@ -1,6 +1,7 @@
 const { ranks, serverRules } = require('../../utils/embeds');
 const ranksObj = require('../../config/ranks.json');
 
+
 module.exports = {
     data: {
         name: 'send',

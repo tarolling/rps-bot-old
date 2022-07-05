@@ -1,5 +1,6 @@
 const { defaultElo, defaultRank } = require('../../config/settings.json');
 
+
 const addValues = (interaction) => {
     return {
         user_id: interaction.user.id,

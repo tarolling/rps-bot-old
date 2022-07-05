@@ -6,6 +6,7 @@ const MongoClient = require('mongodb').MongoClient;
 // eslint-disable-next-line
 const uri = process.env.DB_URI;
 
+
 module.exports = async (interaction) => {
     const guild = interaction.guild;
     const leaderboardChannel = guild.channels.cache.find(channel => channel.name === 'leaderboards');

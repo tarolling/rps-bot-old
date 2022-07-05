@@ -4,6 +4,7 @@ const { Routes } = require('discord-api-types/v10');
 const { MODE_ARG } = require('./config/settings.json');
 const ranks = require('./config/ranks.json');
 
+
 module.exports = () => {
     // Initializing slash commands
     // eslint-disable-next-line

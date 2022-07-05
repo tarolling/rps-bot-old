@@ -1,6 +1,7 @@
 const ranks = require('../../config/ranks');
 const { footer } = require('../../config/embeds');
 
+
 module.exports = (data) => {
     const { username, rank, elo, clan, career_games, career_wins,
             career_losses, career_win_pct, season_games,

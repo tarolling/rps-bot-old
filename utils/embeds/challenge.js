@@ -1,5 +1,6 @@
 const { footer } = require('../../config/embeds');
 
+
 module.exports = (interaction) => {
     return {
         color: null,

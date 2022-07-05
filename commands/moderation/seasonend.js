@@ -1,5 +1,6 @@
 const seasonReset = require('../../utils/db/seasonReset');
 
+
 module.exports = {
     data: {
         name: 'seasonend',

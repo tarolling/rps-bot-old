@@ -5,6 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 // eslint-disable-next-line
 const uri = process.env.DB_URI;
 
+
 module.exports = async (interaction) => {
     const defaultRole = interaction.guild.roles.cache.find(r => r.name === defaultRank);
     const userId = interaction.user.id;

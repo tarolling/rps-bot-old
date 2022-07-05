@@ -1,6 +1,7 @@
 const { removePlayerFromQueue, deleteQueue } = require('../../utils/manageQueues');
 const { leave } = require('../../utils/embeds');
 
+
 module.exports = {
     data: {
         name: 'leave',

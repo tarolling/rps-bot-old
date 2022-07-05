@@ -1,5 +1,6 @@
 const registerPlayer = require('../../utils/db/registerPlayer');
 
+
 module.exports = {
     data: {
         name: 'register',

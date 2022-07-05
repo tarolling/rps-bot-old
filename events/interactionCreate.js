@@ -1,5 +1,6 @@
 const ranks = require('../config/ranks');
 
+
 module.exports = {
     name: 'interactionCreate',
     once: false,

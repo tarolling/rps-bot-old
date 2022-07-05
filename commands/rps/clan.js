@@ -1,5 +1,6 @@
 const { createClan, joinClan, leaveClan, viewClan } = require('../../utils/db/clan');
 
+
 module.exports = {
     data: {
         name: 'clan',

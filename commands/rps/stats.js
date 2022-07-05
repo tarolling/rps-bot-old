@@ -1,6 +1,7 @@
 const findPlayer = require('../../utils/db/findPlayer');
 const { statsEmbed } = require('../../utils/embeds');
 
+
 module.exports = {
     data: {
         name: 'stats',

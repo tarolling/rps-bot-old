@@ -5,6 +5,7 @@ const logic = require('./logic');
 const ranks = require('../config/ranks.json');
 const capitalize = require('./capitalize');
 
+
 module.exports = async (queue, interaction) => {
     let { players, game: { p1, p2 }, lobby: { id, rank } } = queue;
     p1.user = players[0];

@@ -4,6 +4,7 @@ const MongoClient = require('mongodb').MongoClient;
 // eslint-disable-next-line
 const uri = process.env.DB_URI;
 
+
 module.exports = async (queue) => {
     const { game: { p1, p2 } } = queue;
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });

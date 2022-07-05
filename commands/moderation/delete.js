@@ -2,6 +2,7 @@ const deletePlayer = require('../../utils/db/deletePlayer');
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../../utils/capitalize');
 
+
 module.exports = {
     data: {
         name: 'delete',

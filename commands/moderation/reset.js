@@ -3,6 +3,7 @@ const ranks = require('../../config/ranks.json');
 const capitalize = require('../../utils/capitalize');
 const { defaultRank } = require('../../config/settings.json');
 
+
 module.exports = {
     data: {
         name: 'reset',

@@ -1,6 +1,7 @@
 const { displayRankQueue } = require('../../utils/manageQueues');
 const { status } = require('../../utils/embeds');
 
+
 module.exports = {
     data: {
         name: 'status',

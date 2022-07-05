@@ -1,5 +1,6 @@
 const updateLeaderboards = require('../../utils/db/updateLeaderboards');
 
+
 module.exports = {
     data: {
         name: 'refresh',

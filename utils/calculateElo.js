@@ -1,5 +1,6 @@
 const { K, minInc, maxInc } = require('../config/settings.json');
 
+
 module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {
     // sigma values will be decreased depending on each other
     let larger, smaller, expectedWin, expectedLoss;

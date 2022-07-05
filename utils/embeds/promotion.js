@@ -1,6 +1,7 @@
 const ranks = require('../../config/ranks');
 const { footer } = require('../../config/embeds');
 
+
 module.exports = (member, rank, dm) => {
     const color = (Object.keys(ranks).includes(rank.toLowerCase())) ? ranks[rank.toLowerCase()].color : null;
     return {

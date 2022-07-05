@@ -1,6 +1,7 @@
 const ranks = require('../../config/ranks');
 const { footer } = require('../../config/embeds');
 
+
 module.exports = (queue) => {
     const { game: { number, p1, p2 }, lobby: { rank } } = queue;
     const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;

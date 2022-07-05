@@ -2,6 +2,7 @@ const game = require('../../utils/game');
 const { challenge } = require('../../utils/embeds');
 const { addPlayerToQueue, deleteQueue } = require('../../utils/manageQueues');
 
+
 module.exports = {
     data: {
         name: 'play',
