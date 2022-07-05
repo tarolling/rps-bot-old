@@ -1,5 +1,6 @@
 const { footer } = require('../../config/embeds');
 
+
 module.exports = () => {
     return {
         color: null,

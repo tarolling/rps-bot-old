@@ -8,6 +8,7 @@ const leaderboard = require('./leaderboard');
 const leave = require('./leave');
 const promotion = require('./promotion');
 const queueEmbed = require('./queue');
+const ranks = require('./ranks');
 const results = require('./results');
 const serverRules = require('./serverRules');
 const statsEmbed = require('./stats');
@@ -25,6 +26,7 @@ module.exports = {
     leave,
     promotion,
     queueEmbed,
+    ranks,
     results,
     serverRules,
     statsEmbed,
