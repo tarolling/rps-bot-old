@@ -6,7 +6,8 @@ module.exports = (queue) => {
     const { game: { number, p1, p2 }, lobby: { rank, id } } = queue;
     const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;
 
-    let winner = p1.score === 3 ? p1.user : (p2.score === 3 ? p2.user : null);
+    const winner = p1.score > p2.score ? p1.user : (p2.score > p1.score ? p2.user : null);
+    
     return {
         color,
         title: `Lobby #${id} Results`,

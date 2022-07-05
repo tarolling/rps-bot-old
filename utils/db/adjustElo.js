@@ -34,8 +34,12 @@ module.exports = async (queue) => {
         const p1Incr = winner === p1.user ? incArr[0] : incArr[1];
         const p2Incr = winner === p2.user ? incArr[0] : incArr[1];
 
-        await collection.findOneAndUpdate({ user_id: p1.user.id }, { $inc: { elo: p1Incr } });
-        await collection.findOneAndUpdate({ user_id: p2.user.id }, { $inc: { elo: p2Incr } });
+        let p1Elo = await collection.findOneAndUpdate({ user_id: p1.user.id }, { $inc: { elo: p1Incr } });
+        p1Elo = p1Elo.value.elo;
+        let p2Elo = await collection.findOneAndUpdate({ user_id: p2.user.id }, { $inc: { elo: p2Incr } });
+        p2Elo = p2Elo.value.elo;
+
+        return [p1Elo, p1Incr, p2Elo, p2Incr];
     } catch (err) {
         console.error(err);
     } finally {
