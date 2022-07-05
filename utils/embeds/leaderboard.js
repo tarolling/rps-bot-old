@@ -7,7 +7,7 @@ module.exports = (data) => {
     return {
         color,
         title: data[0].rank,
-        fields: data.map(({ username, elo }) => ({ name: username, value: `${elo}` })),
+        fields: data.map(({ username, elo }) => ({ name: username, value: `${elo}`, inline: true })),
         footer
     };
 };
