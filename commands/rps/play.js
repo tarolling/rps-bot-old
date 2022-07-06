@@ -24,7 +24,7 @@ module.exports = {
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
         
-        let queue = addPlayerToQueue(interaction.user, 'challenge');
+        let queue = await addPlayerToQueue(interaction.user, 'challenge');
         let acceptBtn = {
             type: 'BUTTON',
             label: 'Accept',
@@ -47,43 +47,49 @@ module.exports = {
             type: 'ACTION_ROW',
             components: [acceptBtn, declineBtn]
         };
-        let sentMsg;
+
+        let challengeMessage;
 
         try {
             await target.send({ embeds: [challenge(interaction)], components: [row] })
-                .then(msg => sentMsg = msg);
-            interaction.reply({ content: 'Challenge sent!', ephemeral: true });
+                .then(msg => challengeMessage = msg);
+            await interaction.reply({ content: 'Challenge sent!', ephemeral: true });
         } catch (err) {
             console.error(err);
             return interaction.reply({ content: 'Unable to DM user.', ephemeral: true });
         }
 
-        let filter = (i) => {
+        const filter = i => i.user.id === target.id;
+
+        const collector = challengeMessage.createMessageComponentCollector({ filter, time: 30000 });
+
+        collector.on('collect', async (i) => {
             i.deferUpdate();
-            return i.user.id === target.id;
-        };
-        await sentMsg.awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
-            .then((i) => {
-                acceptBtn.disabled = true;
-                declineBtn.disabled = true;
-                row.components = [acceptBtn, declineBtn];
-                if (i.customId === 'Accept') {
-                    sentMsg.edit({ components: [row] });
-                    queue = addPlayerToQueue(target, 'challenge');
-                    game(queue, interaction);
-                } else {
-                    sentMsg.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
-                    interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
-                    deleteQueue('challenge', queue.lobby.id, false);
-                }
-            })
-            .catch(() => {
-                acceptBtn.disabled = true;
-                declineBtn.disabled = true;
-                row.components = [acceptBtn, declineBtn];
-                sentMsg.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
-                interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
-                deleteQueue('challenge', queue.lobby.id, false);
-            });
+            acceptBtn.disabled = true;
+            declineBtn.disabled = true;
+            row.components = [acceptBtn, declineBtn];
+            if (i.customId === 'Accept') {
+                await challengeMessage.edit({ components: [row] });
+                queue = await addPlayerToQueue(target, 'challenge');
+                await game(queue, interaction);
+            } else {
+                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
+                await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
+                await deleteQueue('challenge', queue.lobby.id, false);
+            }
+
+            collector.stop();
+        });
+
+        collector.on('end', async (collected, reason) => {
+            if (reason !== 'time') return;
+
+            acceptBtn.disabled = true;  
+            declineBtn.disabled = true;
+            row.components = [acceptBtn, declineBtn];
+            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
+            await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
+            await deleteQueue('challenge', queue.lobby.id, false);
+        });
     }
 };
