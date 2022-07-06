@@ -1,6 +1,5 @@
 const { adjustStats, adjustElo, rankValidate } = require('./db');
 const { eloResult, game, gameWin, gameLoss, gameDraw, results, waiting } = require('./embeds');
-const { deleteQueue } = require('./manageQueues');
 const logic = require('./logic');
 const ranks = require('../config/ranks.json');
 const capitalize = require('./capitalize');
@@ -164,9 +163,7 @@ module.exports = async (queue, interaction) => {
         await adjustStats(queue);
 
         for (let i = 0; i < players.length; i++) {
-            await players[i].send({ embeds: [eloResult(queue, players[i * 2], eloArr[i * 2], eloArr[i * 2 + 1])] });
+            await players[i].send({ embeds: [eloResult(queue, players[i], eloArr[i * 2], eloArr[i * 2 + 1])] });
         }
     }
-
-    await deleteQueue(rank, id, true);
 };

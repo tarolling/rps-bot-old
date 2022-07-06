@@ -1,6 +1,6 @@
 const game = require('../../utils/game');
 const { challenge } = require('../../utils/embeds');
-const { addPlayerToQueue, deleteQueue } = require('../../utils/manageQueues');
+const { addPlayerToQueue, createQueue } = require('../../utils/manageQueues');
 
 
 module.exports = {
@@ -71,11 +71,12 @@ module.exports = {
             if (i.customId === 'Accept') {
                 await challengeMessage.edit({ components: [row] });
                 queue = await addPlayerToQueue(target, 'challenge');
+                global.lobbyId++;
+                global[`challengeQueue`] = createQueue('challenge');
                 await game(queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
                 await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
-                await deleteQueue('challenge', queue.lobby.id, false);
             }
 
             collector.stop();
@@ -89,7 +90,6 @@ module.exports = {
             row.components = [acceptBtn, declineBtn];
             await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
-            await deleteQueue('challenge', queue.lobby.id, false);
         });
     }
 };

@@ -1,6 +1,6 @@
 const game = require('../../utils/game');
 const { queueEmbed } = require('../../utils/embeds');
-const { addPlayerToQueue } = require('../../utils/manageQueues');
+const { addPlayerToQueue, createQueue } = require('../../utils/manageQueues');
 const ranks = require('../../config/ranks.json');
 const { defaultTimeout } = require('../../config/settings.json');
 const capitalize = require('../../utils/capitalize');
@@ -28,7 +28,8 @@ module.exports = {
         const queueLength = interaction.options.getInteger('queue_length');
         const queue = await addPlayerToQueue(user, channel.name, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
 
-        if (!queue) return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
+        if (!queue) return interaction.reply({ content: 'The bot is currently making the queue.', ephemeral: true });
+        if (queue === 'in') return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
         
         const { players, lobby: { rank } } = queue;
 
@@ -40,6 +41,10 @@ module.exports = {
             await interaction.channel.send({ content: `<@&${rankRole.id}>` });
         }
         
-        if (players.length === 2) await game(queue, interaction);
+        if (players.length === 2) {
+            global.lobbyId++;
+            global[`${rank}Queue`] = createQueue(rank);
+            await game(queue, interaction);
+        }
     }
 };

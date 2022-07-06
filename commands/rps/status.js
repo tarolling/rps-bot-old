@@ -14,6 +14,6 @@ module.exports = {
         const queue = await displayRankQueue(channel.name);
         if (!queue) return interaction.reply({ content: 'There are no active queues. Type /queue to start one!', ephemeral: true });
 
-        interaction.reply({ embeds: [status(queue)] }).catch(console.error);
+        await interaction.reply({ embeds: [status(queue)] }).catch(console.error);
     }
 };
