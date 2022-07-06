@@ -49,15 +49,15 @@ module.exports = async (queue, interaction) => {
         };
 
         // Sends the embed to the players and pushes the messages into an array for button interaction collection
-        let games = [];
+        let gameMessages = [];
         let gameResults = {};
         
         await p1.user.send({ embeds: [game(queue)], components: [row] })
-            .then(msg => games.push(msg))
+            .then(msg => gameMessages.push(msg))
             .catch(console.error);
 
         await p2.user.send({ embeds: [game(queue)], components: [row] })
-            .then(msg => games.push(msg))
+            .then(msg => gameMessages.push(msg))
             .catch(console.error);
 
         const filter = (i) => {
@@ -66,26 +66,26 @@ module.exports = async (queue, interaction) => {
         };
 
         // Setting up message component collection
-        if (games.length != 2) continue;
-        let prom1 = games[0].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
+        if (gameMessages.length != 2) continue;
+        let prom1 = gameMessages[0].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
             .then((i) => {
                 p1.choice = i.customId;
                 rockBtn.disabled = true;
                 paperBtn.disabled = true;
                 scissorsBtn.disabled = true;
                 row.components = [rockBtn, paperBtn, scissorsBtn];
-                games[0].edit({ components: [row] });
+                gameMessages[0].edit({ components: [row] });
                 return p1.user.send({ embeds: [waiting(queue, i)] });
             })
             .then(msg => gameResults.p1msg = msg);
-        let prom2 = games[1].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
+        let prom2 = gameMessages[1].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
             .then((i) => {
                 p2.choice = i.customId;
                 rockBtn.disabled = true;
                 paperBtn.disabled = true;
                 scissorsBtn.disabled = true;
                 row.components = [rockBtn, paperBtn, scissorsBtn];
-                games[1].edit({ components: [row] });
+                gameMessages[1].edit({ components: [row] });
                 return p2.user.send({ embeds: [waiting(queue, i)] });
             })
             .then(msg => gameResults.p2msg = msg);

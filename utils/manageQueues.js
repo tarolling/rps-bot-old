@@ -37,8 +37,8 @@ const addPlayerToQueue = async (player, rank, timeout) => {
         newQueue.players.push(player);
         newQueue.playerIdsIndexed[player.id] = player;
         if (timeout) {
-            newQueue.timeouts[player.id] = setTimeout(() => {
-                removePlayerFromQueue(player, rank);
+            newQueue.timeouts[player.id] = setTimeout(async () => {
+                await removePlayerFromQueue(player, rank);
             }, timeout);
         }
         rankQueue.push(newQueue);
@@ -56,8 +56,8 @@ const addPlayerToQueue = async (player, rank, timeout) => {
         const { players, timeouts, playerIdsIndexed } = notFullQueue;
         players.push(player);
         if (timeout) {
-            timeouts[player.id] = setTimeout(() => {
-                removePlayerFromQueue(player, rank);
+            timeouts[player.id] = setTimeout(async () => {
+                await removePlayerFromQueue(player, rank);
             }, timeout);
         }
         playerIdsIndexed[player.id] = player;
@@ -68,8 +68,8 @@ const addPlayerToQueue = async (player, rank, timeout) => {
     newQueue.players.push(player);
     newQueue.playerIdsIndexed[player.id] = player;
     if (timeout) {
-        newQueue.timeouts[player.id] = setTimeout(() => {
-            removePlayerFromQueue(player, rank);
+        newQueue.timeouts[player.id] = setTimeout(async () => {
+            await removePlayerFromQueue(player, rank);
         }, timeout);
     }
     rankQueue.push(newQueue);
