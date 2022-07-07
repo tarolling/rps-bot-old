@@ -163,7 +163,7 @@ module.exports = async (queue, interaction) => {
         for (let i = 0; i < players.length; i++) {
             const newStats = await findPlayer(players[i].id);
             await players[i].send({ embeds: [eloResult(queue, players[i], oldElo[i], newStats.elo)] });
-            console.log(`${p1.user.username} is now at ${newStats.elo} from ${oldElo}`);
+            console.log(`${p1.user.username} is now at ${newStats.elo} from ${oldElo[i]}`);
         }
     }
 };
