@@ -31,11 +31,11 @@ module.exports = {
         if (!queue) return interaction.reply({ content: 'The bot is currently making the queue.', ephemeral: true });
         if (queue === 'in') return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
         
-        const { players, lobby: { rank } } = queue;
+        const { players, lobby: { rank, id } } = queue;
         console.log(`Players in queue now: ${players.length}`);
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
-        console.log(`${user.username} joined Lobby ${global.lobbyId} in ${capitalize(rank)}`);
+        console.log(`${user.username} joined Lobby ${id} in ${capitalize(rank)}`);
 
         const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
 
