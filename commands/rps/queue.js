@@ -27,6 +27,7 @@ module.exports = {
 
         const queueLength = interaction.options.getInteger('queue_length');
         const queue = await addPlayerToQueue(user, channel.name, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
+        console.log(queue);
 
         if (!queue) return interaction.reply({ content: 'The bot is currently making the queue.', ephemeral: true });
         if (queue === 'in') return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
