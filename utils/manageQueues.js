@@ -64,6 +64,8 @@ const addPlayerToChallenge = async (queue, player) => {
 }
 
 const removePlayerFromQueue = async (player, rank) => {
+    if (!global[`${rank}Queue`]) return undefined;
+    
     const playerInQueue = global[`${rank}Queue`].playerIdsIndexed[player.id];
     
     if (!playerInQueue) return undefined;
