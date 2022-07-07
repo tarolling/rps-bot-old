@@ -1,5 +1,6 @@
 const { removePlayerFromQueue } = require('../../utils/manageQueues');
 const { leave } = require('../../utils/embeds');
+const capitalize = require('../../utils/capitalize');
 
 
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
         if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
         await interaction.reply({ embeds: [leave(queue, interaction)] });
+        console.log(`${user.username} left Lobby ${global.lobbyId} in ${capitalize(queue.lobby.rank)}`);
     }
 };

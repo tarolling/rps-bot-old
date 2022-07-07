@@ -10,6 +10,13 @@ module.exports = async (queue, interaction) => {
     p1.user = players[0];
     p2.user = players[1];
 
+    const resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
+    if (!resultsChannel) {
+        interaction.guild.channels.create('results', { type: 'text' })
+            .then(c => c.send({ embeds: [results(queue)] }))
+            .catch(console.error);
+    }
+
     console.log(`Lobby ${id} | ${capitalize(rank)} | ${p1.user.username} vs. ${p2.user.username}`);
 
     while (p1.score < 3 && p2.score < 3) {
@@ -103,9 +110,6 @@ module.exports = async (queue, interaction) => {
                     (gameResults.p2msg) ? gameResults.p2msg.edit({ embeds: [gameLoss(queue)] })
                         : p2.user.send({ embeds: [gameLoss(queue)] });
                     p1.score++;
-                    console.log(`L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (${p1.choice || 'N/A'}) | ${p2.user.username}: ${p2.score} (${p2.choice || 'N/A'})`);
-                    p1.choice = '';
-                    p2.choice = '';
                     break;
                 }
                 case 'p2': {
@@ -114,24 +118,25 @@ module.exports = async (queue, interaction) => {
                     (gameResults.p2msg) ? gameResults.p2msg.edit({ embeds: [gameWin(queue)] })
                         : p2.user.send({ embeds: [gameWin(queue)] });
                     p2.score++;
-                    console.log(`L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (${p1.choice || 'N/A'}) | ${p2.user.username}: ${p2.score} (${p2.choice || 'N/A'})`);
-                    p1.choice = '';
-                    p2.choice = '';
                     break;
                 }
                 case 'draw': {
                     gameResults.p1msg.edit({ embeds: [gameDraw(queue)] });
                     gameResults.p2msg.edit({ embeds: [gameDraw(queue)] });
-                    console.log(`L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (${p1.choice || 'N/A'}) | ${p2.user.username}: ${p2.score} (${p2.choice || 'N/A'})`);
-                    p1.choice = '';
-                    p2.choice = '';
                     break;
                 }
             }
+
+            console.log(`L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (${p1.choice || 'N/A'}) | ${p2.user.username}: ${p2.score} (${p2.choice || 'N/A'})`);
+            resultsChannel.send({ content: `L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (${p1.choice || 'N/A'}) | ${p2.user.username}: ${p2.score} (${p2.choice || 'N/A'})` });
+            p1.choice = '';
+            p2.choice = '';
+
         } else { // If no player responds
             p1.user.send('Neither player chose an option in time, so the lobby has been aborted.');
             p2.user.send('Neither player chose an option in time, so the lobby has been aborted.');
             console.log(`L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (N/A) | ${p2.user.username}: ${p2.score} (N/A)`);
+            resultsChannel.send({ content: `L${id}-G${queue.game.number} | ${p1.user.username}: ${p1.score} (N/A) | ${p2.user.username}: ${p2.score} (N/A)` });
             break;
         }
     }
@@ -140,21 +145,7 @@ module.exports = async (queue, interaction) => {
         user.send({ embeds: [results(queue)] });
     }
 
-    if (interaction) {
-        if (interaction.guild.available) {
-            let resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
-            if (results) {
-                await resultsChannel.send({ embeds: [results(queue)] });
-            } else {
-                interaction.guild.channels.create('results', { type: 'text' })
-                    .then(c => c.send({ embeds: [results(queue)] }))
-                    .catch(console.error);
-            }
-        } else {
-            console.error('Unable to send results to the guild.');
-        }
-    }
-
+    await resultsChannel.send({ embeds: [results(queue)] });
     console.log(`Lobby ${id} Results | ${p1.user.username}: ${p1.score} | ${p2.user.username}: ${p2.score} | Games Played: ${queue.game.number}`);
     
     if (Object.keys(ranks).includes(rank) && (p1.score === 3 || p2.score === 3)) {

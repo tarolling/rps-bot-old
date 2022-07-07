@@ -36,6 +36,7 @@ module.exports = {
         const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
+        console.log(`${user.username} joined Lobby ${global.lobbyId} in ${capitalize(rank)}`);
 
         if (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) {
             await interaction.channel.send({ content: `<@&${rankRole.id}>` });
