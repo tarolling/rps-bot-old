@@ -93,7 +93,7 @@ const findPlayerQueue = async (player, rank) => {
 };
 
 const displayRankQueue = async (rank) => {
-    return (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length !== 0) ? global[`${rank}Queue`] : undefined;
+    return global[`${rank}Queue`];
 };
 
 module.exports = {
