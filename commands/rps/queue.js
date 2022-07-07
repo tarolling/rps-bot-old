@@ -45,6 +45,7 @@ module.exports = {
         
         if (players.length === 2) {
             global.lobbyId++;
+            global[`${rank}Queue`] = null;
             await game(queue, interaction);
         }
     }
