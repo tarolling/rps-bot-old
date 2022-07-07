@@ -166,4 +166,6 @@ module.exports = async (queue, interaction) => {
             console.log(`${players[i].username} is now at ${newStats.elo} from ${oldElo[i]}`);
         }
     }
+
+    return;
 };

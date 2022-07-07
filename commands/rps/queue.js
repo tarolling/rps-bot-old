@@ -47,5 +47,7 @@ module.exports = {
             global[`${rank}Queue`] = null;
             await game(queue, interaction);
         }
+
+        return;
     }
 };
