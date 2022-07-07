@@ -15,7 +15,9 @@ module.exports = {
         const queue = await removePlayerFromQueue(user, channel.name);
         if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
+        const { lobby: { rank, id } } = queue;
+
         await interaction.reply({ embeds: [leave(queue, interaction)] });
-        console.log(`${user.username} left Lobby ${global.lobbyId} in ${capitalize(queue.lobby.rank)}`);
+        console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
     }
 };
