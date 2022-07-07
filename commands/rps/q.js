@@ -8,7 +8,7 @@ const capitalize = require('../../utils/capitalize');
 
 module.exports = {
     data: {
-        name: 'queue',
+        name: 'q',
         description: 'Enter in the queue to play RPS against an opponent.',
         options: [
             {
