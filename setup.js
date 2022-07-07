@@ -2,8 +2,6 @@ const fs = require('fs');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const { MODE_ARG } = require('./config/settings.json');
-const { createQueue } = require('./utils/manageQueues');
-const ranks = require('./config/ranks.json');
 
 
 module.exports = () => {
@@ -36,9 +34,4 @@ module.exports = () => {
 
     // Global lobby ID
     global.lobbyId = 1;
-
-    // Initializing rank queues
-    for (const rank in ranks) {
-        global[`${rank}Queue`] = createQueue(rank);
-    }
 };

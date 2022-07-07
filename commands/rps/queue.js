@@ -1,6 +1,6 @@
 const game = require('../../utils/game');
 const { queueEmbed } = require('../../utils/embeds');
-const { addPlayerToQueue, createQueue } = require('../../utils/manageQueues');
+const { addPlayerToQueue } = require('../../utils/manageQueues');
 const ranks = require('../../config/ranks.json');
 const { defaultTimeout } = require('../../config/settings.json');
 const capitalize = require('../../utils/capitalize');
@@ -27,17 +27,17 @@ module.exports = {
 
         const queueLength = interaction.options.getInteger('queue_length');
         const queue = await addPlayerToQueue(user, channel.name, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
-        console.log(queue);
 
         if (!queue) return interaction.reply({ content: 'The bot is currently making the queue.', ephemeral: true });
         if (queue === 'in') return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
         
         const { players, lobby: { rank } } = queue;
-
-        const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
+        console.log(`Players in queue now: ${players.length}`);
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
         console.log(`${user.username} joined Lobby ${global.lobbyId} in ${capitalize(rank)}`);
+
+        const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
 
         if (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) {
             await interaction.channel.send({ content: `<@&${rankRole.id}>` });
@@ -45,7 +45,6 @@ module.exports = {
         
         if (players.length === 2) {
             global.lobbyId++;
-            global[`${rank}Queue`] = createQueue(rank);
             await game(queue, interaction);
         }
     }

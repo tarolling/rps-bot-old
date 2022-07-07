@@ -31,16 +31,20 @@ const createQueue = (rank) => {
 */
 const addPlayerToQueue = async (player, rank, timeout) => {
     // There is no existing rank queue
-    if (!global[`${rank}Queue`]) return undefined;
+    if (!global[`${rank}Queue`]) {
+        console.log('No existing rank queue, making one...');
+        global[`${rank}Queue`] = createQueue(rank);
+    }
 
     // Failsafe
-    if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length >= 2) return undefined;
+    if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length >= 2) { console.log('Failsafe'); return undefined; }    
 
     // Player already in queue
-    if (global[`${rank}Queue`].playerIdsIndexed[player.id]) return 'in';
+    if (global[`${rank}Queue`].playerIdsIndexed[player.id]) { console.log('Player already in queue'); return 'in'; }
     
     // Player not in queue & it has room
-    const { players, timeouts, playerIdsIndexed } = global[`${rank}Queue`];
+    const { players, timeouts, playerIdsIndexed, lobby: { id } } = global[`${rank}Queue`];
+    console.log(`Adding ${player.username} to lobby ${id}...`);
     players.push(player);
     playerIdsIndexed[player.id] = player;
     if (timeout) {
@@ -48,7 +52,7 @@ const addPlayerToQueue = async (player, rank, timeout) => {
             await removePlayerFromQueue(player, rank);
         }, timeout);
     }
-
+    console.log(`${player.username} added to lobby ${id}!`);
     return global[`${rank}Queue`];
 };
 
