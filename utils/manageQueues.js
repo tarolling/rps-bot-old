@@ -17,7 +17,7 @@ const createQueue = (rank) => {
             }
         },
         lobby: {
-            id: global.lobbyId,
+            id: global.lobbyId++,
             rank: rank
         }
     };
