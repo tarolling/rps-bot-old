@@ -1,4 +1,4 @@
-const { adjustStats, adjustElo, rankValidate } = require('./db');
+const { adjustStats, adjustElo, rankValidate, findPlayer } = require('./db');
 const { eloResult, game, gameWin, gameLoss, gameDraw, results, waiting } = require('./embeds');
 const logic = require('./logic');
 const ranks = require('../config/ranks.json');
@@ -149,12 +149,20 @@ module.exports = async (queue, interaction) => {
     console.log(`Lobby ${id} Results | ${p1.user.username}: ${p1.score} | ${p2.user.username}: ${p2.score} | Games Played: ${queue.game.number}`);
     
     if (Object.keys(ranks).includes(rank) && (p1.score === 3 || p2.score === 3)) {
-        const eloArr = await adjustElo(queue);
+        const oldElo = [];
+
+        for (let i = 0; i < players.length; i++) {
+            const oldStats = await findPlayer(players[i].id);
+            oldElo.push(oldStats.elo);
+        }
+        
+        await adjustElo(queue);
         await rankValidate(queue, interaction);
         await adjustStats(queue);
 
         for (let i = 0; i < players.length; i++) {
-            await players[i].send({ embeds: [eloResult(queue, players[i], eloArr[i * 2], eloArr[i * 2 + 1])] });
+            const newStats = await findPlayer(players[i].id);
+            await players[i].send({ embeds: [eloResult(queue, players[i], oldElo[i], newStats.elo)] });
         }
     }
 };

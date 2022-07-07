@@ -1,6 +1,6 @@
 const game = require('../../utils/game');
 const { challenge } = require('../../utils/embeds');
-const { addPlayerToQueue, createQueue } = require('../../utils/manageQueues');
+const { addPlayerToChallenge, createQueue } = require('../../utils/manageQueues');
 
 
 module.exports = {
@@ -18,13 +18,16 @@ module.exports = {
         default_member_permissions: (1 << 11) // SEND_MESSAGES
     },
     async execute(interaction) {
+        const { user } = interaction;
+
         const target = interaction.options.getUser('user');
         
         if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true });
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
         
-        let queue = await addPlayerToQueue(interaction.user, 'challenge');
+        let queue = createQueue(`challenge-${user.id}`);
+        await addPlayerToChallenge(queue, user);
         let acceptBtn = {
             type: 'BUTTON',
             label: 'Accept',
@@ -70,9 +73,8 @@ module.exports = {
             row.components = [acceptBtn, declineBtn];
             if (i.customId === 'Accept') {
                 await challengeMessage.edit({ components: [row] });
-                queue = await addPlayerToQueue(target, 'challenge');
+                queue = await addPlayerToChallenge(queue, target);
                 global.lobbyId++;
-                global[`challengeQueue`] = createQueue('challenge');
                 await game(queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });

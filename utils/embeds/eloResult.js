@@ -2,7 +2,7 @@ const ranks = require('../../config/ranks');
 const { footer } = require('../../config/embeds');
 
 
-module.exports = (queue, player, newElo, eloDiff) => {
+module.exports = (queue, player, oldElo, newElo) => {
     const { lobby: { rank } } = queue;
     const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;
 
@@ -14,8 +14,8 @@ module.exports = (queue, player, newElo, eloDiff) => {
             url: player?.displayAvatarURL({ format: 'png', dynamic: true })
         },
         fields: [
-            { name: 'Previous Elo', value: `${newElo - eloDiff}`, inline: true },
-            { name: 'Elo Change', value: `${eloDiff}`, inline: true }
+            { name: 'Previous Elo', value: `${oldElo}`, inline: true },
+            { name: 'Elo Change', value: `${newElo - oldElo}`, inline: true }
         ],
         footer
     };

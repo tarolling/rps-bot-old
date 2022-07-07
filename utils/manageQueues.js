@@ -52,6 +52,13 @@ const addPlayerToQueue = async (player, rank, timeout) => {
     return global[`${rank}Queue`];
 };
 
+const addPlayerToChallenge = async (queue, player) => {
+    const { players, playerIdsIndexed } = queue;
+    players.push(player);
+    playerIdsIndexed[player.id] = player;
+    return queue;
+}
+
 const removePlayerFromQueue = async (player, rank) => {
     const playerInQueue = global[`${rank}Queue`].playerIdsIndexed[player.id];
     
@@ -86,6 +93,7 @@ const displayRankQueue = async (rank) => {
 module.exports = {
     createQueue,
     addPlayerToQueue,
+    addPlayerToChallenge,
     removePlayerFromQueue,
     findPlayerQueue,
     displayRankQueue
