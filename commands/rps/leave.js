@@ -5,7 +5,7 @@ const capitalize = require('../../utils/capitalize');
 
 module.exports = {
     data: {
-        name: 'leave',
+        name: 'l',
         description: 'Leave the queue.',
         options: [],
         default_member_permissions: (1 << 11) // SEND_MESSAGES
