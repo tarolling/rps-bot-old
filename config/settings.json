@@ -1,6 +1,6 @@
 {
     "MODE_ARG": 2,
-    "K": 48,
+    "K": 28,
     "minInc": 7,
     "maxInc": 20,
     "defaultElo": 1000,

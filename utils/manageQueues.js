@@ -45,7 +45,9 @@ const addPlayerToQueue = async (player, rank, timeout) => {
     // Player not in queue & it has room
     const { players, timeouts, playerIdsIndexed, lobby: { id } } = global[`${rank}Queue`];
     console.log(`Adding ${player.username} to lobby ${id}...`);
-    console.log(`Players before the push: ${players.length}`);
+    console.log('Queue before the push ----------------------------------------------------');
+    console.log(global[`${rank}Queue`]);
+
     players.push(player);
     playerIdsIndexed[player.id] = player;
     if (timeout) {
@@ -53,7 +55,9 @@ const addPlayerToQueue = async (player, rank, timeout) => {
             await removePlayerFromQueue(player, rank);
         }, timeout);
     }
-    console.log(`Players after the push: ${players.length}`);
+    
+    console.log('Queue after the push ----------------------------------------------------');
+    console.log(global[`${rank}Queue`]);
     console.log(`${player.username} added to lobby ${id}!`);
     return global[`${rank}Queue`];
 };
