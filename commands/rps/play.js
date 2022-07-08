@@ -68,6 +68,7 @@ module.exports = {
 
         collector.on('collect', async (i) => {
             i.deferUpdate();
+            collector.stop();
             acceptBtn.disabled = true;
             declineBtn.disabled = true;
             row.components = [acceptBtn, declineBtn];
@@ -79,8 +80,6 @@ module.exports = {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
                 await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
             }
-
-            collector.stop();
         });
 
         collector.on('end', async (collected, reason) => {
