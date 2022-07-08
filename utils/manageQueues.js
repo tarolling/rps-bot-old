@@ -1,4 +1,4 @@
-const createQueue = (rank) => {
+const createQueue = async (rank) => {
     return {
         players: [],
         playerIdsIndexed: {},
@@ -33,10 +33,8 @@ const addPlayerToQueue = async (player, rank, timeout) => {
     // There is no existing rank queue
     if (!global[`${rank}Queue`]) {
         console.log('No existing rank queue, making one...');
-        global[`${rank}Queue`] = createQueue(rank);
+        global[`${rank}Queue`] = await createQueue(rank);
     }
-
-    await new Promise(r => setTimeout(r, 100));
 
     // Failsafe
     if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length >= 2) { console.log('Failsafe'); return undefined; }    
