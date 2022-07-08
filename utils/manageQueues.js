@@ -36,6 +36,8 @@ const addPlayerToQueue = async (player, rank, timeout) => {
         global[`${rank}Queue`] = createQueue(rank);
     }
 
+    await new Promise(r => setTimeout(r, 100));
+
     // Failsafe
     if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length >= 2) { console.log('Failsafe'); return undefined; }    
 
