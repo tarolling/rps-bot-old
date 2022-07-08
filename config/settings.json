@@ -1,7 +1,7 @@
 {
     "MODE_ARG": 2,
     "K": 48,
-    "minInc": 5,
+    "minInc": 7,
     "maxInc": 20,
     "defaultElo": 1000,
     "defaultRank": "Veteran",
