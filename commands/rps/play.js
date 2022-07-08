@@ -74,7 +74,6 @@ module.exports = {
             if (i.customId === 'Accept') {
                 await challengeMessage.edit({ components: [row] });
                 queue = await addPlayerToChallenge(queue, target);
-                global.lobbyId++;
                 await game(queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
