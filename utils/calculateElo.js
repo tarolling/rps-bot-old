@@ -1,18 +1,18 @@
-const { K, minInc, maxInc } = require('../config/settings.json');
+const { K, minInc, maxInc, distributionFactor } = require('../config/settings.json');
 
 
 module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {
     // sigma values will be decreased depending on each other
     let larger, smaller, expectedWin, expectedLoss;
     if (winnerElo >= loserElo) {
-        larger = Math.pow(10, (winnerElo) / 400);
-        smaller = Math.pow(10, (loserElo) / 400);
+        larger = Math.pow(10, (winnerElo) / distributionFactor);
+        smaller = Math.pow(10, (loserElo) / distributionFactor);
 
         expectedWin = larger / (larger + smaller);
         expectedLoss = smaller / (larger + smaller);
     } else {
-        larger = Math.pow(10, (loserElo) / 400);
-        smaller = Math.pow(10, (winnerElo) / 400);
+        larger = Math.pow(10, (loserElo) / distributionFactor);
+        smaller = Math.pow(10, (winnerElo) / distributionFactor);
 
         expectedWin = smaller / (larger + smaller);
         expectedLoss = larger / (larger + smaller);

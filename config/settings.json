@@ -3,6 +3,7 @@
     "K": 28,
     "minInc": 7,
     "maxInc": 20,
+    "distributionFactor": 500,
     "defaultElo": 1000,
     "defaultRank": "Veteran",
     "defaultTimeout": 10
