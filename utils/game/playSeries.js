@@ -2,7 +2,8 @@ const playGame = require('./playGame');
 const capitalize = require('../misc/capitalize');
 const ranks = require('../../config/ranks.json');
 const { eloResult, results } = require('./embeds');
-const { adjustElo, adjustStats, findPlayer, rankValidate } = require('../db');
+const { adjustElo, adjustStats, rankValidate } = require('./db');
+const { findPlayer } = require('../db');
 
 
 module.exports = async (queue, interaction) => {
@@ -25,13 +26,7 @@ module.exports = async (queue, interaction) => {
         gameNumber++;
         await playGame(queue);
 
-        if (pOne.score == -1 || pTwo.score == -1) {
-            pOne.user.send('Neither player chose an option in time, so the lobby has been aborted.');
-            pTwo.user.send('Neither player chose an option in time, so the lobby has been aborted.');
-            console.log(`DOUBLE AFK | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`);
-            await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`});
-            return;
-        }
+        if (pOne.score == -1 || pTwo.score == -1) break;
 
         console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
         await resultsChannel.send({ content: `L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})` });
@@ -39,7 +34,13 @@ module.exports = async (queue, interaction) => {
         pTwo.choice = '';
     }
 
-    // Finish up
+    if (pOne.score == -1 || pTwo.score == -1) {
+        pOne.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+        pTwo.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+        console.log(`DOUBLE AFK | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`);
+        await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`});
+        return;
+    }
 
     for (const player of players) {
         await player.user.send({ embeds: [results(queue)] });

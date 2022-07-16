@@ -7,7 +7,7 @@ const gameLoss = require('./gameLoss');
 const gameWin = require('./gameWin');
 const leave = require('./leave');
 const promotion = require('./promotion');
-const queue = require('./queue');
+const queueEmbed = require('./queue');
 const results = require('./results');
 const status = require('./status');
 const waiting = require('./waiting');
@@ -23,7 +23,7 @@ module.exports = {
     gameWin,
     leave,
     promotion,
-    queue,
+    queueEmbed,
     results,
     status,
     waiting

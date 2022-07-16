@@ -9,7 +9,7 @@ module.exports = async (queue) => {
 
     queue.lobbyInfo.gameNumber++;
 
-    let rockBtn = {
+    const rockBtn = {
         type: 'BUTTON',
         label: 'Rock',
         custom_id: 'Rock',
@@ -18,7 +18,7 @@ module.exports = async (queue) => {
         url: null,
         disabled: false
     };
-    let paperBtn = {
+    const paperBtn = {
         type: 'BUTTON',
         label: 'Paper',
         custom_id: 'Paper',
@@ -27,7 +27,7 @@ module.exports = async (queue) => {
         url: null,
         disabled: false
     };
-    let scissorsBtn = {
+    const scissorsBtn = {
         type: 'BUTTON',
         label: 'Scissors',
         custom_id: 'Scissors',
@@ -36,7 +36,7 @@ module.exports = async (queue) => {
         url: null,
         disabled: false
     };
-    let row = {
+    const row = {
         type: 'ACTION_ROW',
         components: [rockBtn, paperBtn, scissorsBtn]
     };
@@ -54,7 +54,6 @@ module.exports = async (queue) => {
         .catch(() => { console.error; return; });
 
     const filter = (i) => {
-        i.deferUpdate();
         return i.user.id === pOne.user.id || i.user.id === pTwo.user.id;
     };
 
@@ -62,40 +61,26 @@ module.exports = async (queue) => {
     if (gameMessages.length != 2) return;
     let prom1 = gameMessages[0].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
         .then((i) => {
+            i.deferUpdate();
             pOne.choice = i.customId;
-            rockBtn.disabled = true;
-            paperBtn.disabled = true;
-            scissorsBtn.disabled = true;
-            row.components = [rockBtn, paperBtn, scissorsBtn];
-            gameMessages[0].edit({ components: [row] });
+            gameMessages[0].edit({ components: [] });
             return pOne.user.send({ embeds: [waiting(queue, i)] });
         })
         .then(msg => gameResults.pOneMsg = msg)
         .catch(() => {
-            rockBtn.disabled = true;
-            paperBtn.disabled = true;
-            scissorsBtn.disabled = true;
-            row.components = [rockBtn, paperBtn, scissorsBtn];
-            gameMessages[0].edit({ components: [row] });
+            gameMessages[0].edit({ components: [] });
         });
 
     let prom2 = gameMessages[1].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
         .then((i) => {
+            i.deferUpdate();
             pTwo.choice = i.customId;
-            rockBtn.disabled = true;
-            paperBtn.disabled = true;
-            scissorsBtn.disabled = true;
-            row.components = [rockBtn, paperBtn, scissorsBtn];
-            gameMessages[1].edit({ components: [row] });
+            gameMessages[1].edit({ components: [] });
             return pTwo.user.send({ embeds: [waiting(queue, i)] });
         })
         .then(msg => gameResults.pTwoMsg = msg)
         .catch(() => {
-            rockBtn.disabled = true;
-            paperBtn.disabled = true;
-            scissorsBtn.disabled = true;
-            row.components = [rockBtn, paperBtn, scissorsBtn];
-            gameMessages[1].edit({ components: [row] });
+            gameMessages[1].edit({ components: [] });
         });
     
     // Awaiting the players to make their choices

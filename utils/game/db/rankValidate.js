@@ -1,5 +1,5 @@
-const ranks = require('../../config/ranks.json');
-const capitalize = require('../misc/capitalize');
+const ranks = require('../../../config/ranks.json');
+const capitalize = require('../../misc/capitalize');
 const { promotion, demotion } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
