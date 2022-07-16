@@ -1,5 +1,5 @@
 const findPlayer = require('../../utils/db/findPlayer');
-const { statsEmbed } = require('../../utils/embeds');
+const statsEmbed = require('../../utils/embeds/stats');
 
 
 module.exports = {

@@ -1,4 +1,4 @@
-const { K, minInc, maxInc, distributionFactor } = require('../config/settings.json');
+const { K, minInc, maxInc, distributionFactor } = require('../../config/settings.json');
 
 
 module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {

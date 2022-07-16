@@ -1,6 +1,6 @@
 const resetPlayer = require('../../utils/db/resetPlayer');
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../../utils/capitalize');
+const capitalize = require('../../utils/misc/capitalize');
 const { defaultRank } = require('../../config/settings.json');
 
 

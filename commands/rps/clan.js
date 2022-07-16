@@ -1,5 +1,5 @@
-const { createClan, joinClan, leaveClan, viewClan } = require('../../utils/db/clan');
-const { clanEmbed } = require('../../utils/embeds');
+const { createClan, joinClan, leaveClan, viewClan } = require('../../utils/clans/db');
+const clanEmbed = require('../../utils/clans/embeds/clan');
 
 
 module.exports = {

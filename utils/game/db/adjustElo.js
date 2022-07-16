@@ -1,4 +1,4 @@
-const calculateElo = require('../calculateElo');
+const calculateElo = require('../game/calculateElo');
 
 const MongoClient = require('mongodb').MongoClient;
 // eslint-disable-next-line

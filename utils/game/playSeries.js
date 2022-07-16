@@ -1,7 +1,7 @@
 const playGame = require('./playGame');
-const capitalize = require('../capitalize');
+const capitalize = require('../misc/capitalize');
 const ranks = require('../../config/ranks.json');
-const { eloResult, results } = require('../embeds');
+const { eloResult, results } = require('./embeds');
 const { adjustElo, adjustStats, findPlayer, rankValidate } = require('../db');
 
 

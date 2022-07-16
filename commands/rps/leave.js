@@ -1,6 +1,6 @@
-const { removePlayerFromQueue } = require('../../utils/manageQueues');
-const { leave } = require('../../utils/embeds');
-const capitalize = require('../../utils/capitalize');
+const { removePlayerFromQueue } = require('../../utils/game/manageQueues');
+const { leave } = require('../../utils/game/embeds');
+const capitalize = require('../../utils/misc/capitalize');
 
 
 module.exports = {

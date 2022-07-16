@@ -1,6 +1,6 @@
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../capitalize');
-const { leaderboard } = require('../embeds');
+const capitalize = require('../misc/capitalize');
+const leaderboard = require('../embeds/leaderboard');
 
 const MongoClient = require('mongodb').MongoClient;
 // eslint-disable-next-line

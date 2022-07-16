@@ -1,4 +1,4 @@
-const { footer } = require('../../config/embeds');
+const { footer } = require('../../../config/embeds.json');
 
 
 module.exports = (interaction) => {

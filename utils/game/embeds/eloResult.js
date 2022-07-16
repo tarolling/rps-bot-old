@@ -1,5 +1,5 @@
-const ranks = require('../../config/ranks');
-const { footer } = require('../../config/embeds');
+const ranks = require('../../../config/ranks.json');
+const { footer } = require('../../../config/embeds.json');
 
 
 module.exports = (queue, player, oldElo, newElo) => {

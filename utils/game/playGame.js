@@ -1,4 +1,4 @@
-const { game, gameWin, gameLoss, gameDraw, waiting } = require('../embeds');
+const { game, gameWin, gameLoss, gameDraw, waiting } = require('./embeds');
 const logic = require('./logic');
 
 
