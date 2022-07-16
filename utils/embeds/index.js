@@ -1,4 +1,5 @@
 const challenge = require('./challenge');
+const clanEmbed = require('./clan');
 const demotion = require('./demotion');
 const eloResult = require('./eloResult');
 const game = require('./game');
@@ -19,6 +20,7 @@ const waiting = require('./waiting');
 
 module.exports = {
     challenge,
+    clanEmbed,
     demotion,
     eloResult,
     game,

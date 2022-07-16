@@ -1,4 +1,4 @@
-const game = require('../../utils/game');
+const playSeries = require('../../utils/game/playSeries');
 const { challenge } = require('../../utils/embeds');
 const { addPlayerToChallenge, createQueue } = require('../../utils/manageQueues');
 
@@ -26,8 +26,10 @@ module.exports = {
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
         
-        let queue = createQueue(`challenge-${user.id}`);
-        await addPlayerToChallenge(queue, user);
+        const rankName = `challenge-${user.id}`;
+        await createQueue(rankName);
+        await addPlayerToChallenge(rankName, user);
+
         let acceptBtn = {
             type: 'BUTTON',
             label: 'Accept',
@@ -74,8 +76,8 @@ module.exports = {
             row.components = [acceptBtn, declineBtn];
             if (i.customId === 'Accept') {
                 await challengeMessage.edit({ components: [row] });
-                queue = await addPlayerToChallenge(queue, target);
-                await game(queue, interaction);
+                const queue = await addPlayerToChallenge(rankName, target);
+                await playSeries(queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
                 await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });

@@ -1,4 +1,4 @@
-module.exports = (p1Choice, p2Choice) => {
+module.exports = async (p1Choice, p2Choice) => {
     if (!(p1Choice && p2Choice)) {
         if (p1Choice) return 'p1';
         if (p2Choice) return 'p2';

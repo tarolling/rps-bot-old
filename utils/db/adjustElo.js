@@ -6,22 +6,15 @@ const uri = process.env.DB_URI;
 
 
 module.exports = async (queue) => {
-    const { game: { p1, p2 } } = queue;
+    const { players } = queue;
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
     try {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        let winner, loser;
-
-        if (p1.score === 3) {
-            winner = p1.user;
-            loser = p2.user;
-        } else {
-            winner = p2.user;
-            loser = p1.user;
-        }
+        const winner = players[0].score === 3 ? players[0].user : (players[1].score === 3 ? players[1].user : null);
+        const loser = players[0].score === 3 ? players[1].user : (players[1].score === 3 ? players[0].user : null);
 
         let winnerElo, loserElo;
 
@@ -31,11 +24,11 @@ module.exports = async (queue) => {
             .then(player => loserElo = player.elo);
 
         const incArr = calculateElo(winnerElo, loserElo);
-        const p1Incr = winner === p1.user ? incArr[0] : incArr[1];
-        const p2Incr = winner === p2.user ? incArr[0] : incArr[1];
+        const p1Incr = winner === players[0].user ? incArr[0] : incArr[1];
+        const p2Incr = winner === players[1].user ? incArr[0] : incArr[1];
 
-        await collection.findOneAndUpdate({ user_id: p1.user.id }, { $inc: { elo: p1Incr } });
-        await collection.findOneAndUpdate({ user_id: p2.user.id }, { $inc: { elo: p2Incr } });
+        await collection.findOneAndUpdate({ user_id: players[0].user.id }, { $inc: { elo: p1Incr } });
+        await collection.findOneAndUpdate({ user_id: players[1].user.id }, { $inc: { elo: p2Incr } });
     } catch (err) {
         console.error(err);
     } finally {

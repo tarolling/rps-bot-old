@@ -3,21 +3,21 @@ const { footer } = require('../../config/embeds');
 
 
 module.exports = (queue) => {
-    const { game: { number, p1, p2 }, lobby: { rank, id } } = queue;
+    const { players, lobbyInfo: { gameNumber, id, rank } } = queue;
     const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;
 
-    const winner = p1.score > p2.score ? p1.user : (p2.score > p1.score ? p2.user : null);
+    const winner = players[0].score > players[1].score ? players[0].user : (players[1].score > players[0].score ? players[1].user : null);
     
     return {
         color,
         title: `Lobby #${id} Results`,
-        description: `**Games Played:** ${number}`,
+        description: `**Games Played:** ${gameNumber}`,
         thumbnail: {
             url: winner?.displayAvatarURL({ format: 'png', dynamic: true })
         },
         fields: [
-            { name: p1.user.username, value: `${p1.score}`, inline: true },
-            { name: p2.user.username, value: `${p2.score}`, inline: true }
+            { name: `${players[0].score}`, value: players[0].user.username, inline: true },
+            { name: `${players[1].score}`, value: players[1].user.username, inline: true }
         ],
         footer
     };

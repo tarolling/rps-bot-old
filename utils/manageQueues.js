@@ -1,26 +1,26 @@
-const createQueue = async (rank) => {
+let globalQueues = {};
+let globalLobbyId = 1;
+
+const playerInfo = (user, timeout) => {
     return {
+        user,
+        timeout: timeout || undefined,
+        choice: '',
+        score: 0
+    }
+};
+
+const createQueue = async (rank) => {
+    globalQueues[`${rank}`] = {
         players: [],
-        playerIdsIndexed: {},
-        timeouts: {},
-        game: {
-            number: 0,
-            p1: {
-                user: {},
-                choice: '',
-                score: 0
-            },
-            p2: {
-                user: {},
-                choice: '',
-                score: 0
-            }
-        },
-        lobby: {
-            id: global.lobbyId++,
+        lobbyInfo: {
+            gameNumber: 0,
+            id: globalLobbyId++,
             rank: rank
         }
     };
+
+    return globalQueues[`${rank}`];
 };
 
 /*
@@ -29,80 +29,52 @@ const createQueue = async (rank) => {
 * Case 3: Player is already in a queue -> Return queue.
 * Case 4: Player is not in a queue -> Add player to queue.
 */
-const addPlayerToQueue = async (player, rank, timeout) => {
-    // There is no existing rank queue
-    if (!global[`${rank}Queue`]) {
-        console.log('No existing rank queue, making one...');
-        global[`${rank}Queue`] = await createQueue(rank);
-    }
+const addPlayerToQueue = async (rank, player, timeout) => {
+    const { players } = globalQueues[`${rank}`];
+    if (players.length >= 2) return undefined;
 
-    // Failsafe
-    if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length >= 2) { console.log('Failsafe'); return undefined; }    
-
-    // Player already in queue
-    if (global[`${rank}Queue`].playerIdsIndexed[player.id]) { console.log('Player already in queue'); return 'in'; }
+    players.push(playerInfo(player, timeout));
     
-    // Player not in queue & it has room
-    const { players, timeouts, playerIdsIndexed, lobby: { id } } = global[`${rank}Queue`];
-    console.log(`Adding ${player.username} to lobby ${id}...`);
-    console.log('Queue before the push ----------------------------------------------------');
-    console.log(global[`${rank}Queue`]);
-
-    players.push(player);
-    playerIdsIndexed[player.id] = player;
-    if (timeout) {
-        timeouts[player.id] = setTimeout(async () => {
-            await removePlayerFromQueue(player, rank);
-        }, timeout);
-    }
-    
-    console.log('Queue after the push ----------------------------------------------------');
-    console.log(global[`${rank}Queue`]);
-    console.log(`${player.username} added to lobby ${id}!`);
-    return global[`${rank}Queue`];
+    return globalQueues[`${rank}`];
 };
 
-const addPlayerToChallenge = async (queue, player) => {
-    const { players, playerIdsIndexed } = queue;
-    players.push(player);
-    playerIdsIndexed[player.id] = player;
-    return queue;
+const addPlayerToChallenge = async (rank, player) => {
+    const { players } = globalQueues[`${rank}`];
+    players.push(playerInfo(player));
+    return globalQueues[`${rank}`];
 }
 
-const removePlayerFromQueue = async (player, rank) => {
-    if (!global[`${rank}Queue`]) return undefined;
-    
-    const playerInQueue = global[`${rank}Queue`].playerIdsIndexed[player.id];
-    
-    if (!playerInQueue) return undefined;
-    
-    const { players, playerIdsIndexed, timeouts } = global[`${rank}Queue`];
+const removePlayerFromQueue = async (rank, player) => {
+    if (!globalQueues[`${rank}`]) return undefined;
 
-    if (players.length > 0 && playerIdsIndexed[player.id]) {
-        const index = players.findIndex(p => p.id === player.id);
-        players.splice(index, 1);
-        if (timeouts[player.id]) {
-            clearTimeout(timeouts[player.id]);
-            delete timeouts[player.id];
-        }
-        delete playerIdsIndexed[player.id];
-        return global[`${rank}Queue`];
-    }
+    const playerIndex = globalQueues[`${rank}`].players.findIndex(p => p.user.id === player.id);
+    
+    if (playerIndex === -1) return undefined;
 
-    return undefined;
+    const queue = globalQueues[`${rank}`];
+    globalQueues[`${rank}`] = null;
+
+    globalLobbyId--;
+    return queue;
 };
 
-const findPlayerQueue = async (player, rank) => {
-    const rankQueue = global[`${rank}Queue`];
-    const playerQueue = rankQueue.find(queue => queue.playerIdsIndexed[player.id]);
-    return playerQueue ? playerQueue : undefined;
+const findPlayerQueue = async (rank, player) => {
+    if (!globalQueues[`${rank}`]) return true;
+    return globalQueues[`${rank}`].players.find(p => p.user.id === player.id);
 };
+
+const findRankQueue = async (rank) => {
+    return globalQueues[`${rank}`];
+}
 
 const displayRankQueue = async (rank) => {
-    if (!global[`${rank}Queue`]) return undefined;
-    if (Object.keys(global[`${rank}Queue`].playerIdsIndexed).length === 0) return undefined;
-    return global[`${rank}Queue`];
+    const queue = globalQueues[`${rank}`];
+    return (!queue || queue?.players.length === 0) ? undefined : queue;
 };
+
+const deleteRankQueue = async (rank) => {
+    globalQueues[`${rank}`] = null;
+}
 
 module.exports = {
     createQueue,
@@ -110,5 +82,7 @@ module.exports = {
     addPlayerToChallenge,
     removePlayerFromQueue,
     findPlayerQueue,
-    displayRankQueue
+    findRankQueue,
+    displayRankQueue,
+    deleteRankQueue
 };

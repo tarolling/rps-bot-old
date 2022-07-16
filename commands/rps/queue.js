@@ -1,9 +1,10 @@
-const game = require('../../utils/game');
-const { queueEmbed } = require('../../utils/embeds');
-const { addPlayerToQueue } = require('../../utils/manageQueues');
+const playSeries = require('../../utils/game/playSeries');
 const ranks = require('../../config/ranks.json');
-const { defaultTimeout } = require('../../config/settings.json');
 const capitalize = require('../../utils/capitalize');
+const { queueEmbed } = require('../../utils/embeds');
+const { addPlayerToQueue, findPlayerQueue, findRankQueue, createQueue, deleteRankQueue } = require('../../utils/manageQueues');
+const { defaultTimeout } = require('../../config/settings.json');
+const leave = require('./leave');
 
 
 module.exports = {
@@ -24,15 +25,24 @@ module.exports = {
     },
     async execute(interaction) {
         const { user, channel, guild } = interaction;
+        const rankName = channel.name;
+
+        let rankQueue = await findRankQueue(rankName);
+        if (!rankQueue) await createQueue(rankName);
+
+        const playerQueue = await findPlayerQueue(rankName, user);
+        if (playerQueue) return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
+
 
         const queueLength = interaction.options.getInteger('queue_length');
-        const queue = await addPlayerToQueue(user, channel.name, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
-
-        if (!queue) return interaction.reply({ content: 'The bot is currently making the queue.', ephemeral: true });
-        if (queue === 'in') return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
+        const timeout = setTimeout(async () => {
+            await leave.execute(interaction);
+        }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
         
-        const { players, lobby: { rank, id } } = queue;
-        console.log(`Players in queue now: ${players.length}`);
+        const queue = await addPlayerToQueue(rankName, user, timeout);
+        if (!queue) return interaction.reply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
+        
+        const { players, lobbyInfo: { id, rank } } = queue;
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
         console.log(`${user.username} joined Lobby ${id} in ${capitalize(rank)}`);
@@ -40,14 +50,15 @@ module.exports = {
         const rankRole = guild.roles.cache.find(r => r.name === `${capitalize(rank)} Ping`);
 
         if (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) {
-            await interaction.channel.send({ content: `<@&${rankRole.id}>` });
+            await channel.send({ content: `<@&${rankRole.id}>` });
         }
         
         if (players.length === 2) {
-            global[`${rank}Queue`] = null;
-            await game(queue, interaction);
+            for (const player of players) {
+                clearTimeout(player.timeout);
+            }
+            await deleteRankQueue(rank);
+            await playSeries(queue, interaction);
         }
-
-        return;
     }
 };

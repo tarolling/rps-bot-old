@@ -3,7 +3,7 @@ const { footer } = require('../../config/embeds');
 
 
 module.exports = (queue, player, oldElo, newElo) => {
-    const { lobby: { rank } } = queue;
+    const { lobbyInfo: { rank } } = queue;
     const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;
 
     return {

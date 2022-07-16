@@ -12,12 +12,22 @@ module.exports = {
     },
     async execute(interaction) {
         const { user, channel } = interaction;
-        const queue = await removePlayerFromQueue(user, channel.name);
-        if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
+        const queue = await removePlayerFromQueue(channel.name, user);
 
-        const { lobby: { rank, id } } = queue;
+        if (interaction.deferred || interaction.replied) {
+            if (!queue) return channel.send({ content: 'You are not in a queue.', ephemeral: true });
+    
+            const { lobbyInfo: { id, rank } } = queue;
+    
+            await channel.send({ embeds: [leave(queue)] });
+            console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
+        } else {
+            if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
-        await interaction.reply({ embeds: [leave(queue, interaction)] });
-        console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
+            const { lobbyInfo: { id, rank } } = queue;
+            
+            await interaction.reply({ embeds: [leave(queue)] });
+            console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
+        }
     }
 };

@@ -8,7 +8,7 @@ const uri = process.env.DB_URI;
 
 
 module.exports = async (queue, interaction) => {
-    const { game: { p1, p2 } } = queue;
+    const { players } = queue;
     const guild = interaction.guild;
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -16,8 +16,8 @@ module.exports = async (queue, interaction) => {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        const winner = p1.score === 3 ? p1.user : (p2.score === 3 ? p2.user : null);
-        const loser = p1.score === 3 ? p2.user : (p2.score === 3 ? p1.user : null);
+        const winner = players[0].score === 3 ? players[0].user : (players[1].score === 3 ? players[1].user : null);
+        const loser = players[0].score === 3 ? players[1].user : (players[1].score === 3 ? players[0].user : null);
 
         if (!winner || !loser) return;
         const winnerDoc = await collection.findOne({ user_id: winner.id });

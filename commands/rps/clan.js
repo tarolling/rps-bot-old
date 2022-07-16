@@ -1,4 +1,5 @@
 const { createClan, joinClan, leaveClan, viewClan } = require('../../utils/db/clan');
+const { clanEmbed } = require('../../utils/embeds');
 
 
 module.exports = {
@@ -61,7 +62,8 @@ module.exports = {
         default_member_permissions: (1 << 11) // SEND_MESSAGES
     },
     async execute(interaction) {
-        const guild = interaction.guild;
+        const { guild } = interaction;
+        if (!guild.available) return;
 
         try {
             await interaction.deferReply({ ephemeral: true });
@@ -71,10 +73,16 @@ module.exports = {
             switch (subcommand) {
                 case 'join': {
                     updatedNickname = await joinClan(interaction);
+                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
+                        await interaction.member.setNickname(updatedNickname);
+                    }
                     break;
                 }
                 case 'leave': {
                     updatedNickname = await leaveClan(interaction);
+                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
+                        await interaction.member.setNickname(updatedNickname);
+                    }
                     break;
                 }
                 case 'create': {
@@ -82,20 +90,19 @@ module.exports = {
                     if (clanAbbr.length > 4) return interaction.editReply({ content: 'Clan abbreviations must under 5 characters.' });
                     
                     updatedNickname = await createClan(interaction);
+                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
+                        await interaction.member.setNickname(updatedNickname);
+                    }
                     break;
                 }
                 case 'view': {
-                    updatedNickname = await viewClan(interaction);
+                    const clan = await viewClan(interaction);
+                    if (!clan) return interaction.editReply({ content: 'This clan could not be found!', ephemeral: true });
+                    await interaction.editReply({ embeds: [clanEmbed(clan)], ephemeral: true });
                     break;
                 }
                 default: break;
             }
-
-            if (!guild.available) return;
-            if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
-                await interaction.member.setNickname(updatedNickname);
-            }
-
         } catch (err) {
             console.error(err);
             return interaction.editReply({ content: 'An error occurred while trying to join/create a clan.', ephemeral: true });
