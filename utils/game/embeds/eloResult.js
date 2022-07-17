@@ -9,13 +9,13 @@ module.exports = (queue, player, oldElo, newElo) => {
     return {
         color,
         title: `Elo Change`,
-        description: `**New Elo:** ${newElo}`,
+        description: `New Elo: **${newElo}**`,
         thumbnail: {
             url: player?.displayAvatarURL({ format: 'png', dynamic: true })
         },
         fields: [
-            { name: 'Previous Elo', value: `${oldElo}`, inline: true },
-            { name: 'Elo Change', value: `${newElo - oldElo}`, inline: true }
+            { name: `${oldElo}`, value: 'Previous Elo', inline: true },
+            { name: `${newElo - oldElo}`, value: 'Elo Change', inline: true }
         ],
         footer
     };

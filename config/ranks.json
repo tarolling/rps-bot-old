@@ -2,6 +2,8 @@
     "recruit": {
         "color": 9125135,
         "elo": {
+            "increment": 20,
+            "decrement": -15,
             "placement": 400,
             "demo_placement": 500,
             "promotion": 600,
@@ -11,6 +13,8 @@
     "apprentice": {
         "color": 11382189,
         "elo": {
+            "increment": 20,
+            "decrement": -15,
             "placement": 700,
             "demo_placement": 800,
             "promotion": 900,
@@ -20,6 +24,8 @@
     "veteran": {
         "color": 4215,
         "elo": {
+            "increment": 20,
+            "decrement": -15,
             "placement": 1000,
             "demo_placement": 1100,
             "promotion": 1200,
