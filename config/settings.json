@@ -1,9 +1,9 @@
 {
     "MODE_ARG": 2,
-    "K": 28,
-    "minInc": 7,
+    "K": 30,
+    "minInc": 10,
     "maxInc": 20,
-    "distributionFactor": 500,
+    "distributionFactor": 750,
     "defaultElo": 1000,
     "defaultRank": "Veteran",
     "defaultTimeout": 10
