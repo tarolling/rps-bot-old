@@ -51,6 +51,9 @@ const removePlayerFromQueue = async (rank, player) => {
     
     if (playerIndex === -1) return undefined;
 
+    const { players } = globalQueues[`${rank}`];
+    clearTimeout(players[playerIndex].timeout);
+
     const queue = globalQueues[`${rank}`];
     globalQueues[`${rank}`] = null;
 
