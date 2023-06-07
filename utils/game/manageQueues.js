@@ -14,6 +14,7 @@ const createQueue = async (rank) => {
     globalQueues[`${rank}`] = {
         players: [],
         lobbyInfo: {
+            isPlaying: false,
             gameNumber: 0,
             id: globalLobbyId++,
             rank: rank

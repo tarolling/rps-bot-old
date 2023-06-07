@@ -42,7 +42,7 @@ module.exports = {
         const queue = await addPlayerToQueue(rankName, user, timeout);
         if (!queue) return interaction.reply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
         
-        const { players, lobbyInfo: { id, rank } } = queue;
+        const { players, lobbyInfo: { id, rank, isPlaying } } = queue;
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
         console.log(`${user.username} joined Lobby ${id} in ${capitalize(rank)}`);
@@ -58,7 +58,8 @@ module.exports = {
                 clearTimeout(player.timeout);
             }
             await deleteRankQueue(rank);
-            await playSeries(queue, interaction);
+            queue.isPlaying = true;
+            if (!isPlaying) await playSeries(queue, interaction);
         }
     }
 };
