@@ -1,15 +1,8 @@
-const ranks = require('../config/ranks');
-
-
 module.exports = {
     name: 'interactionCreate',
     once: false,
     async execute(interaction) {
-        if (!interaction.isCommand() || !interaction.channel) return; 
-        if (!(Object.keys(ranks).includes(interaction.channel.name)) && interaction.commandName !== 'register') {
-            await interaction.reply({ content: 'You cannot execute commands in this channel.', ephemeral: true });
-            return;
-        }
+        if (!interaction.isCommand() || !interaction.channel) return;
 
         const client = interaction.client;
         const command = client.commands.get(interaction.commandName);
