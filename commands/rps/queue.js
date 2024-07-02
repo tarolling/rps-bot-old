@@ -38,10 +38,10 @@ module.exports = {
         const timeout = setTimeout(async () => {
             await leave.execute(interaction);
         }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
-        
+
         const queue = await addPlayerToQueue(rankName, user, timeout);
         if (!queue) return interaction.reply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
-        
+
         const { players, lobbyInfo: { id, rank, isPlaying } } = queue;
 
         await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
@@ -52,7 +52,7 @@ module.exports = {
         if (players.length === 1 && Object.keys(ranks).includes(rank) && rankRole) {
             await channel.send({ content: `<@&${rankRole.id}>` });
         }
-        
+
         if (players.length === 2) {
             for (const player of players) {
                 clearTimeout(player.timeout);

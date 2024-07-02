@@ -5,13 +5,10 @@ const { MODE_ARG } = require('./config/settings.json');
 
 
 module.exports = () => {
-    // Initializing slash commands
     // eslint-disable-next-line
     const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
     // eslint-disable-next-line
     const clientId = (!process.argv[MODE_ARG]) ? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
-    // eslint-disable-next-line
-    const guildId = (!process.argv[MODE_ARG]) ? process.env.PROD_GUILD_ID : process.env.DEV_GUILD_ID;
 
     const commands = [];
     const commandFolders = fs.readdirSync('./commands');
@@ -25,13 +22,9 @@ module.exports = () => {
     }
 
     const rest = new REST({ version: '10' }).setToken(token);
-    
+
     // Application command permissions have moved to UI as of 04/27/22
-    rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: commands })
+    rest.put(Routes.applicationCommands(clientId), { body: commands })
         .then(() => console.log('Successfully registered application commands.'))
         .catch(console.error);
-
-
-    // Global lobby ID
-    global.lobbyId = 1;
 };
