@@ -5,7 +5,7 @@ const addValues = (interaction) => {
     return {
         user_id: interaction.user.id,
         username: interaction.options.getString('username'),
-        clan: "N/A",
+        club: "N/A",
         elo: defaultElo,
         sigma: 0,
         rank: defaultRank,
@@ -30,7 +30,7 @@ const addValues = (interaction) => {
 const careerResetValues = () => {
     return {
         $set: {
-            clan: "N/A",
+            club: "N/A",
             elo: defaultElo,
             sigma: 0,
             rank: defaultRank,

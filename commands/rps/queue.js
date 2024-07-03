@@ -25,7 +25,6 @@ module.exports = {
     },
     async execute(interaction) {
         const { user, channel, guild } = interaction;
-        const rankName = channel.name;
 
         let rankQueue = await findRankQueue(rankName);
         if (!rankQueue) await createQueue(rankName);

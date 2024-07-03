@@ -3,12 +3,12 @@ const { footer } = require('../../config/embeds');
 
 
 module.exports = (data) => {
-    const { username, rank, elo, clan, career_games, career_wins,
-            career_losses, career_win_pct, season_games,
-            season_wins, season_losses, season_win_pct, 
-            tournament_games, tournament_wins, tournament_losses,
-            current_streak, longest_streak, career_peak_elo,
-            season_peak_elo } = data;
+    const { username, rank, elo, club, career_games, career_wins,
+        career_losses, career_win_pct, season_games,
+        season_wins, season_losses, season_win_pct,
+        tournament_games, tournament_wins, tournament_losses,
+        current_streak, longest_streak, career_peak_elo,
+        season_peak_elo } = data;
 
     const color = (Object.keys(ranks).includes(rank.toLowerCase())) ? ranks[rank.toLowerCase()].color : null;
     return {
@@ -17,7 +17,7 @@ module.exports = (data) => {
         description: `${rank}`,
         fields: [
             { name: 'Elo', value: `${elo}`, inline: true },
-            { name: 'Clan', value: `${clan}`, inline: true },
+            { name: 'Club', value: `${club}`, inline: true },
             { name: 'Career Games Played', value: `${career_games}`, inline: true },
             { name: 'Career Wins', value: `${career_wins}`, inline: true },
             { name: 'Career Losses', value: `${career_losses}`, inline: true },

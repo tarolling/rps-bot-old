@@ -7,23 +7,23 @@ module.exports = async (interaction) => {
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     const userId = interaction.user.id;
     const playerQuery = { members: userId };
-    
+
 
     try {
         await dbClient.connect();
-        const clanCollection = dbClient.db('rps').collection('clans');
+        const clubCollection = dbClient.db('rps').collection('clubs');
         const playerCollection = dbClient.db('rps').collection('players');
 
-        let clan = await clanCollection.findOneAndUpdate(playerQuery, { $pull: playerQuery });
-        if (!clan) {
-            interaction.editReply({ content: `You are not a part of any clan.` });
+        let club = await clubCollection.findOneAndUpdate(playerQuery, { $pull: playerQuery });
+        if (!club) {
+            interaction.editReply({ content: `You are not a part of any club.` });
             return null;
         }
 
-        interaction.editReply({ content: `You have successfully left ${clan.value.name}!` });
+        interaction.editReply({ content: `You have successfully left ${club.value.name}!` });
 
-        if (clan.value.members.length <= 1) {
-            await clanCollection.findOneAndDelete({ members: { $eq: [] } });
+        if (club.value.members.length <= 1) {
+            await clubCollection.findOneAndDelete({ members: { $eq: [] } });
         }
 
         let playerName = await playerCollection.findOne({ user_id: userId });

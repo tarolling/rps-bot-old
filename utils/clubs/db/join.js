@@ -8,26 +8,26 @@ module.exports = async (interaction) => {
     const userId = interaction.user.id;
     const playerQuery = { members: userId };
 
-    const clanName = interaction.options.getString('clan_name');
-    const clanQuery = { name: { $regex: clanName, $options: 'i' } };
+    const clubName = interaction.options.getString('club_name');
+    const clubQuery = { name: { $regex: clubName, $options: 'i' } };
 
     try {
         await dbClient.connect();
-        const clanCollection = dbClient.db('rps').collection('clans');
+        const clubCollection = dbClient.db('rps').collection('clubs');
         const playerCollection = dbClient.db('rps').collection('players');
 
-        let validation = await clanCollection.findOne(playerQuery);
+        let validation = await clubCollection.findOne(playerQuery);
         if (validation) {
-            interaction.editReply({ content: `You are already part of this clan -> ${validation.name}` });
+            interaction.editReply({ content: `You are already part of this club -> ${validation.name}` });
             return null;
         }
 
-        validation = await clanCollection.findOneAndUpdate(clanQuery, { $push: playerQuery });
+        validation = await clubCollection.findOneAndUpdate(clubQuery, { $push: playerQuery });
         if (!validation.value) {
-            interaction.editReply({ content: 'This clan does not exist.' });
+            interaction.editReply({ content: 'This club does not exist.' });
             return null;
         }
-        
+
         interaction.editReply({ content: `You have successfully joined ${validation.value.name}!` });
 
         let playerName = await playerCollection.findOne({ user_id: userId });

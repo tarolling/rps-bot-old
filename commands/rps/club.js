@@ -1,21 +1,21 @@
-const { createClan, joinClan, leaveClan, viewClan } = require('../../utils/clans/db');
-const clanEmbed = require('../../utils/clans/embeds/clan');
+const { createClub, joinClub, leaveClub, viewClub } = require('../../utils/clubs/db');
+const clubEmbed = require('../../utils/clubs/embeds/club');
 
 
 module.exports = {
     data: {
-        name: 'clan',
-        description: 'Join or create a clan.',
+        name: 'club',
+        description: 'Join or create a club.',
         options: [
             {
                 type: 1,
                 name: 'join',
-                description: 'Join an existing clan.',
+                description: 'Join an existing club.',
                 options: [
                     {
                         type: 3,
-                        name: 'clan_name',
-                        description: 'Specify which clan you would like to join.',
+                        name: 'club_name',
+                        description: 'Specify which club you would like to join.',
                         required: true
                     }
                 ]
@@ -23,24 +23,24 @@ module.exports = {
             {
                 type: 1,
                 name: 'leave',
-                description: 'Leave your existing clan.',
+                description: 'Leave your existing club.',
                 options: []
             },
             {
                 type: 1,
                 name: 'create',
-                description: 'Create a new clan for people to join.',
+                description: 'Create a new club for people to join.',
                 options: [
                     {
                         type: 3,
-                        name: 'clan_name',
-                        description: 'Specify what you what like the clan to be called.',
+                        name: 'club_name',
+                        description: 'Specify what you what like the club to be called.',
                         required: true
                     },
                     {
                         type: 3,
                         name: 'abbreviation',
-                        description: `Specify your clan's desired abbreviation - must be 4 characters or less.`,
+                        description: `Specify your club's desired abbreviation - must be 4 characters or less.`,
                         required: true
                     }
                 ]
@@ -48,12 +48,12 @@ module.exports = {
             {
                 type: 1,
                 name: 'view',
-                description: 'View a specific clan or a list of clans.',
+                description: 'View a specific club or a list of clubs.',
                 options: [
                     {
                         type: 3,
-                        name: 'clan_name',
-                        description: 'Specify what clan you would like to view, or leave blank to view all clans.',
+                        name: 'club_name',
+                        description: 'Specify what club you would like to view, or leave blank to view all clubs.',
                         required: false
                     }
                 ]
@@ -72,40 +72,40 @@ module.exports = {
 
             switch (subcommand) {
                 case 'join': {
-                    updatedNickname = await joinClan(interaction);
+                    updatedNickname = await joinClub(interaction);
                     if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
                         await interaction.member.setNickname(updatedNickname);
                     }
                     break;
                 }
                 case 'leave': {
-                    updatedNickname = await leaveClan(interaction);
+                    updatedNickname = await leaveClub(interaction);
                     if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
                         await interaction.member.setNickname(updatedNickname);
                     }
                     break;
                 }
                 case 'create': {
-                    const clanAbbr = interaction.options.getString('abbreviation');
-                    if (clanAbbr.length > 4) return interaction.editReply({ content: 'Clan abbreviations must under 5 characters.' });
-                    
-                    updatedNickname = await createClan(interaction);
+                    const clubAbbr = interaction.options.getString('abbreviation');
+                    if (clubAbbr.length > 4) return interaction.editReply({ content: 'Club abbreviations must under 5 characters.' });
+
+                    updatedNickname = await createClub(interaction);
                     if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
                         await interaction.member.setNickname(updatedNickname);
                     }
                     break;
                 }
                 case 'view': {
-                    const clan = await viewClan(interaction);
-                    if (!clan) return interaction.editReply({ content: 'This clan could not be found!', ephemeral: true });
-                    await interaction.editReply({ embeds: [clanEmbed(clan)], ephemeral: true });
+                    const club = await viewClub(interaction);
+                    if (!club) return interaction.editReply({ content: 'This club could not be found!', ephemeral: true });
+                    await interaction.editReply({ embeds: [clubEmbed(club)], ephemeral: true });
                     break;
                 }
                 default: break;
             }
         } catch (err) {
             console.error(err);
-            return interaction.editReply({ content: 'An error occurred while trying to join/create a clan.', ephemeral: true });
+            return interaction.editReply({ content: 'An error occurred while trying to join/create a club.', ephemeral: true });
         }
     }
 };

@@ -1,16 +1,15 @@
-const fs = require('fs');
-const { Client, Collection, Intents } = require('discord.js');
+const fs = require('node:fs');
+const path = require('node:path');
+const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { MODE_ARG } = require('./config/settings.json');
+const { prodToken, devToken } = require('./config.json')
 
 
-// eslint-disable-next-line
-const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+const token = (!process.argv[MODE_ARG]) ? prodToken : devToken;
 
 const client = new Client({
     intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MEMBERS,
-        Intents.FLAGS.GUILD_MESSAGES
+        GatewayIntentBits.Guilds,
     ],
     allowedMentions: {
         parse: [
@@ -18,46 +17,47 @@ const client = new Client({
             'roles'
         ]
     },
-    partials: ['MESSAGE', 'CHANNEL', 'REACTION'],
+    partials: ['MESSAGE'],
     presence: {
-        status: 'dnd',
+        status: 'online',
         activities: [
             {
-                name: 'the next best RPS player',
-                type: 'WATCHING'
+                name: 'with top RPS players!',
+                type: 'COMPETING'
             }
         ]
     }
 });
 
 client.commands = new Collection();
-const commandFolders = fs.readdirSync('./commands');
+const foldersPath = path.join(__dirname, 'commands');
+const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
-    const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+    const commandsPath = path.join(foldersPath, folder);
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
     for (const file of commandFiles) {
-        const command = require(`./commands/${folder}/${file}`);
-        client.commands.set(command.data.name, command);
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath);
+        if ('data' in command && 'execute' in command) {
+            client.commands.set(command.data.name, command);
+        } else {
+            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        }
     }
 }
 
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-    const event = require(`./events/${file}`);
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
     if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client));
+        client.once(event.name, (...args) => event.execute(...args));
     } else {
-        client.on(event.name, (...args) => event.execute(...args, client));
+        client.on(event.name, (...args) => event.execute(...args));
     }
 }
 
-async function login() {
-    try {
-        await client.login(token);
-    } catch (err) {
-        console.error('The client encountered an error while logging in:', err);
-    }
-}
-
-login();
+client.login(token);

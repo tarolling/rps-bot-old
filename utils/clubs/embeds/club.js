@@ -1,8 +1,8 @@
 const { footer } = require('../../../config/embeds.json');
 
 
-module.exports = (clan) => {
-    const { name, abbreviation } = clan;
+module.exports = (club) => {
+    const { name, abbreviation } = club;
 
     return {
         color: null,

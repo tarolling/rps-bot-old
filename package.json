@@ -5,23 +5,25 @@
   "author": "tarolling",
   "main": "start.js",
   "scripts": {
-    "start": "node -r dotenv/config start.js",
-    "dev": "node -r dotenv/config start.js dev",
-    "lint": "eslint --ext .js,.json src test",
+    "start": "node start.js",
+    "dev": "node start.js dev",
+    "reload": "node deployCommands.js",
+    "reload-dev": "node deployCommands.js dev",
+    "lint": "eslint --ext .js,.json src/ test/",
     "fix": "eslint --ext .js,.json src test --fix",
     "precommit": "npm run lint && npm run test"
   },
   "dependencies": {
-    "@discordjs/rest": "^0.5.0",
+    "@discordjs/rest": "^2.3.0",
     "browser-sync": "^3.0.2",
-    "discord-api-types": "^0.33.5",
+    "discord-api-types": "^0.37.91",
     "discord.js": "^14.15.3",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "mongodb": "^4.17.0",
-    "node": "^17.7.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0",
+    "node": "^20.15.0"
   },
   "devDependencies": {
-    "eslint": "^8.17.0"
+    "eslint": "^9.6.0"
   }
 }

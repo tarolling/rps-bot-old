@@ -5,15 +5,15 @@ const uri = process.env.DB_URI;
 
 module.exports = async (interaction) => {
     const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    const clanName = interaction.options.getString('clan_name');
-    const query = { name: { $regex: clanName, $options: 'i' } };
-    
+    const clubName = interaction.options.getString('club_name');
+    const query = { name: { $regex: clubName, $options: 'i' } };
+
     try {
         await dbClient.connect();
-        const collection = dbClient.db('rps').collection('clans');
+        const collection = dbClient.db('rps').collection('clubs');
 
-        let clan = await collection.findOne(query);
-        return clan;
+        let club = await collection.findOne(query);
+        return club;
     } catch (err) {
         console.error(err);
     } finally {
