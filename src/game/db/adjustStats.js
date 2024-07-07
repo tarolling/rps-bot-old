@@ -1,18 +1,24 @@
-const MongoClient = require('mongodb').MongoClient;
-// eslint-disable-next-line
-const uri = process.env.DB_URI;
+const { dbUri: uri } = require('../../../config.json');
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (queue) => {
     const { players } = queue;
-    const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    
+    const dbClient = new MongoClient(uri, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    });
+
     try {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        const winner = players[0].score === 3 ? players[0].user : (players[1].score === 3 ? players[1].user : null);
-        const loser = players[0].score === 3 ? players[1].user : (players[1].score === 3 ? players[0].user : null);
+        const winner = players[0].score === 4 ? players[0].user : (players[1].score === 4 ? players[1].user : null);
+        const loser = players[0].score === 4 ? players[1].user : (players[1].score === 4 ? players[0].user : null);
 
         const winnerDoc = await collection.findOne({ user_id: winner.id });
         const loserDoc = await collection.findOne({ user_id: loser.id });
@@ -53,7 +59,7 @@ module.exports = async (queue) => {
         if (winnerDoc.elo > winnerDoc.career_peak_elo) {
             winnerNewDoc.$set.career_peak_elo = winnerDoc.elo;
         }
-        
+
         await collection.findOneAndUpdate({ user_id: winner.id }, winnerNewDoc);
         await collection.findOneAndUpdate({ user_id: loser.id }, loserNewDoc);
     } catch (err) {

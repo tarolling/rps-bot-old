@@ -1,8 +1,9 @@
-const { Mutex, Semaphore, withTimeout } = require('async-mutex');
+const { Mutex } = require('async-mutex');
 
 
 let globalQueues = {};
 let globalLobbyId = 1;
+const mutex = new Mutex();
 
 const playerInfo = (user, timeout) => {
     return {
@@ -14,17 +15,20 @@ const playerInfo = (user, timeout) => {
 };
 
 const createQueue = async () => {
-    globalQueues[`${rank}`] = {
-        players: [],
-        lobbyInfo: {
-            isPlaying: false,
-            gameNumber: 0,
-            id: globalLobbyId++,
-            rank: rank
-        }
-    };
+    const release = await mutex.acquire();
+    try {
+        globalQueues[globalLobbyId++] = {
+            players: [],
+            lobbyInfo: {
+                isPlaying: false,
+                gameNumber: 0,
+            }
+        };
 
-    return globalQueues[`${rank}`];
+        return globalLobbyId - 1;
+    } finally {
+        release();
+    }
 };
 
 /*
@@ -33,50 +37,97 @@ const createQueue = async () => {
 * Case 3: Player is already in a queue -> Return queue.
 * Case 4: Player is not in a queue -> Add player to queue.
 */
-const addPlayerToQueue = async (player, timeout) => {
-    const { players } = globalQueues[`${rank}`];
-    if (players.length >= 2) return undefined;
-
-    players.push(playerInfo(player, timeout));
-
-    return globalQueues[`${rank}`];
+const addPlayerToQueue = async (lobbyId, player, timeout) => {
+    const release = await mutex.acquire();
+    try {
+        const { players } = globalQueues[lobbyId];
+        if (players.length >= 2) return undefined;
+        players.push(playerInfo(player, timeout));
+        return globalQueues[lobbyId];
+    } finally {
+        release();
+    }
 };
 
 const addPlayerToChallenge = async (lobbyId, player) => {
-    const { players } = globalQueues[`${rank}`];
-    players.push(playerInfo(player));
-    return globalQueues[`${rank}`];
+    const release = await mutex.acquire();
+    try {
+        let { players } = globalQueues[lobbyId];
+        players.push(playerInfo(player));
+        return globalQueues[lobbyId];
+    } finally {
+        release();
+    }
 }
 
 const removePlayerFromQueue = async (lobbyId, player) => {
-    if (!globalQueues[`${rank}`]) return undefined;
+    const release = await mutex.acquire();
+    try {
+        if (!globalQueues[lobbyId]) return undefined;
 
-    const playerIndex = globalQueues[`${rank}`].players.findIndex(p => p.user.id === player.id);
+        const playerIndex = globalQueues[lobbyId].players.findIndex(p => p.user.id === player.id);
+        if (playerIndex === -1) return undefined;
 
-    if (playerIndex === -1) return undefined;
+        const { players } = globalQueues[lobbyId];
+        clearTimeout(players[playerIndex].timeout);
 
-    const { players } = globalQueues[`${rank}`];
-    clearTimeout(players[playerIndex].timeout);
+        const queue = globalQueues[lobbyId];
+        globalQueues[lobbyId] = null;
 
-    const queue = globalQueues[`${rank}`];
-    globalQueues[`${rank}`] = null;
-
-    globalLobbyId--;
-    return queue;
+        globalLobbyId--;
+        return queue;
+    } finally {
+        release();
+    }
 };
 
 const findPlayerQueue = async (player) => {
-    if (!globalQueues) return true;
-    return globalQueues.players.find(p => p.user.id === player.id);
+    const release = await mutex.acquire();
+    try {
+        if (Object.keys(globalQueues).length == 0) return undefined;
+        for (const [id, queue] of Object.entries(globalQueues)) {
+            const candidate = queue?.players.find(p => p.user.id === player.id);
+            if (candidate) return id;
+        }
+        return undefined;
+    } finally {
+        release();
+    }
 };
 
-const displayQueue = async (lobbyId) => {
-    const queue = globalQueues[lobbyId];
-    return (!queue || queue?.players.length === 0) ? undefined : queue;
+const findOpenQueue = async () => {
+    const release = await mutex.acquire();
+    try {
+        if (Object.keys(globalQueues).length == 0) return undefined;
+        for (const [id, queue] of Object.entries(globalQueues)) {
+            if (queue?.players.length == 1) return id;
+        }
+        return undefined;
+    } finally {
+        release();
+    }
+};
+
+const displayQueue = async () => {
+    const release = await mutex.acquire();
+    try {
+        if (Object.keys(globalQueues).length == 0) return undefined;
+        for (const [id, queue] of Object.entries(globalQueues)) {
+            if (!queue?.lobbyInfo.isPlaying) return queue;
+        }
+        return undefined;
+    } finally {
+        release();
+    }
 };
 
 const deleteRankQueue = async (lobbyId) => {
-    globalQueues[lobbyId] = null;
+    const release = await mutex.acquire();
+    try {
+        globalQueues[lobbyId] = null;
+    } finally {
+        release();
+    }
 }
 
 module.exports = {
@@ -85,6 +136,7 @@ module.exports = {
     addPlayerToChallenge,
     removePlayerFromQueue,
     findPlayerQueue,
+    findOpenQueue,
     displayQueue,
     deleteRankQueue
 };

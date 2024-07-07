@@ -1,29 +1,35 @@
 const ranks = require('../../../config/ranks.json');
 const capitalize = require('../../utils/capitalize');
 const { promotion, demotion } = require('../embeds');
+const { dbUri: uri } = require('../../../config.json');
 
-const MongoClient = require('mongodb').MongoClient;
-// eslint-disable-next-line
-const uri = process.env.DB_URI;
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
 
 
 module.exports = async (queue, interaction) => {
     const { players } = queue;
     const guild = interaction.guild;
-    const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const dbClient = new MongoClient(uri, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    });
 
     try {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('players');
 
-        const winner = players[0].score === 3 ? players[0].user : (players[1].score === 3 ? players[1].user : null);
-        const loser = players[0].score === 3 ? players[1].user : (players[1].score === 3 ? players[0].user : null);
+        const winner = players[0].score === 4 ? players[0].user : (players[1].score === 4 ? players[1].user : null);
+        const loser = players[0].score === 4 ? players[1].user : (players[1].score === 4 ? players[0].user : null);
 
         if (!winner || !loser) return;
         const winnerDoc = await collection.findOne({ user_id: winner.id });
         const loserDoc = await collection.findOne({ user_id: loser.id });
 
-        if (!guild.available) return;
+        if (!guild || !guild?.available) return;
         const winnerMember = guild.members.cache.find(m => m.id === winner.id);
         const loserMember = guild.members.cache.find(m => m.id === loser.id);
 
@@ -45,7 +51,8 @@ module.exports = async (queue, interaction) => {
             if (removeRole) await winnerMember.roles.remove(removeRole);
             if (removePingRole) await winnerMember.roles.remove(removePingRole);
 
-            const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
+            // const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
+            const channel = null;
             if (channel) await channel.send({ embeds: [promotion(winnerMember, winnerNewRank, false)] });
             await winner.send({ embeds: [promotion(winnerMember, winnerNewRank, true)] });
         }
@@ -63,7 +70,8 @@ module.exports = async (queue, interaction) => {
             if (removeRole) await loserMember.roles.remove(removeRole);
             if (removePingRole) await loserMember.roles.remove(removePingRole);
 
-            const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
+            // const channel = guild.channels.cache.find(c => c.name === 'rank-updates');
+            const channel = null;
             if (channel) await channel.send({ embeds: [demotion(loserMember, loserNewRank, false)] });
             await loser.send({ embeds: [demotion(loserMember, loserNewRank, true)] });
         }

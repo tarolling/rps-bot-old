@@ -2,12 +2,12 @@ const ranks = require('../../../config/ranks.json');
 const { footer } = require('../../../config/embeds.json');
 
 
-module.exports = (queue) => {
-    const { players, lobbyInfo: { gameNumber, id, rank } } = queue;
-    const color = (Object.keys(ranks).includes(rank)) ? ranks[rank].color : null;
+module.exports = (id, queue) => {
+    const { players, lobbyInfo: { gameNumber } } = queue;
+    const color = (Object.keys(ranks).includes(null)) ? ranks[null].color : null;
 
     const winner = players[0].score > players[1].score ? players[0].user : (players[1].score > players[0].score ? players[1].user : null);
-    
+
     return {
         color,
         title: `Lobby #${id} Results`,

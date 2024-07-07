@@ -1,6 +1,5 @@
-const { removePlayerFromQueue } = require('../../src/game/manageQueues');
+const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manageQueues');
 const { leave } = require('../../src/game/embeds');
-const capitalize = require('../../src/utils/capitalize');
 
 
 module.exports = {
@@ -12,22 +11,25 @@ module.exports = {
     },
     async execute(interaction) {
         const { user, channel } = interaction;
-        const queue = await removePlayerFromQueue(channel.name, user);
+        const queueId = await findPlayerQueue(user);
+        const queue = await removePlayerFromQueue(queueId, user);
 
         if (interaction.deferred || interaction.replied) {
             if (!queue) return channel.send({ content: 'You are not in a queue.', ephemeral: true });
 
-            const { lobbyInfo: { id, rank } } = queue;
+            if (interaction.inGuild()) {
+                await channel.send({ embeds: [leave(queue)] });
+                console.log(`${user.username} left Lobby ${queueId}`);
+                return;
+            }
 
-            await channel.send({ embeds: [leave(queue)] });
-            console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
+            await user.send({ embeds: [leave(queue)] });
+            console.log(`${user.username} left Lobby ${queueId}`);
         } else {
             if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
-            const { lobbyInfo: { id, rank } } = queue;
-
             await interaction.reply({ embeds: [leave(queue)] });
-            console.log(`${user.username} left Lobby ${id} in ${capitalize(rank)}`);
+            console.log(`${user.username} left Lobby ${queueId}`);
         }
     }
 };

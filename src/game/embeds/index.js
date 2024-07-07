@@ -1,7 +1,6 @@
 const challenge = require('./challenge');
 const demotion = require('./demotion');
 const eloResult = require('./eloResult');
-const game = require('./game');
 const gameDraw = require('./gameDraw');
 const gameLoss = require('./gameLoss');
 const gameWin = require('./gameWin');
@@ -17,7 +16,6 @@ module.exports = {
     challenge,
     demotion,
     eloResult,
-    game,
     gameDraw,
     gameLoss,
     gameWin,

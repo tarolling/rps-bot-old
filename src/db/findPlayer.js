@@ -1,10 +1,16 @@
-const MongoClient = require('mongodb').MongoClient;
-// eslint-disable-next-line
-const uri = process.env.DB_URI;
+const { dbUri: uri } = require('../../config.json');
+
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (id) => {
-    const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const dbClient = new MongoClient(uri, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    });
     const query = { user_id: id };
 
     try {

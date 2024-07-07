@@ -1,65 +1,50 @@
-const { game, gameWin, gameLoss, gameDraw, waiting } = require('./embeds');
+const { gameWin, gameLoss, gameDraw, waiting } = require('./embeds');
+const { game } = require('../utils/embeds');
 const logic = require('./logic');
+const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 
-module.exports = async (queue) => {
+module.exports = async (id, queue) => {
     const { players } = queue;
     const pOne = players[0];
     const pTwo = players[1];
 
     queue.lobbyInfo.gameNumber++;
 
-    const rockBtn = {
-        type: 'BUTTON',
-        label: 'Rock',
-        custom_id: 'Rock',
-        style: 'PRIMARY',
-        emoji: null,
-        url: null,
-        disabled: false
-    };
-    const paperBtn = {
-        type: 'BUTTON',
-        label: 'Paper',
-        custom_id: 'Paper',
-        style: 'PRIMARY',
-        emoji: null,
-        url: null,
-        disabled: false
-    };
-    const scissorsBtn = {
-        type: 'BUTTON',
-        label: 'Scissors',
-        custom_id: 'Scissors',
-        style: 'PRIMARY',
-        emoji: null,
-        url: null,
-        disabled: false
-    };
-    const row = {
-        type: 'ACTION_ROW',
-        components: [rockBtn, paperBtn, scissorsBtn]
-    };
+    const rockBtn = new ButtonBuilder()
+        .setCustomId('Rock')
+        .setLabel('Rock')
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(false);
+    const paperBtn = new ButtonBuilder()
+        .setCustomId('Paper')
+        .setLabel('Paper')
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(false);
+    const scissorsBtn = new ButtonBuilder()
+        .setCustomId('Scissors')
+        .setLabel('Scissors')
+        .setStyle(ButtonStyle.Primary)
+        .setDisabled(false);
+
+    const row = new ActionRowBuilder()
+        .addComponents(rockBtn, paperBtn, scissorsBtn);
 
     // Sends the embed to the players and pushes the messages into an array for button interaction collection
     let gameMessages = [];
     let gameResults = {};
-    
-    await pOne.user.send({ embeds: [game(queue)], components: [row] })
-        .then(msg => gameMessages.push(msg))
-        .catch(() => { console.error; return; });
 
-    await pTwo.user.send({ embeds: [game(queue)], components: [row] })
-        .then(msg => gameMessages.push(msg))
-        .catch(() => { console.error; return; });
+    const msgOne = await pOne.user.send({ embeds: [game(id, queue)], components: [row] });
+    gameMessages.push(msgOne);
+    const msgTwo = await pTwo.user.send({ embeds: [game(id, queue)], components: [row] });
+    gameMessages.push(msgTwo);
 
-    const filter = (i) => {
-        return i.user.id === pOne.user.id || i.user.id === pTwo.user.id;
-    };
+    const pOneFilter = i => i.user.id === pOne.user.id;
+    const pTwoFilter = i => i.user.id === pTwo.user.id;
 
     // Setting up message component collection
     if (gameMessages.length != 2) return;
-    let prom1 = gameMessages[0].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
+    let prom1 = gameMessages[0].awaitMessageComponent({ pOneFilter, time: 30000 })
         .then((i) => {
             i.deferUpdate();
             pOne.choice = i.customId;
@@ -71,7 +56,7 @@ module.exports = async (queue) => {
             gameMessages[0].edit({ components: [] });
         });
 
-    let prom2 = gameMessages[1].awaitMessageComponent({ filter, componentType: 'BUTTON', time: 30000 })
+    let prom2 = gameMessages[1].awaitMessageComponent({ pTwoFilter, time: 30000 })
         .then((i) => {
             i.deferUpdate();
             pTwo.choice = i.customId;
@@ -82,7 +67,7 @@ module.exports = async (queue) => {
         .catch(() => {
             gameMessages[1].edit({ components: [] });
         });
-    
+
     // Awaiting the players to make their choices
     let promises = [prom1, prom2];
     await Promise.allSettled(promises);

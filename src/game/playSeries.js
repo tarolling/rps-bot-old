@@ -1,35 +1,31 @@
 const playGame = require('./playGame');
-const capitalize = require('../utils/capitalize');
-const ranks = require('../../config/ranks.json');
 const { eloResult, results } = require('./embeds');
 const { adjustElo, adjustStats, rankValidate } = require('./db');
 const { findPlayer } = require('../db');
 
 
-module.exports = async (queue, interaction) => {
-    let { players, lobbyInfo: { gameNumber, id, rank } } = queue;
+module.exports = async (id, queue, interaction) => {
+    let { players } = queue;
 
     let pOne = players[0];
     let pTwo = players[1];
 
-    console.log(`Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`);
+    console.log(`Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
-    const resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
-    if (!resultsChannel) {
-        interaction.guild.channels.create('results', { type: 'text' })
-            .then(c => c.send({ embeds: [results(queue)] }))
-            .catch(console.error);
-    }
+    // const resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
+    // if (!resultsChannel) {
+    //     interaction.guild.channels.create('results', { type: 'text' })
+    //         .then(c => c.send({ embeds: [results(queue)] }))
+    //         .catch(console.error);
+    // }
 
-    while (pOne.score < 3 && pTwo.score < 3 && pOne.score != -1 && pTwo.score != -1) {
-        // eslint-disable-next-line no-unused-vars
-        gameNumber++;
-        await playGame(queue);
+    while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
+        await playGame(id, queue);
 
         if (pOne.score == -1 || pTwo.score == -1) break;
 
-        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
-        await resultsChannel.send({ content: `L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})` });
+        // console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
+        // await resultsChannel.send({ content: `L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})` });
         pOne.choice = '';
         pTwo.choice = '';
     }
@@ -37,19 +33,19 @@ module.exports = async (queue, interaction) => {
     if (pOne.score == -1 || pTwo.score == -1) {
         pOne.user.send('Neither player chose an option in time, so the lobby has been aborted.');
         pTwo.user.send('Neither player chose an option in time, so the lobby has been aborted.');
-        console.log(`DOUBLE AFK | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`);
-        await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}` });
+        console.log(`DOUBLE AFK | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
+        // await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}` });
         return;
     }
 
     for (const player of players) {
-        await player.user.send({ embeds: [results(queue)] });
+        await player.user.send({ embeds: [results(id, queue)] });
     }
 
-    await resultsChannel.send({ embeds: [results(queue)] });
+    // await resultsChannel.send({ embeds: [results(queue)] });
     console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
 
-    if (Object.keys(ranks).includes(rank) && (pOne.score === 3 || pTwo.score === 3)) {
+    if (pOne.score === 4 || pTwo.score === 4) {
         const oldElo = [];
 
         for (let i = 0; i < players.length; i++) {
