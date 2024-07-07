@@ -1,6 +1,6 @@
-const resetPlayer = require('../../utils/db/resetPlayer');
+const resetPlayer = require('../../src/db/resetPlayer');
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../../utils/misc/capitalize');
+const capitalize = require('../../src/utils/capitalize');
 const { defaultRank } = require('../../config/settings.json');
 
 
@@ -24,7 +24,7 @@ module.exports = {
             await resetPlayer(interaction);
 
             const guild = interaction.guild;
-            
+
             if (guild.available) {
                 const member = guild.members.cache.find(m => m.id === interaction.options.getUser('user').id);
                 for (const key of Object.keys(ranks)) {
@@ -35,7 +35,7 @@ module.exports = {
                 }
                 await member.roles.add(guild.roles.cache.find(r => r.name === defaultRank));
             }
-            
+
         } catch (err) {
             console.error(err);
             return interaction.editReply({ content: 'An error occurred while trying to reset the player.', ephemeral: true });

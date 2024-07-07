@@ -1,5 +1,5 @@
 const playGame = require('./playGame');
-const capitalize = require('../misc/capitalize');
+const capitalize = require('../utils/capitalize');
 const ranks = require('../../config/ranks.json');
 const { eloResult, results } = require('./embeds');
 const { adjustElo, adjustStats, rankValidate } = require('./db');
@@ -38,7 +38,7 @@ module.exports = async (queue, interaction) => {
         pOne.user.send('Neither player chose an option in time, so the lobby has been aborted.');
         pTwo.user.send('Neither player chose an option in time, so the lobby has been aborted.');
         console.log(`DOUBLE AFK | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`);
-        await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}`});
+        await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${capitalize(rank)} | ${pOne.user.username} vs. ${pTwo.user.username}` });
         return;
     }
 
@@ -48,7 +48,7 @@ module.exports = async (queue, interaction) => {
 
     await resultsChannel.send({ embeds: [results(queue)] });
     console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
-    
+
     if (Object.keys(ranks).includes(rank) && (pOne.score === 3 || pTwo.score === 3)) {
         const oldElo = [];
 
@@ -56,7 +56,7 @@ module.exports = async (queue, interaction) => {
             const oldStats = await findPlayer(players[i].user.id);
             oldElo.push(oldStats.elo);
         }
-        
+
         await adjustElo(queue);
         await rankValidate(queue, interaction);
         await adjustStats(queue);

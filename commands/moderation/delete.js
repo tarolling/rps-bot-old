@@ -1,6 +1,6 @@
-const deletePlayer = require('../../utils/db/deletePlayer');
+const deletePlayer = require('../../src/db/deletePlayer');
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../../utils/misc/capitalize');
+const capitalize = require('../../src/utils/capitalize');
 
 
 module.exports = {

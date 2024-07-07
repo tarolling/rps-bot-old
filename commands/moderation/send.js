@@ -1,5 +1,5 @@
-const ranks = require('../../utils/embeds/ranks');
-const serverRules = require('../../utils/embeds/serverRules');
+const ranks = require('../../src/embeds/ranks');
+const serverRules = require('../../src/embeds/serverRules');
 const ranksObj = require('../../config/ranks.json');
 
 

@@ -1,8 +1,8 @@
-const playSeries = require('../../utils/game/playSeries');
+const playSeries = require('../../src/game/playSeries');
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../../utils/misc/capitalize');
-const { queueEmbed } = require('../../utils/game/embeds');
-const { addPlayerToQueue, findPlayerQueue, findRankQueue, createQueue, deleteRankQueue } = require('../../utils/game/manageQueues');
+const capitalize = require('../../src/utils/capitalize');
+const { queueEmbed } = require('../../src/game/embeds');
+const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue } = import('../../src/game/manageQueues.mjs');
 const { defaultTimeout } = require('../../config/settings.json');
 const leave = require('./leave');
 
@@ -26,7 +26,7 @@ module.exports = {
     async execute(interaction) {
         const { user, channel, guild } = interaction;
 
-        let rankQueue = await findRankQueue(rankName);
+        let rankQueue = await findPlayerQueue(user);
         if (!rankQueue) await createQueue(rankName);
 
         const playerQueue = await findPlayerQueue(rankName, user);

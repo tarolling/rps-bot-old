@@ -1,5 +1,5 @@
 const ranks = require('../../../config/ranks.json');
-const capitalize = require('../../misc/capitalize');
+const capitalize = require('../../utils/capitalize');
 const { promotion, demotion } = require('../embeds');
 
 const MongoClient = require('mongodb').MongoClient;
@@ -26,7 +26,7 @@ module.exports = async (queue, interaction) => {
         if (!guild.available) return;
         const winnerMember = guild.members.cache.find(m => m.id === winner.id);
         const loserMember = guild.members.cache.find(m => m.id === loser.id);
-        
+
         let winnerRank = winnerDoc.rank.toLowerCase();
         let loserRank = loserDoc.rank.toLowerCase();
         const winnerThreshold = ranks[winnerRank].elo.promotion;

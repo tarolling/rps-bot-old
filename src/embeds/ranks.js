@@ -1,5 +1,5 @@
 const { footer } = require('../../config/embeds');
-const capitalize = require('../misc/capitalize');
+const capitalize = require('../utils/capitalize');
 
 
 module.exports = (name, info) => {

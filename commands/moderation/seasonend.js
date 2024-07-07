@@ -1,4 +1,4 @@
-const seasonReset = require('../../utils/db/seasonReset');
+const seasonReset = require('../../src/db/seasonReset');
 
 
 module.exports = {

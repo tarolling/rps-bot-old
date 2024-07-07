@@ -1,5 +1,5 @@
-const { createClub, joinClub, leaveClub, viewClub } = require('../../utils/clubs/db');
-const clubEmbed = require('../../utils/clubs/embeds/club');
+const { createClub, joinClub, leaveClub, viewClub } = require('../../src/clubs/db');
+const clubEmbed = require('../../src/clubs/embeds/club');
 
 
 module.exports = {

@@ -1,4 +1,4 @@
-const setPlayerStats = require('../../utils/db/setPlayerStats');
+const setPlayerStats = require('../../src/db/setPlayerStats');
 
 
 module.exports = {

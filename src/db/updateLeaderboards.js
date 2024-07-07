@@ -1,5 +1,5 @@
 const ranks = require('../../config/ranks.json');
-const capitalize = require('../misc/capitalize');
+const capitalize = require('../utils/capitalize');
 const leaderboard = require('../embeds/leaderboard');
 
 const MongoClient = require('mongodb').MongoClient;
@@ -23,7 +23,7 @@ module.exports = async (interaction) => {
             const players = await collection.find(query).sort({ elo: -1 }).limit(10).toArray();
             if (players.length === 0) continue;
             await leaderboardChannel.send({ embeds: [leaderboard(players)] });
-        } 
+        }
 
         await interaction.editReply({ content: 'Leaderboards refreshed.' });
     } catch (err) {

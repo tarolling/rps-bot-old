@@ -1,4 +1,4 @@
-const changeName = require('../../utils/db/changeName');
+const changeName = require('../../src/db/changeName');
 
 
 module.exports = {
