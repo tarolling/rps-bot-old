@@ -1,4 +1,4 @@
-const registerPlayer = require('../../utils/db/registerPlayer');
+const registerPlayer = require('../../src/db/registerPlayer');
 
 
 module.exports = {

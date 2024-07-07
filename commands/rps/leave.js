@@ -1,4 +1,4 @@
-const { removePlayerFromQueue } = import('../../src/game/manageQueues.mjs');
+const { removePlayerFromQueue } = require('../../src/game/manageQueues');
 const { leave } = require('../../src/game/embeds');
 const capitalize = require('../../src/utils/capitalize');
 

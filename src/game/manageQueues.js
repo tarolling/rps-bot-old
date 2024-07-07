@@ -1,4 +1,4 @@
-import { Mutex, Semaphore, withTimeout } from 'async-mutex';
+const { Mutex, Semaphore, withTimeout } = require('async-mutex');
 
 
 let globalQueues = {};
@@ -79,7 +79,7 @@ const deleteRankQueue = async (lobbyId) => {
     globalQueues[lobbyId] = null;
 }
 
-export default {
+module.exports = {
     createQueue,
     addPlayerToQueue,
     addPlayerToChallenge,

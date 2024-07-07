@@ -1,4 +1,4 @@
-const findPlayer = require('../../utils/db/findPlayer');
+const findPlayer = require('../../src/db/findPlayer');
 
 
 module.exports = {

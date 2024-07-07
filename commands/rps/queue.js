@@ -2,7 +2,7 @@ const playSeries = require('../../src/game/playSeries');
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../../src/utils/capitalize');
 const { queueEmbed } = require('../../src/game/embeds');
-const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue } = import('../../src/game/manageQueues.mjs');
+const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue } = require('../../src/game/manageQueues');
 const { defaultTimeout } = require('../../config/settings.json');
 const leave = require('./leave');
 

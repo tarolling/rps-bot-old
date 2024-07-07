@@ -1,4 +1,4 @@
-const updateLeaderboards = require('../../utils/db/updateLeaderboards');
+const updateLeaderboards = require('../../src/db/updateLeaderboards');
 
 
 module.exports = {

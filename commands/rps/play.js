@@ -1,6 +1,6 @@
-const playSeries = require('../../utils/game/playSeries');
-const { challenge } = require('../../utils/game/embeds');
-const { addPlayerToChallenge, createQueue } = require('../../utils/game/manageQueues');
+const playSeries = require('../../src/game/playSeries');
+const { challenge } = require('../../src/game/embeds');
+const { addPlayerToChallenge, createQueue } = require('../../src/game/manageQueues');
 
 
 module.exports = {
