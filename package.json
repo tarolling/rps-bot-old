@@ -29,5 +29,6 @@
   },
   "devDependencies": {
     "eslint": "^9.6.0"
-  }
+  },
+  "nodeVersion": "21.6.2"
 }
