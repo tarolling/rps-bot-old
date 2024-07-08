@@ -17,7 +17,7 @@ module.exports = (data) => {
         description: `${rank}`,
         fields: [
             { name: 'Elo', value: `${elo}`, inline: true },
-            { name: 'Club', value: `${club}`, inline: true },
+            { name: 'Club', value: `${club || 'None'}`, inline: true },
             { name: 'Career Games Played', value: `${career_games}`, inline: true },
             { name: 'Career Wins', value: `${career_wins}`, inline: true },
             { name: 'Career Losses', value: `${career_losses}`, inline: true },

@@ -1,4 +1,4 @@
-const { Events, PresenceUpdateStatus } = require('discord.js');
+const { Events, PresenceUpdateStatus, ActivityType } = require('discord.js');
 
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
             .then(results => {
                 const totalGuilds = results[0].reduce((acc, guildCount) => acc + guildCount, 0);
                 const totalMembers = results[1].reduce((acc, memberCount) => acc + memberCount, 0);
-                client.user.setPresence({ activities: [{ name: `${totalMembers} players across ${totalGuilds} servers` }], status: PresenceUpdateStatus.Online });
+                client.user.setPresence({ activities: [{ name: `${totalMembers} players across ${totalGuilds} servers`, type: ActivityType.Watching }], status: PresenceUpdateStatus.Online });
             })
             .catch(console.error);
         console.log(`Ready! Logged in as ${client.user.displayName}`);

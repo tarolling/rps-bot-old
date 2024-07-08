@@ -1,6 +1,6 @@
 const playGame = require('./playGame');
 const { eloResult, results } = require('./embeds');
-const { adjustElo, adjustStats, rankValidate } = require('./db');
+const { adjustElo, adjustStats, rankValidate } = require('../db');
 const { findPlayer } = require('../db');
 
 

@@ -1,6 +1,6 @@
-const calculateElo = require('../calculateElo');
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const calculateElo = require('../game/calculateElo');
 
 
 module.exports = async (queue) => {

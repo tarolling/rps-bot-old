@@ -2,15 +2,19 @@ const ranks = require('../../config/ranks.json');
 const capitalize = require('../utils/capitalize');
 const leaderboard = require('../embeds/leaderboard');
 
-const MongoClient = require('mongodb').MongoClient;
-// eslint-disable-next-line
-const uri = process.env.DB_URI;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (interaction) => {
     const guild = interaction.guild;
     const leaderboardChannel = guild.channels.cache.find(channel => channel.name === 'leaderboards');
-    const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const dbClient = new MongoClient(process.env.DB_URI, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    });
 
     try {
         await dbClient.connect();

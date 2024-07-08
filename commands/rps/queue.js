@@ -1,5 +1,5 @@
 const playSeries = require('../../src/game/playSeries');
-const { queueEmbed } = require('../../src/game/embeds');
+const { queueEmbed } = require('../../src/utils/embeds');
 const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { defaultTimeout } = require('../../config/settings.json');
 const leave = require('./leave');
@@ -47,7 +47,7 @@ module.exports = {
 
         const { players, lobbyInfo: { isPlaying } } = queue;
 
-        await interaction.reply({ embeds: [queueEmbed(queue, interaction)] });
+        await interaction.reply({ embeds: [queueEmbed(queue, user)] });
         console.log(`${user.username} joined Lobby ${playerQueueId}`);
 
         if (players.length === 2) {

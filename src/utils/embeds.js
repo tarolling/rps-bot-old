@@ -1,7 +1,29 @@
 const { EmbedBuilder } = require('discord.js');
-const { footer } = require('../../config/embeds.json');
 
 
+
+const footer = {
+    "text": "Powered by RPS",
+    "iconURL": "https://i.imgur.com/YODnmBn.png"
+};
+
+
+const queueEmbed = (queue, user) => {
+    const { players } = queue;
+    return new EmbedBuilder()
+        .setTitle(`${players.length} player${players.length === 1 ? ' is' : 's are'} in the queue`)
+        .setDescription(`**${user.username}** has joined.`)
+        .setThumbnail(user.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 }))
+        .setFooter(footer);
+};
+
+const leaveEmbed = (queue, user) => {
+    return new EmbedBuilder()
+        .setTitle('0 players are in the queue')
+        .setDescription(`**${user.username}** has left.`)
+        .setThumbnail(user.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 }))
+        .setFooter(footer);
+};
 
 const game = (id, queue) => {
     const { players, lobbyInfo: { gameNumber } } = queue;
@@ -14,5 +36,7 @@ const game = (id, queue) => {
 };
 
 module.exports = {
+    queueEmbed,
+    leaveEmbed,
     game
 };

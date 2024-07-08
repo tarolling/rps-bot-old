@@ -1,12 +1,16 @@
 const { careerResetValues } = require('./values');
 
-const MongoClient = require('mongodb').MongoClient;
-// eslint-disable-next-line
-const uri = process.env.DB_URI;
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (interaction) => {
-    const dbClient = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const dbClient = new MongoClient(process.env.DB_URI, {
+        serverApi: {
+            version: ServerApiVersion.v1,
+            strict: true,
+            deprecationErrors: true,
+        }
+    });
     const query = { user_id: interaction.options.getUser('user').id };
     const update = careerResetValues();
 

@@ -1,5 +1,5 @@
 const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manageQueues');
-const { leave } = require('../../src/game/embeds');
+const { leaveEmbed } = require('../../src/utils/embeds');
 
 
 module.exports = {
@@ -18,17 +18,17 @@ module.exports = {
             if (!queue) return channel.send({ content: 'You are not in a queue.', ephemeral: true });
 
             if (interaction.inGuild()) {
-                await channel.send({ embeds: [leave(queue)] });
+                await channel.send({ embeds: [leaveEmbed(queue, user)] });
                 console.log(`${user.username} left Lobby ${queueId}`);
                 return;
             }
 
-            await user.send({ embeds: [leave(queue)] });
+            await user.send({ embeds: [leaveEmbed(queue, user)] });
             console.log(`${user.username} left Lobby ${queueId}`);
         } else {
             if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
 
-            await interaction.reply({ embeds: [leave(queue)] });
+            await interaction.reply({ embeds: [leaveEmbed(queue, user)] });
             console.log(`${user.username} left Lobby ${queueId}`);
         }
     }

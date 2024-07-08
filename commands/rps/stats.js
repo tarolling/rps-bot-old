@@ -20,8 +20,7 @@ module.exports = {
         try {
             await interaction.deferReply({ ephemeral: true });
             const user = interaction.options.getUser('user') || interaction.user;
-            const member = interaction.guild.members.cache.find(m => m.id === user.id);
-            const stats = await findPlayer(member.id);
+            const stats = await findPlayer(user.id);
             if (!stats) return interaction.editReply({ content: 'The user you specified is not in the database.', ephemeral: true });
 
             return interaction.editReply({ embeds: [statsEmbed(stats)], ephemeral: true });
