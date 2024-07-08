@@ -1,10 +1,9 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const { MODE_ARG } = require('./config/settings.json');
 
 
-const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+const token = (process.argv.findIndex(s => s === 'dev') == -1) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
 
 const client = new Client({
     intents: [
@@ -16,16 +15,7 @@ const client = new Client({
             'roles'
         ]
     },
-    partials: ['MESSAGE'],
-    presence: {
-        status: 'online',
-        activities: [
-            {
-                name: 'with top RPS players!',
-                type: 'COMPETING'
-            }
-        ]
-    }
+    partials: ['MESSAGE']
 });
 
 client.commands = new Collection();

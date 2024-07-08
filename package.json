@@ -3,10 +3,10 @@
   "description": "A bot that lets users play rock, paper, scissors against each other.",
   "version": "0.1.0",
   "author": "tarolling",
-  "main": "start.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node -r dotenv/config start.js",
-    "dev": "node -r dotenv/config start.js dev",
+    "start": "node -r dotenv/config index.js",
+    "dev": "node -r dotenv/config index.js dev",
     "reload": "node -r dotenv/config deployCommands.js",
     "reload-dev": "node -r dotenv/config deployCommands.js dev",
     "lint": "eslint --ext .js,.json src/ test/",

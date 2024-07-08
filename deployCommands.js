@@ -1,11 +1,10 @@
 const { REST, Routes } = require('discord.js');
-const { MODE_ARG } = require('./config/settings.json')
 const fs = require('node:fs');
 const path = require('node:path');
 
 
-const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
-const clientId = (!process.argv[MODE_ARG]) ? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
+const token = (process.argv.findIndex(s => s === 'dev') == -1) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+const clientId = (process.argv.findIndex(s => s === 'dev') == -1) ? process.env.PROD_CLIENT_ID : process.env.DEV_CLIENT_ID;
 
 const commands = [];
 // Grab all the command folders from the commands directory you created earlier
