@@ -11,7 +11,8 @@
     "reload-dev": "node deployCommands.js dev",
     "lint": "eslint --ext .js,.json src/ test/",
     "fix": "eslint --ext .js,.json src test --fix",
-    "precommit": "npm run lint && npm run test"
+    "precommit": "npm run lint && npm run test",
+    "postinstall": "nvm install 21.6.2 && nvm use 21.6.2"
   },
   "engines": {
     "node": "21.6.2"
