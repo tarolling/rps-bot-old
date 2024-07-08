@@ -1,10 +1,8 @@
-const { dbUri: uri } = require('../../config.json');
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (id) => {
-    const dbClient = new MongoClient(uri, {
+    const dbClient = new MongoClient(process.env.DB_URI, {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,

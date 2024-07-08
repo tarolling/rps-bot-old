@@ -1,12 +1,11 @@
 const calculateElo = require('../calculateElo');
-const { dbUri: uri } = require('../../../config.json');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (queue) => {
     const { players } = queue;
-    const dbClient = new MongoClient(uri, {
+    const dbClient = new MongoClient(process.env.DB_URI, {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,

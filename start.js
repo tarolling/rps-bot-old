@@ -2,10 +2,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { MODE_ARG } = require('./config/settings.json');
-const { prodToken, devToken } = require('./config.json')
 
 
-const token = (!process.argv[MODE_ARG]) ? prodToken : devToken;
+const token = (!process.argv[MODE_ARG]) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
 
 const client = new Client({
     intents: [
