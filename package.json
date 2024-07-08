@@ -14,7 +14,7 @@
     "precommit": "npm run lint && npm run test"
   },
   "engines": {
-    "node": "^20.15.0"
+    "node": "21.6.2"
   },
   "dependencies": {
     "@discordjs/rest": "^2.3.0",
@@ -24,7 +24,8 @@
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongodb": "^6.8.0"
+    "mongodb": "^6.8.0",
+    "node": "^20.15.0"
   },
   "devDependencies": {
     "eslint": "^9.6.0"
