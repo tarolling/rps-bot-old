@@ -5,17 +5,13 @@
   "author": "tarolling",
   "main": "start.js",
   "scripts": {
-    "start": "node start.js",
-    "dev": "node start.js dev",
-    "reload": "node deployCommands.js",
-    "reload-dev": "node deployCommands.js dev",
+    "start": "node -r dotenv/config start.js",
+    "dev": "node -r dotenv/config start.js dev",
+    "reload": "node -r dotenv/config deployCommands.js",
+    "reload-dev": "node -r dotenv/config deployCommands.js dev",
     "lint": "eslint --ext .js,.json src/ test/",
     "fix": "eslint --ext .js,.json src test --fix",
-    "precommit": "npm run lint && npm run test",
-    "postinstall": "nvm install 21.6.2 && nvm use 21.6.2"
-  },
-  "engines": {
-    "node": "21.6.2"
+    "precommit": "npm run lint && npm run test"
   },
   "dependencies": {
     "@discordjs/rest": "^2.3.0",
