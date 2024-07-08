@@ -9,8 +9,8 @@
     "dev": "node -r dotenv/config index.js dev",
     "reload": "node -r dotenv/config deployCommands.js",
     "reload-dev": "node -r dotenv/config deployCommands.js dev",
-    "lint": "eslint --ext .js,.json src/ test/",
-    "fix": "eslint --ext .js,.json src test --fix",
+    "lint": "eslint **/*.js",
+    "fix": "eslint **/*.js --fix",
     "precommit": "npm run lint && npm run test"
   },
   "dependencies": {
