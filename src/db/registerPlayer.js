@@ -14,7 +14,7 @@ module.exports = async (interaction) => {
             deprecationErrors: true,
         }
     });
-    const query = { $or: [{ user_id: userId }, { username: interaction.options.getString('username') }] };
+    const query = { $or: [{ user_id: userId }] };
     const doc = addValues(interaction);
 
     try {
