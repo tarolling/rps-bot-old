@@ -4,7 +4,6 @@ const { defaultElo, defaultRank } = require('../../config/settings.json');
 const addValues = (interaction) => {
     return {
         user_id: interaction.user.id,
-        username: interaction.options.getString('username'),
         club: "N/A",
         elo: defaultElo,
         sigma: 0,

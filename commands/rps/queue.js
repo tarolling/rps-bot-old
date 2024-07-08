@@ -3,6 +3,7 @@ const { queueEmbed } = require('../../src/game/embeds');
 const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { defaultTimeout } = require('../../config/settings.json');
 const leave = require('./leave');
+const { findPlayer } = require('../../src/db');
 
 
 module.exports = {
@@ -23,6 +24,10 @@ module.exports = {
     },
     async execute(interaction) {
         const { user } = interaction;
+        const player_doc = await findPlayer(user.id);
+        if (!player_doc) {
+            return interaction.reply({ content: 'You are not registered.', ephemeral: true });
+        }
 
         let playerQueueId = await findPlayerQueue(user);
         if (playerQueueId) return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });

@@ -5,14 +5,7 @@ module.exports = {
     data: {
         name: 'register',
         description: 'Register a user to the RPS database.',
-        options: [
-            {
-                type: 3,
-                name: 'username',
-                description: 'Specify the username you would like to register with.',
-                required: true
-            }
-        ],
+        options: [],
         default_member_permissions: (1 << 11) // SEND_MESSAGES
     },
     async execute(interaction) {

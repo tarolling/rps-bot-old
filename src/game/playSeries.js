@@ -24,7 +24,7 @@ module.exports = async (id, queue, interaction) => {
 
         if (pOne.score == -1 || pTwo.score == -1) break;
 
-        // console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
+        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
         // await resultsChannel.send({ content: `L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})` });
         pOne.choice = '';
         pTwo.choice = '';
