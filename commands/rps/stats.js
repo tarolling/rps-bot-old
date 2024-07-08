@@ -23,7 +23,7 @@ module.exports = {
             const stats = await findPlayer(user.id);
             if (!stats) return interaction.editReply({ content: 'The user you specified is not in the database.', ephemeral: true });
 
-            return interaction.editReply({ embeds: [statsEmbed(stats)], ephemeral: true });
+            return interaction.editReply({ embeds: [statsEmbed(user, stats)], ephemeral: true });
         } catch (err) {
             console.error(err);
             return interaction.editReply({ content: 'An error occurred while trying to retrieve the player.', ephemeral: true });

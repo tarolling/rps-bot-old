@@ -2,8 +2,8 @@ const ranks = require('../../config/ranks');
 const { footer } = require('../../config/embeds');
 
 
-module.exports = (data) => {
-    const { username, rank, elo, club, career_games, career_wins,
+module.exports = (user, data) => {
+    const { rank, elo, club, career_games, career_wins,
         career_losses, career_win_pct, season_games,
         season_wins, season_losses, season_win_pct,
         tournament_games, tournament_wins, tournament_losses,
@@ -13,7 +13,7 @@ module.exports = (data) => {
     const color = (Object.keys(ranks).includes(rank.toLowerCase())) ? ranks[rank.toLowerCase()].color : null;
     return {
         color,
-        title: `${username}`,
+        title: `${user.username}`,
         description: `${rank}`,
         fields: [
             { name: 'Elo', value: `${elo}`, inline: true },

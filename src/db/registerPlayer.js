@@ -14,7 +14,7 @@ module.exports = async (interaction) => {
             deprecationErrors: true,
         }
     });
-    const query = { $or: [{ user_id: userId }] };
+    const query = { user_id: userId };
     const doc = addValues(interaction);
 
     try {
@@ -24,11 +24,7 @@ module.exports = async (interaction) => {
 
         const check = await collection.findOne(query);
         if (check) {
-            if (check.user_id === userId) {
-                return interaction.editReply({ content: `You are already registered with the username **${check.username}**.`, ephemeral: true });
-            } else {
-                return interaction.editReply({ content: `The username **${check.username}** is already taken.`, ephemeral: true });
-            }
+            return interaction.editReply({ content: `You are already registered!`, ephemeral: true });
         } else {
             await collection.insertOne(doc);
             return interaction.editReply({ content: 'You have been registered. Have fun!', ephemeral: true });

@@ -1,6 +1,4 @@
 const deletePlayer = require('../../src/db/deletePlayer');
-const ranks = require('../../config/ranks.json');
-const capitalize = require('../../src/utils/capitalize');
 
 
 module.exports = {
@@ -21,16 +19,6 @@ module.exports = {
         try {
             await interaction.deferReply({ ephemeral: true });
             await deletePlayer(interaction);
-
-            const member = interaction.guild.members.cache.find(m => m.id === interaction.options.getUser('user').id);
-            const guild = interaction.guild;
-            if (guild.available) {
-                for (const key of Object.keys(ranks)) {
-                    const rank = capitalize(key);
-                    const role = guild.roles.cache.find(r => r.name === rank);
-                    if (role) await member.roles.remove(role);
-                }
-            }
         } catch (err) {
             console.error(err);
             return interaction.editReply({ content: 'An error occurred while trying to delete the player.', ephemeral: true });
