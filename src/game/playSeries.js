@@ -1,5 +1,6 @@
 const playGame = require('./playGame');
 const { eloResult, results } = require('./embeds');
+const { deleteChallenge } = require('./manageQueues');
 const { adjustElo, adjustStats, rankValidate } = require('../db');
 const { findPlayer } = require('../db');
 
@@ -45,8 +46,10 @@ module.exports = async (id, queue, interaction) => {
     // await resultsChannel.send({ embeds: [results(queue)] });
     console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
 
-    if (typeof id == 'string' && id.includes('challenge')) return;
-
+    if (typeof id == 'string' && id.includes('challenge')) {
+        await deleteChallenge(id);
+        return;
+    }
 
     if (pOne.score === 4 || pTwo.score === 4) {
         const oldElo = [];
