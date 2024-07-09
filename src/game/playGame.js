@@ -15,17 +15,14 @@ module.exports = async (id, queue) => {
         .setCustomId('Rock')
         .setLabel('Rock')
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(false);
     const paperBtn = new ButtonBuilder()
         .setCustomId('Paper')
         .setLabel('Paper')
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(false);
     const scissorsBtn = new ButtonBuilder()
         .setCustomId('Scissors')
         .setLabel('Scissors')
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(false);
 
     const row = new ActionRowBuilder()
         .addComponents(rockBtn, paperBtn, scissorsBtn);

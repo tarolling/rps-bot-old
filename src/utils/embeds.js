@@ -35,8 +35,16 @@ const game = (id, queue) => {
         .setFooter(footer);
 };
 
+const challenge = (interaction) => {
+    return new EmbedBuilder()
+        .setTitle('New Challenger Approaching')
+        .setDescription(`**${interaction.user.username}** has challenged you to a game of RPS!`)
+        .setFooter(footer);
+};
+
 module.exports = {
     queueEmbed,
     leaveEmbed,
-    game
+    game,
+    challenge
 };
