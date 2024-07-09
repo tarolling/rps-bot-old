@@ -1,21 +1,22 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 const token = (process.argv.findIndex(s => s === 'dev') == -1) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
 
 const client = new Client({
     intents: [
-        GatewayIntentBits.Guilds,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.Guilds
     ],
     allowedMentions: {
         parse: [
-            'users',
-            'roles'
+            'users'
         ]
-    },
-    partials: ['MESSAGE']
+    }
 });
 
 client.commands = new Collection();
@@ -50,3 +51,25 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+
+const dbClient = new MongoClient(process.env.DB_URI, {
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
+
+async function run() {
+    try {
+        // Connect the client to the server (optional starting in v4.7)
+        await dbClient.connect();
+        // Send a ping to confirm a successful connection
+        await dbClient.db("rps").command({ ping: 1 });
+        console.log("Pinged deployment. Successfully connected to MongoDB!");
+    } finally {
+        // Ensures that the client will close when you finish/error
+        await dbClient.close();
+    }
+}
+run().catch(console.dir);

@@ -46,6 +46,15 @@ const createChallenge = async (lobbyId) => {
     }
 }
 
+const deleteChallenge = async (lobbyId) => {
+    const release = await mutex.acquire();
+    try {
+        delete globalQueues[lobbyId];
+    } finally {
+        release();
+    }
+}
+
 /*
 * Case 1: There will ALWAYS be a queue available for every rank.
 * Case 2: A queue does exist for the rank -> Cases 3 & 4.
@@ -148,6 +157,7 @@ const deleteRankQueue = async (lobbyId) => {
 module.exports = {
     createQueue,
     createChallenge,
+    deleteChallenge,
     addPlayerToQueue,
     addPlayerToChallenge,
     removePlayerFromQueue,

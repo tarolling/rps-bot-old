@@ -1,6 +1,6 @@
 const playSeries = require('../../src/game/playSeries');
 const { challenge } = require('../../src/utils/embeds');
-const { addPlayerToChallenge, createChallenge } = require('../../src/game/manageQueues');
+const { addPlayerToChallenge, createChallenge, deleteChallenge } = require('../../src/game/manageQueues');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 
@@ -79,6 +79,7 @@ module.exports = {
             declineBtn.setDisabled(true);
             await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
+            await deleteChallenge(lobbyId);
         });
     }
 };
