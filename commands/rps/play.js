@@ -1,6 +1,7 @@
 const playSeries = require('../../src/game/playSeries');
-const { challenge } = require('../../src/game/embeds');
-const { addPlayerToChallenge, createQueue } = require('../../src/game/manageQueues');
+const { challenge } = require('../../src/utils/embeds');
+const { addPlayerToChallenge, createChallenge } = require('../../src/game/manageQueues');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 
 
 module.exports = {
@@ -21,39 +22,27 @@ module.exports = {
         const { user } = interaction;
 
         const target = interaction.options.getUser('user');
-        
+
         if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true });
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
-        
-        const rankName = `challenge-${user.id}`;
-        await createQueue(rankName);
-        await addPlayerToChallenge(rankName, user);
 
-        let acceptBtn = {
-            type: 'BUTTON',
-            label: 'Accept',
-            custom_id: 'Accept',
-            style: 'SUCCESS',
-            emoji: null,
-            url: null,
-            disabled: false
-        };
-        let declineBtn = {
-            type: 'BUTTON',
-            label: 'Decline',
-            custom_id: 'Decline',
-            style: 'DANGER',
-            emoji: null,
-            url: null,
-            disabled: false
-        }
-        let row = {
-            type: 'ACTION_ROW',
-            components: [acceptBtn, declineBtn]
-        };
+        const lobbyId = `challenge-${user.id}`;
+        await createChallenge(lobbyId);
+        await addPlayerToChallenge(lobbyId, user);
+
+        const acceptBtn = new ButtonBuilder()
+            .setCustomId('Accept')
+            .setLabel('Accept')
+            .setStyle(ButtonStyle.Success);
+        const declineBtn = new ButtonBuilder()
+            .setCustomId('Decline')
+            .setLabel('Decline')
+            .setStyle(ButtonStyle.Danger);
 
         let challengeMessage;
+        const row = new ActionRowBuilder()
+            .addComponents(acceptBtn, declineBtn);
 
         try {
             await target.send({ embeds: [challenge(interaction)], components: [row] })
@@ -66,18 +55,17 @@ module.exports = {
 
         const filter = i => i.user.id === target.id;
 
-        const collector = challengeMessage.createMessageComponentCollector({ filter, time: 30000 });
+        const collector = challengeMessage.createMessageComponentCollector({ filter, time: 30_000 });
 
         collector.on('collect', async (i) => {
             i.deferUpdate();
             collector.stop();
-            acceptBtn.disabled = true;
-            declineBtn.disabled = true;
-            row.components = [acceptBtn, declineBtn];
+            acceptBtn.setDisabled(true);
+            declineBtn.setDisabled(true);
             if (i.customId === 'Accept') {
                 await challengeMessage.edit({ components: [row] });
-                const queue = await addPlayerToChallenge(rankName, target);
-                await playSeries(queue, interaction);
+                const queue = await addPlayerToChallenge(lobbyId, target);
+                await playSeries(lobbyId, queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
                 await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
@@ -87,9 +75,8 @@ module.exports = {
         collector.on('end', async (collected, reason) => {
             if (reason !== 'time') return;
 
-            acceptBtn.disabled = true;  
-            declineBtn.disabled = true;
-            row.components = [acceptBtn, declineBtn];
+            acceptBtn.setDisabled(true);
+            declineBtn.setDisabled(true);
             await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
         });

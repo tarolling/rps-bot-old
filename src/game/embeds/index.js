@@ -1,4 +1,3 @@
-const challenge = require('./challenge');
 const demotion = require('./demotion');
 const eloResult = require('./eloResult');
 const gameDraw = require('./gameDraw');
@@ -11,7 +10,6 @@ const waiting = require('./waiting');
 
 
 module.exports = {
-    challenge,
     demotion,
     eloResult,
     gameDraw,
