@@ -26,12 +26,12 @@ module.exports = async (interaction) => {
         }
 
         validation = await clubCollection.findOneAndUpdate(clubQuery, { $push: playerQuery });
-        if (!validation.value) {
+        if (!validation) {
             interaction.editReply({ content: 'This club does not exist.' });
             return;
         }
 
-        interaction.editReply({ content: `You have successfully joined ${validation.value.name}!` });
+        interaction.editReply({ content: `You have successfully joined ${validation.name}!` });
     } catch (err) {
         console.error(err);
     } finally {
