@@ -1,6 +1,6 @@
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../utils/capitalize');
-const leaderboard = require('../embeds/leaderboard');
+const { leaderboard } = require('../utils/embeds');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 

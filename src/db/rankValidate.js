@@ -1,6 +1,6 @@
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../utils/capitalize');
-const { promotion, demotion } = require('../game/embeds');
+const { promotion, demotion } = require('../utils/embeds');
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 

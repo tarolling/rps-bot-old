@@ -1,5 +1,5 @@
 const { displayQueue } = require('../../src/game/manageQueues');
-const { status } = require('../../src/game/embeds');
+const { status } = require('../../src/utils/embeds');
 
 
 module.exports = {

@@ -1,7 +1,6 @@
-const { gameWin, gameLoss, gameDraw, waiting } = require('./embeds');
-const { game } = require('../utils/embeds');
-const logic = require('./logic');
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
+const { game, gameWin, gameLoss, gameDraw, waiting } = require('../utils/embeds');
+const logic = require('./logic');
 
 
 module.exports = async (id, queue) => {

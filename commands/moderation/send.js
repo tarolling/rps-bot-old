@@ -1,6 +1,5 @@
-const ranks = require('../../src/embeds/ranks');
-const serverRules = require('../../src/embeds/serverRules');
 const ranksObj = require('../../config/ranks.json');
+const { ranksEmbed } = require('../../src/utils/embeds');
 
 
 module.exports = {
@@ -13,14 +12,12 @@ module.exports = {
     async execute(interaction) {
         const { guild } = interaction;
 
-        const rulesChannel = guild.channels.cache.find(c => c.name === 'rules');
         const infoChannel = guild.channels.cache.find(c => c.name === 'info');
 
         try {
             await interaction.deferReply({ ephemeral: true });
-            await rulesChannel.send({ embeds: [serverRules()] });
             for (const rank in ranksObj) {
-                await infoChannel.send({ embeds: [ranks(rank, ranksObj[rank])] });
+                await infoChannel.send({ embeds: [ranksEmbed(rank, ranksObj[rank])] });
             }
         } catch (err) {
             console.error(err);
