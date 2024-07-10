@@ -35,6 +35,11 @@ const rest = new REST().setToken(token);
     try {
         console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
+        // Delete any specific commands
+        // rest.put(Routes.applicationCommands(clientId), { body: [] })
+        //     .then(() => console.log('Successfully deleted all application commands.'))
+        //     .catch(console.error);
+
         // The put method is used to fully refresh all commands with the current set
         const data = await rest.put(
             Routes.applicationCommands(clientId),

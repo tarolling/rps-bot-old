@@ -7,8 +7,8 @@
   "scripts": {
     "start": "node -r dotenv/config index.js",
     "dev": "node -r dotenv/config index.js dev",
-    "reload": "node -r dotenv/config deployCommands.js",
-    "reload-dev": "node -r dotenv/config deployCommands.js dev",
+    "reload": "node -r dotenv/config deploy-commands.js",
+    "reload-dev": "node -r dotenv/config deploy-commands.js dev",
     "lint": "eslint **/*.js",
     "fix": "eslint **/*.js --fix",
     "precommit": "npm run lint && npm run test"

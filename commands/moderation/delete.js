@@ -16,6 +16,8 @@ module.exports = {
         default_member_permissions: (1 << 3) // ADMINISTRATOR
     },
     async execute(interaction) {
+        if (interaction.user.id !== '417455238522339330') return interaction.reply({ content: 'You are not authorized to use this command.', ephemeral: true });
+
         try {
             await interaction.deferReply({ ephemeral: true });
             await deletePlayer(interaction);
