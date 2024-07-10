@@ -1,6 +1,6 @@
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const { seasonResetValues } = require('./values');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (interaction) => {
@@ -8,7 +8,7 @@ module.exports = async (interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
     const update = seasonResetValues();

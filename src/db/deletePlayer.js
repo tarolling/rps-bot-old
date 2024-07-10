@@ -6,7 +6,7 @@ module.exports = async (interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
     const query = { user_id: interaction.options.getUser('user').id };

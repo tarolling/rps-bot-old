@@ -1,6 +1,6 @@
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const { addValues } = require('../db/values');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 module.exports = async (interaction) => {
@@ -11,7 +11,7 @@ module.exports = async (interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
     const query = { user_id: userId };

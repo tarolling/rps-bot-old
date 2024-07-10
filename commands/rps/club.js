@@ -60,36 +60,21 @@ module.exports = {
                 )
         ),
     async execute(interaction) {
-        const { guild } = interaction;
-        if (!guild.available) return;
-
         try {
             await interaction.deferReply({ ephemeral: true });
-            let updatedNickname = null;
-            let subcommand = interaction.options.getSubcommand();
+            const subcommand = interaction.options.getSubcommand();
 
             switch (subcommand) {
                 case 'join': {
-                    updatedNickname = await joinClub(interaction);
-                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
-                        await interaction.member.setNickname(updatedNickname);
-                    }
+                    await joinClub(interaction);
                     break;
                 }
                 case 'leave': {
-                    updatedNickname = await leaveClub(interaction);
-                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
-                        await interaction.member.setNickname(updatedNickname);
-                    }
+                    await leaveClub(interaction);
                     break;
                 }
                 case 'create': {
-                    const clubAbbr = interaction.options.getString('abbreviation');
-
-                    updatedNickname = await createClub(interaction);
-                    if (updatedNickname?.length <= 32 && interaction.user.id !== '417455238522339330') {
-                        await interaction.member.setNickname(updatedNickname);
-                    }
+                    await createClub(interaction);
                     break;
                 }
                 case 'view': {

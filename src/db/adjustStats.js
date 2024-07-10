@@ -7,7 +7,7 @@ module.exports = async (queue) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
 

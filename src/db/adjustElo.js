@@ -1,6 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-
 const calculateElo = require('../game/calculateElo');
+
 
 
 module.exports = async (queue) => {
@@ -9,7 +9,7 @@ module.exports = async (queue) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
 

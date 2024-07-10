@@ -6,7 +6,7 @@ module.exports = async (id) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
     const query = { user_id: id };

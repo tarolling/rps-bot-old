@@ -6,10 +6,10 @@ module.exports = async (interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
-    const clubName = interaction.options.getString('club_name');
+    const clubName = interaction.options.getString('name');
     const query = { name: { $regex: clubName, $options: 'i' } };
 
     try {

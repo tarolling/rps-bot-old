@@ -1,8 +1,8 @@
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const ranks = require('../../config/ranks.json');
 const capitalize = require('../utils/capitalize');
 const { promotion, demotion } = require('../utils/embeds');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
 
@@ -13,7 +13,7 @@ module.exports = async (queue, interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
 
