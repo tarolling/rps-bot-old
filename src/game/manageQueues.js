@@ -148,7 +148,7 @@ const displayQueue = async () => {
 const deleteRankQueue = async (lobbyId) => {
     const release = await mutex.acquire();
     try {
-        globalQueues[lobbyId] = null;
+        delete globalQueues[lobbyId];
     } finally {
         release();
     }
