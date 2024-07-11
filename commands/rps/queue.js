@@ -22,7 +22,7 @@ module.exports = {
         const { user } = interaction;
         const player_doc = await findPlayer(user.id);
         if (!player_doc) {
-            return interaction.reply({ content: 'You are not registered.', ephemeral: true });
+            return interaction.reply({ content: 'You are not registered. Use `/r` to register.', ephemeral: true });
         }
 
         let playerQueueId = await findPlayerQueue(user);
@@ -33,7 +33,7 @@ module.exports = {
             playerQueueId = await createQueue();
         }
 
-        const queueLength = interaction.options.getInteger('queue_length');
+        const queueLength = interaction.options.getInteger('timeout');
         const timeout = setTimeout(async () => {
             await leave.execute(interaction);
         }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
