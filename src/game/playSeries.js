@@ -1,11 +1,10 @@
-const playGame = require('./playGame');
-const { eloResult, results } = require('../utils/embeds');
+const { findPlayer, adjustElo, adjustStats, rankValidate } = require('../db');
+const { eloResult, results } = require('../embeds');
 const { deleteChallenge } = require('./manageQueues');
-const { adjustElo, adjustStats, rankValidate } = require('../db');
-const { findPlayer } = require('../db');
+const playGame = require('./playGame');
 
 
-module.exports = async (id, queue, interaction) => {
+module.exports = async (id, queue) => {
     let { players } = queue;
 
     let pOne = players[0];
@@ -60,12 +59,12 @@ module.exports = async (id, queue, interaction) => {
         }
 
         await adjustElo(queue);
-        await rankValidate(queue, interaction);
+        await rankValidate(queue);
         await adjustStats(queue);
 
         for (let i = 0; i < players.length; i++) {
             const newStats = await findPlayer(players[i].user.id);
-            await players[i].user.send({ embeds: [eloResult(queue, players[i].user, oldElo[i], newStats.elo)] });
+            await players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] });
             console.log(`${players[i].user.username} | ${oldElo[i]} --> ${newStats.elo}`);
         }
     }

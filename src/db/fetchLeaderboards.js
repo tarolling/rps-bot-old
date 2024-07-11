@@ -1,7 +1,3 @@
-const ranks = require('../../config/ranks.json');
-const capitalize = require('../utils/capitalize');
-
-
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 

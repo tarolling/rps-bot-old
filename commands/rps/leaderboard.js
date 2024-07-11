@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { fetchLeaderboards } = require('../../src/db');
-const { leaderboard } = require('../../src/utils/embeds');
+const { leaderboard } = require('../../src/embeds');
 
 
 module.exports = {

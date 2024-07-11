@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { createClub, joinClub, leaveClub, viewClub } = require('../../src/db/clubs');
-const { club: clubEmbed } = require('../../src/utils/embeds');
+const { club: clubEmbed } = require('../../src/embeds');
 
 
 module.exports = {
