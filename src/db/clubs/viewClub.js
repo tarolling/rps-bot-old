@@ -16,8 +16,7 @@ module.exports = async (interaction) => {
         await dbClient.connect();
         const collection = dbClient.db('rps').collection('clubs');
 
-        let club = await collection.findOne(query);
-        return club;
+        return await collection.findOne(query);
     } catch (err) {
         console.error(err);
     } finally {

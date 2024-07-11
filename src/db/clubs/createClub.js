@@ -24,7 +24,7 @@ module.exports = async (interaction) => {
 
         let validation = await clubCollection.findOne(playerQuery);
         if (validation) {
-            interaction.editReply({ content: `You are already part of this club -> ${validation.name}` });
+            interaction.editReply({ content: `You are already a member of ${validation.name}!` });
             return;
         }
 

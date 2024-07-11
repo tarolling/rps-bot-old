@@ -11,7 +11,7 @@ module.exports = {
     },
     async execute(interaction) {
         const queue = await displayQueue();
-        if (!queue) return interaction.reply({ content: 'There are no active queues. Type /queue to start one!', ephemeral: true });
+        if (!queue) return interaction.reply({ content: 'There are no active queues. Type `/queue` to start one!', ephemeral: true });
 
         await interaction.reply({ embeds: [status(queue)] }).catch(console.error);
     }

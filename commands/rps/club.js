@@ -54,9 +54,10 @@ module.exports = {
                 .addStringOption(option =>
                     option
                         .setName('name')
-                        .setDescription('Specify what club you would like to view, or leave blank to view all clubs.')
+                        .setDescription('Specify what club you would like to view.')
                         .setMinLength(3)
                         .setMaxLength(32)
+                        .setRequired(true)
                 )
         ),
     async execute(interaction) {
