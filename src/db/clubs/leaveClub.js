@@ -6,33 +6,34 @@ module.exports = async (interaction) => {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true
         }
     });
     const userId = interaction.user.id;
     const playerQuery = { members: userId };
 
-
     try {
         await dbClient.connect();
         const clubCollection = dbClient.db('rps').collection('clubs');
-        const playerCollection = dbClient.db('rps').collection('players');
 
-        let club = await clubCollection.findOneAndUpdate(playerQuery, { $pull: playerQuery });
+        let club = await clubCollection.findOne(playerQuery);
         if (!club) {
-            interaction.editReply({ content: `You are not a part of any club.` });
-            return null;
+            interaction.editReply({ content: 'You are not a part of any club.', ephemeral: true });
+            return;
         }
 
-        interaction.editReply({ content: `You have successfully left ${club.value.name}!` });
-
-        if (club.value.members.length <= 1) {
-            await clubCollection.findOneAndDelete({ members: { $eq: [] } });
+        const leaderCheck = await clubCollection.findOne({ leader: userId });
+        if (leaderCheck) {
+            if (club.members.length !== 1) {
+                interaction.editReply({ content: 'You cannot leave a club that you are a leader of, and that has other members in it.', ephemeral: true });
+                return;
+            }
+            club = await clubCollection.findOneAndDelete({ _id: club._id });
+        } else {
+            club = await clubCollection.findOneAndUpdate(playerQuery, { $pull: playerQuery });
         }
 
-        let playerName = await playerCollection.findOne({ user_id: userId });
-        playerName = playerName?.username;
-        return playerName;
+        interaction.editReply({ content: `You have successfully left ${club.name}!` });
     } catch (err) {
         console.error(err);
     } finally {
