@@ -47,11 +47,9 @@ const eloResult = (queue, player, oldElo, newElo) => {
 };
 
 const leaderboard = (data) => {
-    const color = (Object.keys(ranks).includes(data[0].rank.toLowerCase())) ? ranks[data[0].rank.toLowerCase()].color : null;
     return new EmbedBuilder()
-        .setColor(color)
-        .setTitle(data[0].rank)
-        .addFields(data.map(({ username, elo }) => ({ name: username, value: `${elo}`, inline: true })))
+        .setTitle('Global Leaderboard')
+        .addFields(data.map(({ user_id, elo }) => ({ name: `${elo}`, value: `<@${user_id}>` })))
         .setFooter(footer);
 };
 
