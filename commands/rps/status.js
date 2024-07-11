@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { displayQueue } = require('../../src/game/manageQueues');
-const { status } = require('../../src/utils/embeds');
+const { status } = require('../../src/embeds');
 
 
 module.exports = {

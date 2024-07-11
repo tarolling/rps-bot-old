@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
-const findPlayer = require('../../src/db/findPlayer');
-const { stats: statsEmbed } = require('../../src/utils/embeds');
+const { findPlayer } = require('../../src/db');
+const { stats: statsEmbed } = require('../../src/embeds');
 
 
 

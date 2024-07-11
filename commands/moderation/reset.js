@@ -1,7 +1,6 @@
-const resetPlayer = require('../../src/db/resetPlayer');
-const ranks = require('../../config/ranks.json');
-const capitalize = require('../../src/utils/capitalize');
+const { resetPlayer } = require('../../src/db');
 const { defaultRank } = require('../../config/settings.json');
+const ranks = require('../../config/ranks.json');
 
 
 module.exports = {
@@ -30,8 +29,7 @@ module.exports = {
             if (guild.available) {
                 const member = guild.members.cache.find(m => m.id === interaction.options.getUser('user').id);
                 for (const key of Object.keys(ranks)) {
-                    // this but make the key capitalized
-                    const rank = capitalize(key);
+                    const rank = key.charAt(0).toUpperCase() + key.slice(1);
                     const role = guild.roles.cache.find(r => r.name === rank);
                     if (role) await member.roles.remove(role);
                 }

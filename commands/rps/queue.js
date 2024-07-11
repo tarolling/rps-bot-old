@@ -1,10 +1,10 @@
-const playSeries = require('../../src/game/playSeries');
-const { queueEmbed } = require('../../src/utils/embeds');
-const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpenQueue } = require('../../src/game/manageQueues');
-const { defaultTimeout } = require('../../config/settings.json');
-const leave = require('./leave');
-const { findPlayer } = require('../../src/db');
 const { SlashCommandBuilder } = require('discord.js');
+const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpenQueue } = require('../../src/game/manageQueues');
+const { queue: queueEmbed } = require('../../src/embeds');
+const { findPlayer } = require('../../src/db');
+const { defaultTimeout } = require('../../config/settings.json');
+const playSeries = require('../../src/game/playSeries');
+const leave = require('./leave');
 
 
 module.exports = {
@@ -52,7 +52,7 @@ module.exports = {
             }
             await deleteRankQueue(playerQueueId);
             queue.isPlaying = true;
-            if (!isPlaying) await playSeries(playerQueueId, queue, interaction);
+            if (!isPlaying) await playSeries(playerQueueId, queue);
         }
     }
 };

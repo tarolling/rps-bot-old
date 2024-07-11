@@ -1,7 +1,7 @@
-const playSeries = require('../../src/game/playSeries');
-const { challenge } = require('../../src/utils/embeds');
-const { addPlayerToChallenge, createChallenge, deleteChallenge } = require('../../src/game/manageQueues');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const { addPlayerToChallenge, createChallenge, deleteChallenge } = require('../../src/game/manageQueues');
+const { challenge } = require('../../src/embeds');
+const playSeries = require('../../src/game/playSeries');
 
 
 module.exports = {

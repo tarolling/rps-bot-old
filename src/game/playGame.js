@@ -1,5 +1,5 @@
 const { ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
-const { game, gameWin, gameLoss, gameDraw, waiting } = require('../utils/embeds');
+const { game, gameWin, gameLoss, gameDraw, waiting } = require('../embeds');
 const logic = require('./logic');
 
 

@@ -136,7 +136,7 @@ const displayQueue = async () => {
     const release = await mutex.acquire();
     try {
         if (Object.keys(globalQueues).length == 0) return undefined;
-        for (const [id, queue] of Object.entries(globalQueues)) {
+        for (const queue of Object.values(globalQueues)) {
             if (!queue?.lobbyInfo.isPlaying) return queue;
         }
         return undefined;

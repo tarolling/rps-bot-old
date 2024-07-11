@@ -1,5 +1,5 @@
 const ranksObj = require('../../config/ranks.json');
-const { ranksEmbed } = require('../../src/utils/embeds');
+const { ranks: ranksEmbed } = require('../../src/embeds');
 
 
 module.exports = {

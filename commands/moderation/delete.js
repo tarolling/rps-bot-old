@@ -1,4 +1,4 @@
-const deletePlayer = require('../../src/db/deletePlayer');
+const { deletePlayer } = require('../../src/db');
 
 
 module.exports = {
