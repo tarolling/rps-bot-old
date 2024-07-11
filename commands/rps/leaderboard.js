@@ -1,13 +1,11 @@
+const { SlashCommandBuilder } = require('discord.js');
 const updateLeaderboards = require('../../src/db/updateLeaderboards');
 
 
 module.exports = {
-    data: {
-        name: 'refresh',
-        description: 'Refresh the leaderboards.',
-        options: [],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('lb')
+        .setDescription('View the global leaderboards.'),
     async execute(interaction) {
         try {
             await interaction.deferReply({ ephemeral: true });

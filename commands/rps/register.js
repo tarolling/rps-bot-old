@@ -1,13 +1,11 @@
+const { SlashCommandBuilder } = require('discord.js');
 const registerPlayer = require('../../src/db/registerPlayer');
 
 
 module.exports = {
-    data: {
-        name: 'register',
-        description: 'Register a user to the RPS database.',
-        options: [],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('r')
+        .setDescription('Register to start playing Ranked RPS.'),
     async execute(interaction) {
         try {
             await interaction.deferReply({ ephemeral: true });

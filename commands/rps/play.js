@@ -1,23 +1,19 @@
 const playSeries = require('../../src/game/playSeries');
 const { challenge } = require('../../src/utils/embeds');
 const { addPlayerToChallenge, createChallenge, deleteChallenge } = require('../../src/game/manageQueues');
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 
 
 module.exports = {
-    data: {
-        name: 'play',
-        description: 'Play RPS against a specific user.',
-        options: [
-            {
-                type: 6,
-                name: 'user',
-                description: 'Specify the user you would like to play against.',
-                required: true
-            }
-        ],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('play')
+        .setDescription('Challenge a user to a game of RPS.')
+        .addUserOption(option =>
+            option
+                .setName('user')
+                .setDescription('Specify the user you would like to play against.')
+                .setRequired(true)
+        ),
     async execute(interaction) {
         const { user } = interaction;
 

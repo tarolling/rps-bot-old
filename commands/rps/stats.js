@@ -1,22 +1,18 @@
+const { SlashCommandBuilder } = require('discord.js');
 const findPlayer = require('../../src/db/findPlayer');
 const { stats: statsEmbed } = require('../../src/utils/embeds');
 
 
 
 module.exports = {
-    data: {
-        name: 'stats',
-        description: 'View your stats.',
-        options: [
-            {
-                type: 6,
-                name: 'user',
-                description: 'Specify the user you would like to view.',
-                required: false
-            }
-        ],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('stats')
+        .setDescription('View your stats.')
+        .addUserOption(option =>
+            option
+                .setName('user')
+                .setDescription('Specify the user you would like to view.')
+        ),
     async execute(interaction) {
         try {
             await interaction.deferReply({ ephemeral: true });
