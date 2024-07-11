@@ -1,14 +1,12 @@
+const { SlashCommandBuilder } = require('discord.js');
 const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manageQueues');
 const { leaveEmbed } = require('../../src/utils/embeds');
 
 
 module.exports = {
-    data: {
-        name: 'l',
-        description: 'Leave the queue.',
-        options: [],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('l')
+        .setDescription('Leave the queue.'),
     async execute(interaction) {
         const { user, channel } = interaction;
         const queueId = await findPlayerQueue(user);

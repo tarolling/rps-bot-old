@@ -4,24 +4,20 @@ const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpe
 const { defaultTimeout } = require('../../config/settings.json');
 const leave = require('./leave');
 const { findPlayer } = require('../../src/db');
+const { SlashCommandBuilder } = require('discord.js');
 
 
 module.exports = {
-    data: {
-        name: 'q',
-        description: 'Enter in the queue to play RPS against an opponent.',
-        options: [
-            {
-                type: 4,
-                name: 'queue_length',
-                description: 'Specify (in minutes) how long you would like to stay in the queue for before automatically leaving.',
-                required: false,
-                min_value: 1,
-                max_value: 60
-            }
-        ],
-        default_member_permissions: (1 << 11) // SEND_MESSAGES
-    },
+    data: new SlashCommandBuilder()
+        .setName('q')
+        .setDescription('Enter in the queue to play RPS against a random opponent.')
+        .addIntegerOption(option =>
+            option
+                .setName('timeout')
+                .setDescription('Specify (in minutes) how long you would like to stay in the queue for before automatically leaving.')
+                .setMinValue(1)
+                .setMaxValue(60)
+        ),
     async execute(interaction) {
         const { user } = interaction;
         const player_doc = await findPlayer(user.id);
