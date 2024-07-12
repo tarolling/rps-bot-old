@@ -18,7 +18,7 @@ module.exports = {
             await command.execute(interaction);
             console.log(`COMMAND: ${interaction.commandName} by ${interaction.user.username} ` +
                 `(${interaction.user.id} - Guild: ${interaction.guildId}) Locale: ${interaction.locale}, ` +
-                `msecs: ${(Date.now() - start).toFixed(2)}`);
+                `msecs: ${Date.now() - start}`);
         } catch (error) {
             console.error(error);
             if (interaction.replied || interaction.deferred) {

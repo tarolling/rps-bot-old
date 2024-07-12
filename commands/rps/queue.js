@@ -5,7 +5,10 @@ const { findPlayer } = require('../../src/db');
 const { defaultTimeout } = require('../../config/settings.json');
 const playSeries = require('../../src/game/playSeries');
 const leave = require('./leave');
+const { Mutex } = require('async-mutex');
 
+
+const mutex = new Mutex();
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -19,40 +22,47 @@ module.exports = {
                 .setMaxValue(60)
         ),
     async execute(interaction) {
-        const { user } = interaction;
-        const player_doc = await findPlayer(user.id);
-        if (!player_doc) {
-            return interaction.reply({ content: 'You are not registered. Use `/r` to register.', ephemeral: true });
-        }
+        await interaction.deferReply();
 
-        let playerQueueId = await findPlayerQueue(user);
-        if (playerQueueId) return interaction.reply({ content: 'You are already in a queue.', ephemeral: true });
-
-        playerQueueId = await findOpenQueue();
-        if (!playerQueueId) {
-            playerQueueId = await createQueue();
-        }
-
-        const queueLength = interaction.options.getInteger('timeout');
-        const timeout = setTimeout(async () => {
-            await leave.execute(interaction);
-        }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
-
-        const queue = await addPlayerToQueue(playerQueueId, user, timeout);
-        if (!queue) return interaction.reply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
-
-        const { players, lobbyInfo: { isPlaying } } = queue;
-
-        await interaction.reply({ embeds: [queueEmbed(queue, user)] });
-        console.log(`${user.username} joined Lobby ${playerQueueId}`);
-
-        if (players.length === 2) {
-            for (const player of players) {
-                clearTimeout(player.timeout);
+        const release = await mutex.acquire();
+        try {
+            const { user } = interaction;
+            const player_doc = await findPlayer(user.id);
+            if (!player_doc) {
+                return interaction.editReply({ content: 'You are not registered. Use `/r` to register.', ephemeral: true });
             }
-            await deleteRankQueue(playerQueueId);
-            queue.isPlaying = true;
-            if (!isPlaying) await playSeries(playerQueueId, queue);
+
+            let playerQueueId = await findPlayerQueue(user);
+            if (playerQueueId) return interaction.editReply({ content: 'You are already in a queue.', ephemeral: true });
+
+            playerQueueId = await findOpenQueue();
+            if (!playerQueueId) {
+                playerQueueId = await createQueue();
+            }
+
+            const queueLength = interaction.options.getInteger('timeout');
+            const timeout = setTimeout(async () => {
+                await leave.execute(interaction);
+            }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
+
+            const queue = await addPlayerToQueue(playerQueueId, user, timeout);
+            if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
+
+            const { players, lobbyInfo: { isPlaying } } = queue;
+
+            await interaction.editReply({ embeds: [queueEmbed(queue, user)] });
+            console.log(`${user.username} joined Lobby ${playerQueueId}`);
+
+            if (players.length === 2) {
+                for (const player of players) {
+                    clearTimeout(player.timeout);
+                }
+                await deleteRankQueue(playerQueueId);
+                queue.isPlaying = true;
+                if (!isPlaying) playSeries(playerQueueId, queue);
+            }
+        } finally {
+            release();
         }
     }
 };
