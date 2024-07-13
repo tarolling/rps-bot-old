@@ -14,13 +14,11 @@ module.exports = async (id, queue) => {
     while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
         await playGame(id, queue);
 
-        if (pOne.score === -1 || pTwo.score === -1) break;
-
         console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
 
         if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
-            const pOneEmoji = (pOne.choice === 'Rock') ? ':rock:' : ((pOne.choice === 'Paper') ? ':page_facing_up:' : ':scissors:');
-            const pTwoEmoji = (pTwo.choice === 'Rock') ? ':rock:' : ((pTwo.choice === 'Paper') ? ':page_facing_up:' : ':scissors:');
+            const pOneEmoji = pOne.choice === 'Rock' ? ':rock:' : (pOne.choice === 'Paper' ? ':page_facing_up:' : (pOne.choice === 'Scissors' ? ':scissors:' : ':x:'));
+            const pTwoEmoji = pTwo.choice === 'Rock' ? ':rock:' : (pTwo.choice === 'Paper' ? ':page_facing_up:' : (pTwo.choice === 'Scissors' ? ':scissors:' : ':x:'));
 
             const msg = `__**Lobby #${id} - Game ${queue.lobbyInfo.gameNumber}**__\n` +
                 `${pOne.user.username}  ${pOneEmoji}  ${pOne.score}  |  ${pTwo.score}  ${pTwoEmoji}  ${pTwo.user.username}`;
@@ -33,6 +31,8 @@ module.exports = async (id, queue) => {
                 if (pTwo.channel !== null) pTwo.channel.send(msg);
             }
         }
+
+        if (pOne.score === -1 || pTwo.score === -1) break;
 
         pOne.choice = '';
         pTwo.choice = '';
