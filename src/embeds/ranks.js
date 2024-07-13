@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const { footer } = require('./footer');
+const { footer } = require('./embed');
 
 module.exports = (name, info) => {
     const { color, elo: { placement, demo_placement, promotion, demotion } } = info;

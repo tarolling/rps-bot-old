@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require('discord.js');
-const { footer } = require('./footer');
+const { footer } = require('./embed');
 const ranks = require('../../config/ranks.json');
 
 module.exports = (user, rank) => {
