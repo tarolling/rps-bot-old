@@ -45,7 +45,7 @@ module.exports = {
                 await leave.execute(interaction);
             }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
 
-            const queue = await addPlayerToQueue(playerQueueId, user, timeout);
+            const queue = await addPlayerToQueue(playerQueueId, user, timeout, interaction.channel);
             if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
 
             const { players, lobbyInfo: { isPlaying } } = queue;
