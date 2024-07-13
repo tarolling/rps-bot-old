@@ -1,9 +1,10 @@
 const { EmbedBuilder } = require('discord.js');
-const { footer } = require('./footer');
+const { defaultColor, footer } = require('./embed');
 
 module.exports = (queue, user) => {
     const { players } = queue;
     let embed = new EmbedBuilder()
+        .setColor(defaultColor)
         .setTitle(`${players.length} player${players.length === 1 ? ' is' : 's are'} in the queue`)
         .setDescription(`**${user.username}** has joined.`)
         .setThumbnail(user?.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 }))

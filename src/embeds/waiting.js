@@ -1,9 +1,10 @@
 const { EmbedBuilder } = require('discord.js');
-const { footer } = require('./footer');
+const { defaultColor, footer } = require('./embed');
 
 module.exports = (queue, interaction) => {
     const { players, lobbyInfo: { gameNumber } } = queue;
     return new EmbedBuilder()
+        .setColor(defaultColor)
         .setTitle('Waiting for opponent...')
         .setDescription(`Game ${gameNumber}`)
         .addFields({ name: `${(players[0].user.id === interaction.user.id) ? players[0].choice : '???'}`, value: players[0].user.username, inline: true },
