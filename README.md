@@ -1,8 +1,7 @@
 # Ranked RPS Bot
 
 Old version of Ranked RPS bot.
-If you like what you see, leave a star! I need stars to convince my family
-to feed me :D
+If you like what you see, leave a star!
 
 ## Invite To Your Server
 
