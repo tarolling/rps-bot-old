@@ -6,35 +6,55 @@ const playGame = require('./playGame');
 
 module.exports = async (id, queue) => {
     let { players } = queue;
-
     let pOne = players[0];
     let pTwo = players[1];
 
     console.log(`Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
-    // const resultsChannel = interaction.guild.channels.cache.find(c => c.name === 'results');
-    // if (!resultsChannel) {
-    //     interaction.guild.channels.create('results', { type: 'text' })
-    //         .then(c => c.send({ embeds: [results(queue)] }))
-    //         .catch(console.error);
-    // }
-
     while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
         await playGame(id, queue);
 
-        if (pOne.score == -1 || pTwo.score == -1) break;
+        if (pOne.score === -1 || pTwo.score === -1) break;
 
-        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})`);
-        // await resultsChannel.send({ content: `L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'N/A'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'N/A'})` });
+        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
+
+        if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
+            const pOneEmoji = (pOne.choice === 'Rock') ? ':rock:' : ((pOne.choice === 'Paper') ? ':page_facing_up:' : ':scissors:');
+            const pTwoEmoji = (pTwo.choice === 'Rock') ? ':rock:' : ((pTwo.choice === 'Paper') ? ':page_facing_up:' : ':scissors:');
+
+            const msg = `__**Lobby #${id} - Game ${queue.lobbyInfo.gameNumber}**__\n` +
+                `${pOne.user.username}  ${pOneEmoji}  ${pOne.score}  |  ${pTwo.score}  ${pTwoEmoji}  ${pTwo.user.username}`;
+
+            /* Just send one if they are the same */
+            if (pOne.channel?.id === pTwo.channel?.id) {
+                pOne.channel.send(msg);
+            } else {
+                if (pOne.channel !== null) pOne.channel.send(msg);
+                if (pTwo.channel !== null) pTwo.channel.send(msg);
+            }
+        }
+
         pOne.choice = '';
         pTwo.choice = '';
     }
 
     if (pOne.score == -1 || pTwo.score == -1) {
-        pOne.user.send('Neither player chose an option in time, so the lobby has been aborted.');
-        pTwo.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+        for (const player of players) {
+            player.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+        }
         console.log(`DOUBLE AFK | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
-        // await resultsChannel.send({ content: `**DOUBLE AFK** | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}` });
+
+        if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
+            const msg = { embeds: [results(id, queue)] };
+
+            /* Just send one if they are the same */
+            if (pOne.channel?.id === pTwo.channel?.id) {
+                pOne.channel.send(msg);
+            } else {
+                if (pOne.channel !== null) pOne.channel.send(msg);
+                if (pTwo.channel !== null) pTwo.channel.send(msg);
+            }
+        }
         return;
     }
 
@@ -42,12 +62,22 @@ module.exports = async (id, queue) => {
         await player.user.send({ embeds: [results(id, queue)] });
     }
 
-    // await resultsChannel.send({ embeds: [results(queue)] });
+    if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
+        const msg = { embeds: [results(id, queue)] };
+
+        /* Just send one if they are the same */
+        if (pOne.channel?.id === pTwo.channel?.id) {
+            pOne.channel.send(msg);
+        } else {
+            if (pOne.channel !== null) pOne.channel.send(msg);
+            if (pTwo.channel !== null) pTwo.channel.send(msg);
+        }
+    }
+
     console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
 
     if (typeof id == 'string' && id.includes('challenge')) {
-        await deleteChallenge(id);
-        return;
+        return deleteChallenge(id);
     }
 
     if (pOne.score === 4 || pTwo.score === 4) {
