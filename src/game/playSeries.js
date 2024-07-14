@@ -100,4 +100,6 @@ module.exports = async (id, queue) => {
 
         return deleteRankQueue(id);
     }
+
+    return deleteRankQueue(id);
 }

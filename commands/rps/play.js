@@ -67,7 +67,7 @@ module.exports = {
                 playSeries(lobbyId, queue, interaction);
             } else {
                 await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
-                await interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
+                interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
             }
         });
 
@@ -78,7 +78,7 @@ module.exports = {
             declineBtn.setDisabled(true);
             await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
-            await deleteChallenge(lobbyId);
+            deleteChallenge(lobbyId);
         });
     }
 };
