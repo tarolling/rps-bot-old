@@ -1,7 +1,7 @@
 {
   "name": "rps-bot",
   "description": "A bot that lets users play rock, paper, scissors against each other.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": "tarolling",
   "main": "index.js",
   "scripts": {
