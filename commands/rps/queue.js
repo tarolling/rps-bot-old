@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { queue: queueEmbed } = require('../../src/embeds');
 const { findPlayer, registerPlayer } = require('../../src/db');
@@ -26,7 +26,7 @@ module.exports = {
 
         const release = await mutex.acquire();
         try {
-            const { user } = interaction;
+            const { user, channel } = interaction;
             const player_doc = await findPlayer(user.id);
             if (!player_doc) {
                 await registerPlayer(interaction);
@@ -45,7 +45,9 @@ module.exports = {
                 await leave.execute(interaction);
             }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
 
-            const queue = await addPlayerToQueue(playerQueueId, user, timeout, interaction.channel);
+            console.log(`${user.username}'s channel: ${channel}`);
+            const queue = (channel?.type === ChannelType.DM) ? await addPlayerToQueue(playerQueueId, user, timeout) :
+                await addPlayerToQueue(playerQueueId, user, timeout, channel);
             if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
 
             const { players, lobbyInfo: { isPlaying } } = queue;
