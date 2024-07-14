@@ -50,6 +50,11 @@ for (const file of eventFiles) {
     }
 }
 
+/* DiscordAPI error handling */
+process.on('unhandledRejection', error => {
+    console.error('Unhandled promise rejection:', error);
+});
+
 client.login(token);
 
 const dbClient = new MongoClient(process.env.DB_URI, {
