@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { queue: queueEmbed } = require('../../src/embeds');
-const { findPlayer } = require('../../src/db');
+const { findPlayer, registerPlayer } = require('../../src/db');
 const { defaultTimeout } = require('../../config/settings.json');
 const playSeries = require('../../src/game/playSeries');
 const leave = require('./leave');
@@ -29,7 +29,7 @@ module.exports = {
             const { user } = interaction;
             const player_doc = await findPlayer(user.id);
             if (!player_doc) {
-                return interaction.editReply({ content: 'You are not registered. Use `/r` to register.', ephemeral: true });
+                await registerPlayer(interaction);
             }
 
             let playerQueueId = await findPlayerQueue(user);
