@@ -34,7 +34,7 @@ module.exports = async (id, queue) => {
     try {
         msgOne = await pOne.user.send({ embeds: [game(id, queue)], components: [row] });
         msgTwo = await pTwo.user.send({ embeds: [game(id, queue)], components: [row] });
-    } catch (error) {
+    } catch {
         if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
             const msg = `Lobby ${id} aborted - ` +
                 'One or both players have DMs from server members turned off. Please enable them in your Discord settings.';
@@ -55,7 +55,7 @@ module.exports = async (id, queue) => {
     const pOneFilter = i => i.user.id === pOne.user.id;
     const pTwoFilter = i => i.user.id === pTwo.user.id;
 
-    // Setting up message component collection
+    /* Setting up message component collection */
     if (gameMessages.length != 2) return;
     let prom1 = gameMessages[0].awaitMessageComponent({ pOneFilter, time: 30000 })
         .then((i) => {
@@ -81,27 +81,71 @@ module.exports = async (id, queue) => {
             gameMessages[1].edit({ components: [] });
         });
 
-    // Awaiting the players to make their choices
+    /* Awaiting the players to make their choices */
     let promises = [prom1, prom2];
     await Promise.allSettled(promises);
 
-    // Calculating the winner
-    if (pOne.choice || pTwo.choice) { // If either player respond
-        let winner = await logic(pOne.choice, pTwo.choice);
+    /* Calculating the winner */
+    if (pOne.choice || pTwo.choice) {
+        /* Either player respond */
+        const winner = await logic(pOne.choice, pTwo.choice);
         switch (winner) {
             case 'p1': {
-                (gameResults.pOneMsg) ? gameResults.pOneMsg.edit({ embeds: [gameWin(queue)] })
-                    : pOne.user.send({ embeds: [gameWin(queue)] });
-                (gameResults.pTwoMsg) ? gameResults.pTwoMsg.edit({ embeds: [gameLoss(queue)] })
-                    : pTwo.user.send({ embeds: [gameLoss(queue)] });
+                if (gameResults.pOneMsg) {
+                    gameResults.pOneMsg.edit({ embeds: [gameWin(queue)] });
+                } else {
+                    try {
+                        pOne.user.send({ embeds: [gameWin(queue)] });
+                    } catch {
+                        if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
+                            const msg = `Lobby ${id} aborted - ` +
+                                'One or both players have DMs from server members turned off. Please enable them in your Discord settings.';
+                            /* Just send one if they are the same */
+                            if (pOne.channel?.id === pTwo.channel?.id) {
+                                pOne.channel.send(msg);
+                            } else {
+                                if (pOne.channel !== null) pOne.channel.send(msg);
+                                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                            }
+                        }
+                        return;
+                    }
+                }
+                if (gameResults.pTwoMsg) {
+                    gameResults.pTwoMsg.edit({ embeds: [gameLoss(queue)] });
+                } else {
+                    try {
+                        pTwo.user.send({ embeds: [gameLoss(queue)] });
+                    } catch {
+                        if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
+                            const msg = `Lobby ${id} aborted - ` +
+                                'One or both players have DMs from server members turned off. Please enable them in your Discord settings.';
+                            /* Just send one if they are the same */
+                            if (pOne.channel?.id === pTwo.channel?.id) {
+                                pOne.channel.send(msg);
+                            } else {
+                                if (pOne.channel !== null) pOne.channel.send(msg);
+                                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                            }
+                        }
+                        return;
+                    }
+                }
                 pOne.score++;
                 break;
             }
             case 'p2': {
-                (gameResults.pOneMsg) ? gameResults.pOneMsg.edit({ embeds: [gameLoss(queue)] })
-                    : pOne.user.send({ embeds: [gameLoss(queue)] });
-                (gameResults.pTwoMsg) ? gameResults.pTwoMsg.edit({ embeds: [gameWin(queue)] })
-                    : pTwo.user.send({ embeds: [gameWin(queue)] });
+                if (gameResults.pOneMsg) {
+                    gameResults.pOneMsg.edit({ embeds: [gameLoss(queue)] });
+                } else {
+                    pOne.user.send({ embeds: [gameLoss(queue)] });
+                }
+                if (gameResults.pTwoMsg) {
+                    gameResults.pTwoMsg.edit({ embeds: [gameWin(queue)] });
+                }
+                else {
+                    pTwo.user.send({ embeds: [gameWin(queue)] });
+                }
                 pTwo.score++;
                 break;
             }
@@ -111,7 +155,8 @@ module.exports = async (id, queue) => {
                 break;
             }
         }
-    } else { // If no player responds
+    } else {
+        /* No player responds */
         pOne.score = -1;
         pTwo.score = -1;
     }
