@@ -5,6 +5,9 @@ module.exports = (data) => {
     return new EmbedBuilder()
         .setColor(defaultColor)
         .setTitle('Global Leaderboard')
-        .addFields(data.map(({ user_id, elo }) => ({ name: `${elo}`, value: `<@${user_id}>` })))
+        .addFields(data.map(({ player, elo }) => ({
+            name: `${elo}`,
+            value: `${player.username} (<@${player.id}>)`
+        })))
         .setFooter(footer);
 };
