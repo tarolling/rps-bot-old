@@ -1,5 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
-const { addPlayerToChallenge, createChallenge, deleteChallenge } = require('../../src/game/manageQueues');
+const { addPlayerToChallenge, createChallenge, deleteChallenge, findPlayerQueue } = require('../../src/game/manageQueues');
 const { challenge } = require('../../src/embeds');
 const playSeries = require('../../src/game/playSeries');
 
@@ -22,6 +22,9 @@ module.exports = {
         if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true });
         if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
         if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
+
+        const playerQueue = await findPlayerQueue(user);
+        if (playerQueue !== null) return interaction.reply({ content: 'You are already in a lobby.', ephemeral: true });
 
         const lobbyId = `challenge-${user.id}`;
         await createChallenge(lobbyId);

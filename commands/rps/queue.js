@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { addPlayerToQueue, findPlayerQueue, createQueue, deleteRankQueue, findOpenQueue } = require('../../src/game/manageQueues');
+const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { queue: queueEmbed } = require('../../src/embeds');
 const { findPlayer } = require('../../src/db');
 const { defaultTimeout } = require('../../config/settings.json');
@@ -33,7 +33,7 @@ module.exports = {
             }
 
             let playerQueueId = await findPlayerQueue(user);
-            if (playerQueueId) return interaction.editReply({ content: 'You are already in a queue.', ephemeral: true });
+            if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true });
 
             playerQueueId = await findOpenQueue();
             if (!playerQueueId) {
@@ -57,7 +57,7 @@ module.exports = {
                 for (const player of players) {
                     clearTimeout(player.timeout);
                 }
-                await deleteRankQueue(playerQueueId);
+
                 queue.isPlaying = true;
                 if (!isPlaying) playSeries(playerQueueId, queue);
             }

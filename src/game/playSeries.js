@@ -1,6 +1,6 @@
 const { findPlayer, adjustElo, adjustStats, rankValidate } = require('../db');
 const { eloResult, results } = require('../embeds');
-const { deleteChallenge } = require('./manageQueues');
+const { deleteRankQueue, deleteChallenge } = require('./manageQueues');
 const playGame = require('./playGame');
 
 
@@ -97,5 +97,7 @@ module.exports = async (id, queue) => {
             await players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] });
             console.log(`${players[i].user.username} | ${oldElo[i]} --> ${newStats.elo}`);
         }
+
+        return deleteRankQueue(id);
     }
 }
