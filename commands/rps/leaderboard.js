@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require('discord.js');
-const { fetchLeaderboards } = require('../../src/db');
+const { fetchPlayerLeaderboard } = require('../../src/db');
 const { leaderboard } = require('../../src/embeds');
 
 const MAX_PAGES = 5;
@@ -9,15 +9,25 @@ const MAX_PLAYERS = 50;
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('lb')
-        .setDescription('View the global leaderboard.'),
+        .setDescription('View the global leaderboards.')
+        .addStringOption(option =>
+            option
+                .setName('type')
+                .setDescription('Type of leaderboard')
+                .setRequired(true)
+                .setChoices(
+                    { name: 'Players', value: 'lb_players' },
+                    { name: 'Clubs', value: 'lb_clubs' }
+                )
+        ),
     async execute(interaction) {
         await interaction.deferReply();
 
-        const { client } = interaction;
+        const lbType = interaction.options.get_string('type');
 
         let players;
         try {
-            players = await fetchLeaderboards(MAX_PLAYERS);
+            players = await fetchPlayerLeaderboard(MAX_PLAYERS);
             if (!players) {
                 return interaction.editReply({ content: 'Huh. I guess there are no active players.', ephemeral: true });
             }
@@ -31,13 +41,13 @@ module.exports = {
         const lazyLoad = async (startIndex, endIndex) => {
             for (let i = startIndex; i < endIndex; i++) {
                 playerInfo.push({
-                    player: await client.users.fetch(players[i].user_id),
+                    player: await interaction.client.users.fetch(players[i].user_id),
                     elo: players[i].elo
                 });
             }
         };
 
-        const numPerPage = MAX_PLAYERS / MAX_PAGES;
+        const numPerPage = 10;
         let currentPageIndex = 0;
 
         await lazyLoad(currentPageIndex * numPerPage, (currentPageIndex * numPerPage) + numPerPage);

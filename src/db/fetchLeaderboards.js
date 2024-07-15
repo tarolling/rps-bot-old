@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
-module.exports = async (numPlayers) => {
+module.exports = async (numRecords, type) => {
     const dbClient = new MongoClient(process.env.DB_URI, {
         serverApi: {
             version: ServerApiVersion.v1,
@@ -10,14 +10,16 @@ module.exports = async (numPlayers) => {
         }
     });
 
+    if (type === 'players' || type === 'clubs') return null;
+
     try {
         await dbClient.connect();
-        const collection = dbClient.db('rps').collection('players');
+        const collection = dbClient.db('rps').collection(type);
 
-        const players = await collection.find().sort({ elo: -1 }).limit(numPlayers).toArray();
-        if (!players || players?.length === 0) return null;
+        const records = await collection.find().sort({ elo: -1 }).limit(numRecords).toArray();
+        if (!records || records?.length === 0) return null;
 
-        return players;
+        return records;
     } catch (err) {
         console.log(err);
     } finally {
