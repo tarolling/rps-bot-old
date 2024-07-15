@@ -125,7 +125,7 @@ const findOpenQueue = async () => {
     try {
         if (Object.keys(globalQueues).length == 0) return null;
         for (const [id, queue] of Object.entries(globalQueues)) {
-            if (queue?.players.length == 1) return id;
+            if (queue?.players.length == 1 && !id.includes("challenge")) return id;
         }
         return null;
     } finally {
