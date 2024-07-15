@@ -59,14 +59,12 @@ module.exports = {
         collector.on('collect', async (i) => {
             i.deferUpdate();
             collector.stop();
-            acceptBtn.setDisabled(true);
-            declineBtn.setDisabled(true);
             if (i.customId === 'Accept') {
-                await challengeMessage.edit({ components: [row] });
+                await challengeMessage.edit({ components: [] });
                 const queue = await addPlayerToChallenge(lobbyId, target);
                 playSeries(lobbyId, queue, interaction);
             } else {
-                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
+                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [], ephemeral: true });
                 interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
             }
         });
@@ -74,9 +72,7 @@ module.exports = {
         collector.on('end', async (collected, reason) => {
             if (reason !== 'time') return;
 
-            acceptBtn.setDisabled(true);
-            declineBtn.setDisabled(true);
-            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
+            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
             deleteChallenge(lobbyId);
         });
