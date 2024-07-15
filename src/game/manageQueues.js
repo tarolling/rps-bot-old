@@ -32,27 +32,13 @@ const createQueue = async () => {
     }
 };
 
-const createChallenge = async (lobbyId) => {
-    const release = await mutex.acquire();
-    try {
-        globalQueues[lobbyId] = {
-            players: [],
-            lobbyInfo: {
-                isPlaying: false,
-                gameNumber: 0,
-            }
-        };
-    } finally {
-        release();
-    }
-}
-
-const deleteChallenge = async (lobbyId) => {
-    const release = await mutex.acquire();
-    try {
-        delete globalQueues[lobbyId];
-    } finally {
-        release();
+const createChallenge = async () => {
+    return {
+        players: [],
+        lobbyInfo: {
+            isPlaying: false,
+            gameNumber: 0,
+        }
     }
 }
 
@@ -74,15 +60,10 @@ const addPlayerToQueue = async (lobbyId, player, timeout, channel) => {
     }
 };
 
-const addPlayerToChallenge = async (lobbyId, player) => {
-    const release = await mutex.acquire();
-    try {
-        let { players } = globalQueues[lobbyId];
-        players.push(playerInfo(player));
-        return globalQueues[lobbyId];
-    } finally {
-        release();
-    }
+const addPlayerToChallenge = async (queue, player) => {
+    let { players } = queue;
+    players.push(playerInfo(player));
+    return queue;
 }
 
 const removePlayerFromQueue = async (lobbyId, player) => {
@@ -158,7 +139,6 @@ const deleteRankQueue = async (lobbyId) => {
 module.exports = {
     createQueue,
     createChallenge,
-    deleteChallenge,
     addPlayerToQueue,
     addPlayerToChallenge,
     removePlayerFromQueue,
