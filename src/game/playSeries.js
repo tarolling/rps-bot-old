@@ -1,6 +1,6 @@
 const { findPlayer, adjustElo, adjustStats, rankValidate } = require('../db');
 const { eloResult, results } = require('../embeds');
-const { deleteRankQueue, deleteChallenge } = require('./manageQueues');
+const { deleteRankQueue } = require('./manageQueues');
 const playGame = require('./playGame');
 
 
@@ -75,10 +75,7 @@ module.exports = async (id, queue) => {
     }
 
     console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
-
-    if (typeof id == 'string' && id.includes('challenge')) {
-        return deleteChallenge(id);
-    }
+    if (id.includes('challenge')) return;
 
     if (pOne.score === 4 || pTwo.score === 4) {
         const oldElo = [];
@@ -100,6 +97,4 @@ module.exports = async (id, queue) => {
 
         return deleteRankQueue(id);
     }
-
-    return deleteRankQueue(id);
 }

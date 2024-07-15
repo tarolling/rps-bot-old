@@ -1,5 +1,5 @@
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
-const { addPlayerToChallenge, createChallenge, deleteChallenge, findPlayerQueue } = require('../../src/game/manageQueues');
+const { addPlayerToChallenge, createChallenge, findPlayerQueue } = require('../../src/game/manageQueues');
 const { challenge } = require('../../src/embeds');
 const playSeries = require('../../src/game/playSeries');
 
@@ -26,9 +26,8 @@ module.exports = {
         const playerQueue = await findPlayerQueue(user);
         if (playerQueue !== null) return interaction.reply({ content: 'You are already in a lobby.', ephemeral: true });
 
-        const lobbyId = `challenge-${user.id}`;
-        await createChallenge(lobbyId);
-        await addPlayerToChallenge(lobbyId, user);
+        let queue = await createChallenge();
+        queue = await addPlayerToChallenge(queue, user);
 
         const acceptBtn = new ButtonBuilder()
             .setCustomId('Accept')
@@ -59,26 +58,20 @@ module.exports = {
         collector.on('collect', async (i) => {
             i.deferUpdate();
             collector.stop();
-            acceptBtn.setDisabled(true);
-            declineBtn.setDisabled(true);
             if (i.customId === 'Accept') {
-                await challengeMessage.edit({ components: [row] });
-                const queue = await addPlayerToChallenge(lobbyId, target);
-                playSeries(lobbyId, queue, interaction);
+                await challengeMessage.edit({ components: [] });
+                queue = await addPlayerToChallenge(queue, target);
+                playSeries('challenge', queue, interaction);
             } else {
-                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [row], ephemeral: true });
+                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [], ephemeral: true });
                 interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
             }
         });
 
         collector.on('end', async (collected, reason) => {
             if (reason !== 'time') return;
-
-            acceptBtn.setDisabled(true);
-            declineBtn.setDisabled(true);
-            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [row], ephemeral: true });
+            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [], ephemeral: true });
             await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
-            deleteChallenge(lobbyId);
         });
     }
 };
