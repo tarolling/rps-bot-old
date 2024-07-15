@@ -27,10 +27,10 @@ module.exports = {
         const release = await mutex.acquire();
         try {
             const { user, channel } = interaction;
-            // const player_doc = await findPlayer(user.id);
-            // if (!player_doc) {
-            //     await registerPlayer(interaction);
-            // }
+            const player_doc = await findPlayer(user.id);
+            if (!player_doc) {
+                await registerPlayer(interaction);
+            }
 
             let playerQueueId = await findPlayerQueue(user);
             if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true });
