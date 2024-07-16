@@ -24,7 +24,7 @@
     "mongodb": "^6.8.0"
   },
   "devDependencies": {
-    "eslint": "^9.6.0"
+    "eslint": "^9.7.0"
   },
   "nodeVersion": "21.6.2"
 }
