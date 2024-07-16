@@ -22,7 +22,7 @@ module.exports = {
                 .setMaxValue(60)
         ),
     async execute(interaction) {
-        await interaction.deferReply();
+        await interaction.deferReply().catch(console.error);
 
         const release = await mutex.acquire();
         try {

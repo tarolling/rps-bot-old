@@ -94,7 +94,10 @@ module.exports = {
             }
         } catch (err) {
             console.error(err);
-            return interaction.editReply({ content: 'An error occurred while trying to join/create a club.', ephemeral: true });
+            return interaction.editReply({
+                content: 'An error occurred while trying to join/create a club.',
+                ephemeral: true
+            }).catch(console.error);
         }
     }
 };

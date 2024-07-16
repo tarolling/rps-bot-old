@@ -44,7 +44,8 @@ module.exports = {
 
         try {
             challengeMessage = await target.send({ embeds: [challenge(interaction)], components: [row] });
-        } catch {
+        } catch (error) {
+            console.warn(`Unable to DM ${target.username} (${target.id}) - ${error}`);
             return interaction.reply({
                 content: 'Unable to DM user. Either they have DMs from server members turned off, or they blocked me :(',
                 ephemeral: true
@@ -61,7 +62,7 @@ module.exports = {
             i.deferUpdate();
             collector.stop();
             if (i.customId === 'Accept') {
-                await challengeMessage.edit({ components: [] }).catch(console.error);
+                challengeMessage.edit({ components: [] }).catch(console.error);
                 queue = await addPlayerToChallenge(queue, target);
                 playSeries('challenge', queue, interaction);
             } else {

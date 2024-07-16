@@ -24,7 +24,7 @@ module.exports = {
             try {
                 await user.send({ embeds: [leaveEmbed(user)] });
             } catch (error) {
-                console.error(`leave: Unable to DM ${user.username} (${user.id})\n${error}`);
+                console.warn(`Unable to DM ${user.username} (${user.id}) - ${error}`);
             }
             console.log(`${user.username} left Lobby ${queueId}`);
         } else {

@@ -20,11 +20,17 @@ module.exports = {
         try {
             players = await fetchLeaderboards(MAX_PLAYERS);
             if (!players) {
-                return interaction.editReply({ content: 'Huh. I guess there are no active players.', ephemeral: true });
+                return interaction.editReply({
+                    content: 'Huh. I guess there are no active players.',
+                    ephemeral: true
+                }).catch(console.error);
             }
         } catch (err) {
             console.error(err);
-            return interaction.editReply({ content: 'An error occurred while trying to fetch the leaderboards.', ephemeral: true });
+            return interaction.editReply({
+                content: 'An error occurred while trying to fetch the leaderboards.',
+                ephemeral: true
+            }).catch(console.error);
         }
 
         let playerInfo = [];

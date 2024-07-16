@@ -15,15 +15,15 @@ module.exports = {
         ),
     async execute(interaction) {
         try {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ ephemeral: true }).catch(console.error);
             const user = interaction.options.getUser('user') || interaction.user;
             const stats = await findPlayer(user.id);
-            if (!stats) return interaction.editReply({ content: 'The user you specified is not in the database.', ephemeral: true });
+            if (!stats) return interaction.editReply({ content: 'The user you specified is not in the database.', ephemeral: true }).catch(console.error);
 
-            return interaction.editReply({ embeds: [statsEmbed(user, stats)], ephemeral: true });
+            return interaction.editReply({ embeds: [statsEmbed(user, stats)], ephemeral: true }).catch(console.error);
         } catch (err) {
             console.error(err);
-            return interaction.editReply({ content: 'An error occurred while trying to retrieve the player.', ephemeral: true });
+            return interaction.editReply({ content: 'An error occurred while trying to retrieve the player.', ephemeral: true }).catch(console.error);
         }
     }
 };
