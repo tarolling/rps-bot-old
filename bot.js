@@ -78,4 +78,4 @@ async function run() {
     }
 }
 
-if (process.argv.findIndex(s => s === 'dev') === -1) run().catch(console.dir);
+run().catch(console.dir);

@@ -18,14 +18,17 @@ module.exports = async (interaction) => {
 
         let club = await clubCollection.findOne(playerQuery);
         if (!club) {
-            interaction.editReply({ content: 'You are not a part of any club.', ephemeral: true });
+            interaction.editReply({ content: 'You are not a part of any club.', ephemeral: true }).catch(console.error);
             return;
         }
 
         const leaderCheck = await clubCollection.findOne({ leader: userId });
         if (leaderCheck) {
             if (club.members.length !== 1) {
-                interaction.editReply({ content: 'You cannot leave a club that you are a leader of, and that has other members in it.', ephemeral: true });
+                interaction.editReply({
+                    content: 'You cannot leave a club that you are a leader of, and that has other members in it.',
+                    ephemeral: true
+                }).catch(console.error);
                 return;
             }
             club = await clubCollection.findOneAndDelete({ _id: club._id });
@@ -33,7 +36,7 @@ module.exports = async (interaction) => {
             club = await clubCollection.findOneAndUpdate(playerQuery, { $pull: playerQuery });
         }
 
-        interaction.editReply({ content: `You have successfully left ${club.name}!` });
+        interaction.editReply({ content: `You have successfully left ${club.name}!` }).catch(console.error);
     } catch (err) {
         console.error(err);
     } finally {

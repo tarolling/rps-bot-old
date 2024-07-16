@@ -12,7 +12,12 @@ module.exports = async (id, queue) => {
     console.log(`Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
     while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
-        await playGame(id, queue);
+        try {
+            await playGame(id, queue);
+        } catch (error) {
+            console.warn(`playSeries: Unable to DM someone - ${error}`);
+            break;
+        }
 
         console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
 
@@ -25,10 +30,26 @@ module.exports = async (id, queue) => {
 
             /* Just send one if they are the same */
             if (pOne.channel?.id === pTwo.channel?.id) {
-                pOne.channel.send(msg);
+                try {
+                    await pOne.channel.send(msg);
+                } catch (error) {
+                    console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+                }
             } else {
-                if (pOne.channel !== null) pOne.channel.send(msg);
-                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                if (pOne.channel !== null) {
+                    try {
+                        await pOne.channel.send(msg);
+                    } catch (error) {
+                        console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+                    }
+                }
+                if (pTwo.channel !== null) {
+                    try {
+                        await pTwo.channel.send(msg);
+                    } catch (error) {
+                        console.warn(`playSeries: Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id}) - ${error}`);
+                    }
+                }
             }
         }
 
@@ -38,9 +59,24 @@ module.exports = async (id, queue) => {
         pTwo.choice = '';
     }
 
+    if (pOne.score == -2 || pTwo.score === -2) {
+        for (const player of players) {
+            try {
+                await player.user.send('One or more players was unable to be DMed, so the lobby has been aborted.');
+            } catch (error) {
+                console.warn(`playSeries: Unable to DM ${player.user.username} (${player.user.id}) - ${error}`);
+            }
+        }
+        return deleteRankQueue(id);
+    }
+
     if (pOne.score == -1 || pTwo.score == -1) {
         for (const player of players) {
-            player.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+            try {
+                await player.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+            } catch (error) {
+                console.warn(`playSeries: Unable to DM ${player.user.username} (${player.user.id}) - ${error}`);
+            }
         }
         console.log(`DOUBLE AFK | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
@@ -49,17 +85,37 @@ module.exports = async (id, queue) => {
 
             /* Just send one if they are the same */
             if (pOne.channel?.id === pTwo.channel?.id) {
-                pOne.channel.send(msg);
+                try {
+                    await pOne.channel.send(msg);
+                } catch (error) {
+                    console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+                }
             } else {
-                if (pOne.channel !== null) pOne.channel.send(msg);
-                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                if (pOne.channel !== null) {
+                    try {
+                        await pOne.channel.send(msg);
+                    } catch (error) {
+                        console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+                    }
+                }
+                if (pTwo.channel !== null) {
+                    try {
+                        await pTwo.channel.send(msg);
+                    } catch (error) {
+                        console.warn(`playSeries: Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id}) - ${error}`);
+                    }
+                }
             }
         }
-        return;
+        return deleteRankQueue(id);
     }
 
     for (const player of players) {
-        await player.user.send({ embeds: [results(id, queue)] });
+        try {
+            await player.user.send({ embeds: [results(id, queue)] });
+        } catch (error) {
+            console.warn(`playSeries: Unable to DM ${player.user.username} (${player.user.id}) - ${error}`);
+        }
     }
 
     if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
@@ -67,10 +123,27 @@ module.exports = async (id, queue) => {
 
         /* Just send one if they are the same */
         if (pOne.channel?.id === pTwo.channel?.id) {
-            pOne.channel.send(msg);
+            try {
+                await pOne.channel.send(msg);
+            } catch (error) {
+                console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+            }
+
         } else {
-            if (pOne.channel !== null) pOne.channel.send(msg);
-            if (pTwo.channel !== null) pTwo.channel.send(msg);
+            if (pOne.channel !== null) {
+                try {
+                    await pOne.channel.send(msg);
+                } catch (error) {
+                    console.warn(`playSeries: Could not send results to channel ${pOne.channel.name} (${pOne.channel.id}) - ${error}`);
+                }
+            }
+            if (pTwo.channel !== null) {
+                try {
+                    await pTwo.channel.send(msg);
+                } catch (error) {
+                    console.warn(`playSeries: Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id}) - ${error}`);
+                }
+            }
         }
     }
 
@@ -91,7 +164,11 @@ module.exports = async (id, queue) => {
 
         for (let i = 0; i < players.length; i++) {
             const newStats = await findPlayer(players[i].user.id);
-            await players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] });
+            try {
+                await players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] });
+            } catch (error) {
+                console.warn(`playSeries: Unable to DM ${players[i].user.username} (${players[i].user.id}) - ${error}`)
+            }
             console.log(`${players[i].user.username} | ${oldElo[i]} --> ${newStats.elo}`);
         }
 

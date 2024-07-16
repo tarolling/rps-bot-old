@@ -24,18 +24,18 @@ module.exports = async (interaction) => {
 
         let validation = await clubCollection.findOne(playerQuery);
         if (validation) {
-            interaction.editReply({ content: `You are already a member of ${validation.name}!` });
+            interaction.editReply({ content: `You are already a member of ${validation.name}!` }).catch(console.error);
             return;
         }
 
         validation = await clubCollection.findOne(clubQuery);
         if (validation) {
-            interaction.editReply({ content: 'This club already exists.' });
+            interaction.editReply({ content: 'This club already exists.' }).catch(console.error);
             return;
         }
 
         await clubCollection.insertOne(doc);
-        interaction.editReply({ content: `You have successfully created ${clubName}!` });
+        interaction.editReply({ content: `You have successfully created ${clubName}!` }).catch(console.error);
     } catch (err) {
         console.error(err);
     } finally {
