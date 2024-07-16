@@ -31,22 +31,17 @@ module.exports = async (id, queue) => {
     let gameResults = {};
 
     let msgOne, msgTwo;
+
     try {
         msgOne = await pOne.user.send({ embeds: [game(id, queue)], components: [row] });
+    } catch {
+        throw new Error(`${pOne.user.username} (${pOne.user.id})`);
+    }
+
+    try {
         msgTwo = await pTwo.user.send({ embeds: [game(id, queue)], components: [row] });
     } catch {
-        if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
-            const msg = `Lobby ${id} aborted - ` +
-                'One or both players have DMs from server members turned off. Please enable them in your Discord settings.';
-            /* Just send one if they are the same */
-            if (pOne.channel?.id === pTwo.channel?.id) {
-                pOne.channel.send(msg);
-            } else {
-                if (pOne.channel !== null) pOne.channel.send(msg);
-                if (pTwo.channel !== null) pTwo.channel.send(msg);
-            }
-        }
-        return;
+        throw new Error(`${pTwo.user.username} (${pTwo.user})`);
     }
 
     gameMessages.push(msgOne);
@@ -95,7 +90,7 @@ module.exports = async (id, queue) => {
                     gameResults.pOneMsg.edit({ embeds: [gameWin(queue)] });
                 } else {
                     try {
-                        pOne.user.send({ embeds: [gameWin(queue)] });
+                        await pOne.user.send({ embeds: [gameWin(queue)] });
                     } catch {
                         if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
                             const msg = `Lobby ${id} aborted - ` +

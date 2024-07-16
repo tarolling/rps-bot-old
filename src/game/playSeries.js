@@ -12,7 +12,12 @@ module.exports = async (id, queue) => {
     console.log(`Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
     while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
-        await playGame(id, queue);
+        try {
+            await playGame(id, queue);
+        } catch (error) {
+            console.error(`bot can't DM someone: ${error}`);
+            return;
+        }
 
         console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
 
@@ -25,10 +30,11 @@ module.exports = async (id, queue) => {
 
             /* Just send one if they are the same */
             if (pOne.channel?.id === pTwo.channel?.id) {
-                pOne.channel.send(msg);
+                pOne.channel.send(msg)
+                    .catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
             } else {
-                if (pOne.channel !== null) pOne.channel.send(msg);
-                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                if (pOne.channel !== null) pOne.channel.send(msg).catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
+                if (pTwo.channel !== null) pTwo.channel.send(msg).catch(console.log(`Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id})`));
             }
         }
 
@@ -40,7 +46,8 @@ module.exports = async (id, queue) => {
 
     if (pOne.score == -1 || pTwo.score == -1) {
         for (const player of players) {
-            player.user.send('Neither player chose an option in time, so the lobby has been aborted.');
+            player.user.send('Neither player chose an option in time, so the lobby has been aborted.')
+                .catch(console.log(`Unable to DM ${player.user.username} (${player.user.id})`));
         }
         console.log(`DOUBLE AFK | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
 
@@ -49,17 +56,19 @@ module.exports = async (id, queue) => {
 
             /* Just send one if they are the same */
             if (pOne.channel?.id === pTwo.channel?.id) {
-                pOne.channel.send(msg);
+                pOne.channel.send(msg)
+                    .catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
             } else {
-                if (pOne.channel !== null) pOne.channel.send(msg);
-                if (pTwo.channel !== null) pTwo.channel.send(msg);
+                if (pOne.channel !== null) pOne.channel.send(msg).catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
+                if (pTwo.channel !== null) pTwo.channel.send(msg).catch(console.log(`Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id})`));
             }
         }
         return;
     }
 
     for (const player of players) {
-        await player.user.send({ embeds: [results(id, queue)] });
+        await player.user.send({ embeds: [results(id, queue)] })
+            .catch(console.log(`Unable to DM ${player.user.username} (${player.user.id})`));
     }
 
     if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
@@ -67,10 +76,11 @@ module.exports = async (id, queue) => {
 
         /* Just send one if they are the same */
         if (pOne.channel?.id === pTwo.channel?.id) {
-            pOne.channel.send(msg);
+            pOne.channel.send(msg)
+                .catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
         } else {
-            if (pOne.channel !== null) pOne.channel.send(msg);
-            if (pTwo.channel !== null) pTwo.channel.send(msg);
+            if (pOne.channel !== null) pOne.channel.send(msg).catch(console.log(`Could not send results to channel ${pOne.channel.name} (${pOne.channel.id})`));
+            if (pTwo.channel !== null) pTwo.channel.send(msg).catch(console.log(`Could not send results to channel ${pTwo.channel.name} (${pTwo.channel.id})`));
         }
     }
 
@@ -91,7 +101,8 @@ module.exports = async (id, queue) => {
 
         for (let i = 0; i < players.length; i++) {
             const newStats = await findPlayer(players[i].user.id);
-            await players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] });
+            players[i].user.send({ embeds: [eloResult(players[i].user, oldElo[i], newStats.elo)] })
+                .catch(console.log(`Unable to DM ${players[i].user.username} (${players[i].user.id})`));
             console.log(`${players[i].user.username} | ${oldElo[i]} --> ${newStats.elo}`);
         }
 

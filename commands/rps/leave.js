@@ -8,25 +8,29 @@ module.exports = {
         .setName('l')
         .setDescription('Leave the queue.'),
     async execute(interaction) {
-        const { user, channel } = interaction;
+        const { user } = interaction;
         const queueId = await findPlayerQueue(user);
         const queue = await removePlayerFromQueue(queueId, user);
 
         if (interaction.deferred || interaction.replied) {
-            if (!queue) return channel.send({ content: 'You are not in a queue.', ephemeral: true });
+            if (!queue) return interaction.editReply({ content: 'You are not in a queue.', ephemeral: true }).catch(console.error);
 
             if (interaction.inGuild()) {
-                await channel.send({ embeds: [leaveEmbed(user)] });
+                interaction.editReply({ embeds: [leaveEmbed(user)] }).catch(console.error);
                 console.log(`${user.username} left Lobby ${queueId}`);
                 return;
             }
 
-            await user.send({ embeds: [leaveEmbed(user)] });
+            try {
+                await user.send({ embeds: [leaveEmbed(user)] });
+            } catch (error) {
+                console.error(`leave: Unable to DM ${user.username} (${user.id})\n${error}`);
+            }
             console.log(`${user.username} left Lobby ${queueId}`);
         } else {
-            if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true });
+            if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true }).catch(console.error);
 
-            await interaction.reply({ embeds: [leaveEmbed(user)] });
+            interaction.reply({ embeds: [leaveEmbed(user)] }).catch(console.error);
             console.log(`${user.username} left Lobby ${queueId}`);
         }
     }

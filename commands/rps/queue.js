@@ -33,7 +33,7 @@ module.exports = {
             }
 
             let playerQueueId = await findPlayerQueue(user);
-            if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true });
+            if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true }).catch(console.error);
 
             playerQueueId = await findOpenQueue();
             if (!playerQueueId) {
@@ -45,21 +45,18 @@ module.exports = {
                 await leave.execute(interaction);
             }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
 
-            console.log(`${user.username}'s channel: ${channel}`);
-            const queue = (channel?.type === ChannelType.DM) ? await addPlayerToQueue(playerQueueId, user, timeout) :
-                await addPlayerToQueue(playerQueueId, user, timeout, channel);
-            if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
+            const queue = await addPlayerToQueue(playerQueueId, user, timeout, (channel?.type === ChannelType.DM ? null : channel));
+            if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true }).catch(console.error);
 
             const { players, lobbyInfo: { isPlaying } } = queue;
 
-            await interaction.editReply({ embeds: [queueEmbed(queue, user)] });
+            interaction.editReply({ embeds: [queueEmbed(queue, user)] }).catch(console.error);
             console.log(`${user.username} joined Lobby ${playerQueueId}`);
 
             if (players.length === 2) {
                 for (const player of players) {
                     clearTimeout(player.timeout);
                 }
-
                 queue.isPlaying = true;
                 if (!isPlaying) playSeries(playerQueueId, queue);
             }

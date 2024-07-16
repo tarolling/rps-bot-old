@@ -19,12 +19,12 @@ module.exports = {
 
         const target = interaction.options.getUser('user');
 
-        if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true });
-        if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true });
-        if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true });
+        if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true }).catch(console.error);
+        if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true }).catch(console.error);
+        if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true }).catch(console.error);
 
         const playerQueue = await findPlayerQueue(user);
-        if (playerQueue !== null) return interaction.reply({ content: 'You are already in a lobby.', ephemeral: true });
+        if (playerQueue !== null) return interaction.reply({ content: 'You are already in a lobby.', ephemeral: true }).catch(console.error);
 
         let queue = await createChallenge();
         queue = await addPlayerToChallenge(queue, user);
@@ -43,13 +43,15 @@ module.exports = {
             .addComponents(acceptBtn, declineBtn);
 
         try {
-            await target.send({ embeds: [challenge(interaction)], components: [row] })
-                .then(msg => challengeMessage = msg);
-            await interaction.reply({ content: 'Challenge sent!', ephemeral: true });
-        } catch (err) {
-            console.error(err);
-            return interaction.reply({ content: 'Unable to DM user.', ephemeral: true });
+            challengeMessage = await target.send({ embeds: [challenge(interaction)], components: [row] });
+        } catch {
+            return interaction.reply({
+                content: 'Unable to DM user. Either they have DMs from server members turned off, or they blocked me :(',
+                ephemeral: true
+            }).catch(console.error);
         }
+
+        interaction.reply({ content: 'Challenge sent!', ephemeral: true }).catch(console.error);
 
         const filter = i => i.user.id === target.id;
 
@@ -59,19 +61,20 @@ module.exports = {
             i.deferUpdate();
             collector.stop();
             if (i.customId === 'Accept') {
-                await challengeMessage.edit({ components: [] });
+                await challengeMessage.edit({ components: [] }).catch(console.error);
                 queue = await addPlayerToChallenge(queue, target);
                 playSeries('challenge', queue, interaction);
             } else {
-                await challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [], ephemeral: true });
-                interaction.followUp({ content: 'Challenge declined.', ephemeral: true });
+                challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [], ephemeral: true }).catch(console.error);
+                interaction.followUp({ content: 'Challenge declined.', ephemeral: true }).catch(console.error);
             }
         });
 
         collector.on('end', async (collected, reason) => {
             if (reason !== 'time') return;
-            await challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [], ephemeral: true });
-            await interaction.followUp({ content: 'Challenge timed out.', ephemeral: true });
+
+            challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [], ephemeral: true }).catch(console.error);
+            interaction.followUp({ content: 'Challenge timed out.', ephemeral: true }).catch(console.error);
         });
     }
 };
