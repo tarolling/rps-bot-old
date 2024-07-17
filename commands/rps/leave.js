@@ -16,7 +16,7 @@ module.exports = {
             if (!queue) return interaction.editReply({ content: 'You are not in a queue.', ephemeral: true }).catch(console.error);
 
             if (interaction.inGuild()) {
-                interaction.editReply({ embeds: [leaveEmbed(user)] }).catch(console.error);
+                interaction.followUp({ embeds: [leaveEmbed(user)] }).catch(console.error);
                 console.log(`${user.username} left Lobby ${queueId}`);
                 return;
             }
