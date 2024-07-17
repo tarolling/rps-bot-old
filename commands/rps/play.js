@@ -15,6 +15,8 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction) {
+        await interaction.deferReply().catch(console.error);
+
         const { user } = interaction;
 
         const target = interaction.options.getUser('user');
@@ -52,7 +54,7 @@ module.exports = {
             }).catch(console.error);
         }
 
-        interaction.reply({ content: 'Challenge sent!', ephemeral: true }).catch(console.error);
+        interaction.reply({ content: 'Challenge sent! Waiting for response...', ephemeral: true }).catch(console.error);
 
         const filter = i => i.user.id === target.id;
 
@@ -67,7 +69,7 @@ module.exports = {
                 playSeries('challenge', queue, interaction);
             } else {
                 challengeMessage.edit({ content: 'Challenge declined.', embeds: [], components: [], ephemeral: true }).catch(console.error);
-                interaction.followUp({ content: 'Challenge declined.', ephemeral: true }).catch(console.error);
+                interaction.editReply({ content: 'Challenge declined.', ephemeral: true }).catch(console.error);
             }
         });
 
@@ -75,7 +77,7 @@ module.exports = {
             if (reason !== 'time') return;
 
             challengeMessage.edit({ content: 'Challenge timed out.', embeds: [], components: [], ephemeral: true }).catch(console.error);
-            interaction.followUp({ content: 'Challenge timed out.', ephemeral: true }).catch(console.error);
+            interaction.editReply({ content: 'Challenge timed out.', ephemeral: true }).catch(console.error);
         });
     }
 };

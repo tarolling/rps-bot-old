@@ -11,7 +11,7 @@ module.exports = {
         .setName('lb')
         .setDescription('View the global leaderboard.'),
     async execute(interaction) {
-        interaction.deferReply()
+        await interaction.deferReply()
             .catch(console.error);
 
         const { client } = interaction;
