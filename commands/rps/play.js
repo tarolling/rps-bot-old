@@ -15,6 +15,8 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction) {
+        await interaction.deferReply().catch(console.error);
+
         const { user } = interaction;
 
         const target = interaction.options.getUser('user');
