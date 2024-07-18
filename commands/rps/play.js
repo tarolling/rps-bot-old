@@ -21,12 +21,12 @@ module.exports = {
 
         const target = interaction.options.getUser('user');
 
-        if (!target) return interaction.reply({ content: 'Unable to find user.', ephemeral: true }).catch(console.error);
-        if (target.id === interaction.user.id) return interaction.reply({ content: 'You cannot challenge yourself.', ephemeral: true }).catch(console.error);
-        if (target.bot) return interaction.reply({ content: 'You cannot challenge a bot.', ephemeral: true }).catch(console.error);
+        if (!target) return interaction.editReply({ content: 'Unable to find user.', ephemeral: true }).catch(console.error);
+        if (target.id === interaction.user.id) return interaction.editReply({ content: 'You cannot challenge yourself.', ephemeral: true }).catch(console.error);
+        if (target.bot) return interaction.editReply({ content: 'You cannot challenge a bot.', ephemeral: true }).catch(console.error);
 
         const playerQueue = await findPlayerQueue(user);
-        if (playerQueue !== null) return interaction.reply({ content: 'You are already in a lobby.', ephemeral: true }).catch(console.error);
+        if (playerQueue !== null) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true }).catch(console.error);
 
         let queue = await createChallenge();
         queue = await addPlayerToChallenge(queue, user);
@@ -54,7 +54,7 @@ module.exports = {
             }).catch(console.error);
         }
 
-        interaction.reply({ content: 'Challenge sent! Waiting for response...', ephemeral: true }).catch(console.error);
+        interaction.editReply({ content: 'Challenge sent! Waiting for response...', ephemeral: true }).catch(console.error);
 
         const filter = i => i.user.id === target.id;
 
