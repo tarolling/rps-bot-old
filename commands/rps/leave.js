@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, escapeUnderline } = require('discord.js');
 const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manageQueues');
 const { leave: leaveEmbed } = require('../../src/embeds');
 
@@ -17,21 +17,21 @@ module.exports = {
 
             if (interaction.inGuild()) {
                 interaction.followUp({ embeds: [leaveEmbed(user)] }).catch(console.error);
-                console.log(`${user.username} left Lobby ${queueId}`);
+                console.log(`${escapeUnderline(user.username)} left Lobby ${queueId}`);
                 return;
             }
 
             try {
                 await user.send({ embeds: [leaveEmbed(user)] });
             } catch (error) {
-                console.warn(`Unable to DM ${user.username} (${user.id}) - ${error}`);
+                console.warn(`Unable to DM ${escapeUnderline(user.username)} (${user.id}) - ${error}`);
             }
-            console.log(`${user.username} left Lobby ${queueId}`);
+            console.log(`${escapeUnderline(user.username)} left Lobby ${queueId}`);
         } else {
             if (!queue) return interaction.reply({ content: 'You are not in a queue.', ephemeral: true }).catch(console.error);
 
             interaction.reply({ embeds: [leaveEmbed(user)] }).catch(console.error);
-            console.log(`${user.username} left Lobby ${queueId}`);
+            console.log(`${escapeUnderline(user.username)} left Lobby ${queueId}`);
         }
     }
 };

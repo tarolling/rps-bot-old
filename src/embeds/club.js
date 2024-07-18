@@ -1,11 +1,11 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, escapeMarkdown } = require('discord.js');
 const { defaultColor, footer } = require('./embed');
 
 module.exports = (club) => {
     const { name, abbreviation } = club;
     return new EmbedBuilder()
         .setColor(defaultColor)
-        .setTitle(name)
-        .setDescription(abbreviation)
+        .setTitle(escapeMarkdown(name))
+        .setDescription(escapeMarkdown(abbreviation))
         .setFooter(footer);
 };

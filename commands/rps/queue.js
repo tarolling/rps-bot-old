@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, escapeUnderline } = require('discord.js');
 const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { queue: queueEmbed } = require('../../src/embeds');
 const { findPlayer, registerPlayer } = require('../../src/db');
@@ -51,7 +51,7 @@ module.exports = {
             const { players, lobbyInfo: { isPlaying } } = queue;
 
             interaction.editReply({ embeds: [queueEmbed(queue, user)] }).catch(console.error);
-            console.log(`${user.username} joined Lobby ${playerQueueId}`);
+            console.log(`${escapeUnderline(user.username)} joined Lobby ${playerQueueId}`);
 
             if (players.length === 2) {
                 for (const player of players) {

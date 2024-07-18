@@ -1,3 +1,4 @@
+const { escapeUnderline } = require('discord.js');
 const { findPlayer, adjustElo, adjustStats, rankValidate } = require('../db');
 const { eloResult, results } = require('../embeds');
 const { deleteRankQueue } = require('./manageQueues');
@@ -9,7 +10,7 @@ module.exports = async (id, queue) => {
     let pOne = players[0];
     let pTwo = players[1];
 
-    console.log(`Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
+    console.log(`Lobby ${id} | ${escapeUnderline(pOne.user.username)} vs. ${escapeUnderline(pTwo.user.username)}`);
 
     while (pOne.score < 4 && pTwo.score < 4 && pOne.score != -1 && pTwo.score != -1) {
         try {
@@ -19,14 +20,14 @@ module.exports = async (id, queue) => {
             break;
         }
 
-        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${pOne.user.username}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${pTwo.user.username}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
+        console.log(`L${id}-G${queue.lobbyInfo.gameNumber} | ${escapeUnderline(pOne.user.username)}: ${pOne.score} (${pOne.choice || 'DNR'}) | ${escapeUnderline(pTwo.user.username)}: ${pTwo.score} (${pTwo.choice || 'DNR'})`);
 
         if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
             const pOneEmoji = pOne.choice === 'Rock' ? ':rock:' : (pOne.choice === 'Paper' ? ':page_facing_up:' : (pOne.choice === 'Scissors' ? ':scissors:' : ':x:'));
             const pTwoEmoji = pTwo.choice === 'Rock' ? ':rock:' : (pTwo.choice === 'Paper' ? ':page_facing_up:' : (pTwo.choice === 'Scissors' ? ':scissors:' : ':x:'));
 
             const msg = `__**Lobby #${id} - Game ${queue.lobbyInfo.gameNumber}**__\n` +
-                `${pOne.user.username}  ${pOneEmoji}  ${pOne.score}  |  ${pTwo.score}  ${pTwoEmoji}  ${pTwo.user.username}`;
+                `${escapeUnderline(pOne.user.username)}  ${pOneEmoji}  ${pOne.score}  |  ${pTwo.score}  ${pTwoEmoji}  ${escapeUnderline(pTwo.user.username)}`;
 
             /* Just send one if they are the same */
             if (pOne.channel?.id === pTwo.channel?.id) {
@@ -78,7 +79,7 @@ module.exports = async (id, queue) => {
                 console.warn(`playSeries: Unable to DM ${player.user.username} (${player.user.id}) - ${error}`);
             }
         }
-        console.log(`DOUBLE AFK | Lobby ${id} | ${pOne.user.username} vs. ${pTwo.user.username}`);
+        console.log(`DOUBLE AFK | Lobby ${id} | ${escapeUnderline(pOne.user.username)} vs. ${escapeUnderline(pTwo.user.username)}`);
 
         if (!id.includes('challenge') && !(pOne.channel === null && pTwo.channel === null)) {
             const msg = { embeds: [results(id, queue)] };
@@ -147,7 +148,7 @@ module.exports = async (id, queue) => {
         }
     }
 
-    console.log(`Lobby ${id} Results | ${pOne.user.username}: ${pOne.score} | ${pTwo.user.username}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
+    console.log(`Lobby ${id} Results | ${escapeUnderline(pOne.user.username)}: ${pOne.score} | ${escapeUnderline(pTwo.user.username)}: ${pTwo.score} | Games Played: ${queue.lobbyInfo.gameNumber}`);
     if (id.includes('challenge')) return;
 
     if (pOne.score === 4 || pTwo.score === 4) {

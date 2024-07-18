@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, bold, escapeMarkdown } = require('discord.js');
 const { defaultColor, footer } = require('./embed');
 
 module.exports = (id, queue) => {
@@ -7,9 +7,9 @@ module.exports = (id, queue) => {
     return new EmbedBuilder()
         .setColor(defaultColor)
         .setTitle(`Lobby #${id} Results`)
-        .setDescription(`**Games Played:** ${gameNumber}`)
+        .setDescription(`${bold("Games Played:")} ${gameNumber}`)
         .setThumbnail(winner?.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 }))
-        .addFields({ name: `${players[0].score}`, value: players[0].user.username, inline: true },
-            { name: `${players[1].score}`, value: players[1].user.username, inline: true })
+        .addFields({ name: `${players[0].score}`, value: escapeMarkdown(players[0].user.username), inline: true },
+            { name: `${players[1].score}`, value: escapeMarkdown(players[1].user.username), inline: true })
         .setFooter(footer);
 };

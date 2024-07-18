@@ -19,7 +19,7 @@ module.exports = async (numPlayers) => {
 
         return players;
     } catch (err) {
-        console.log(err);
+        console.error(err);
     } finally {
         await dbClient.close();
     }
