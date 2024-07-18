@@ -48,7 +48,7 @@ module.exports = {
             challengeMessage = await target.send({ embeds: [challenge(interaction)], components: [row] });
         } catch (error) {
             console.warn(`Unable to DM ${target.username} (${target.id}) - ${error}`);
-            return interaction.reply({
+            return interaction.editReply({
                 content: 'Unable to DM user. Either they have DMs from server members turned off, or they blocked me :(',
                 ephemeral: true
             }).catch(console.error);
