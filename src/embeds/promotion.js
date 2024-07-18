@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, bold } = require('discord.js');
 const { footer } = require('./embed');
 const ranks = require('../../config/ranks.json');
 
@@ -7,7 +7,7 @@ module.exports = (user, rank) => {
     return new EmbedBuilder()
         .setColor(color)
         .setTitle('Promotion')
-        .setDescription(`You have been promoted to **${rank}**`)
+        .setDescription(`You have been promoted to ${bold(rank)}`)
         .setThumbnail(user?.displayAvatarURL({ extension: 'png', forceStatic: false, size: 1024 }))
         .setFooter(footer);
 };
