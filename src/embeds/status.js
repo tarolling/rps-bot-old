@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, userMention, escapeMarkdown } = require('discord.js');
 const { defaultColor, footer } = require('./embed');
 
 module.exports = (queue) => {
@@ -6,6 +6,6 @@ module.exports = (queue) => {
     return new EmbedBuilder()
         .setColor(defaultColor)
         .setTitle('RPS Status')
-        .setDescription(`Player in queue: <@!${players[0].user.id}>`)
+        .setDescription(`Player in queue: ${escapeMarkdown(players[0].user.username)} (${userMention(players[0].user.id)})`)
         .setFooter(footer);
 };

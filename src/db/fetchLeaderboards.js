@@ -21,7 +21,7 @@ module.exports = async (numRecords, type) => {
 
         return records;
     } catch (err) {
-        console.log(err);
+        console.error(err);
     } finally {
         await dbClient.close();
     }

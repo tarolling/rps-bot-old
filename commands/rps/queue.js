@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, escapeUnderline } = require('discord.js');
 const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
 const { queue: queueEmbed } = require('../../src/embeds');
 const { findPlayer, registerPlayer } = require('../../src/db');
@@ -22,7 +22,7 @@ module.exports = {
                 .setMaxValue(60)
         ),
     async execute(interaction) {
-        await interaction.deferReply();
+        await interaction.deferReply().catch(console.error);
 
         const release = await mutex.acquire();
         try {
@@ -33,7 +33,7 @@ module.exports = {
             }
 
             let playerQueueId = await findPlayerQueue(user);
-            if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true });
+            if (playerQueueId) return interaction.editReply({ content: 'You are already in a lobby.', ephemeral: true }).catch(console.error);
 
             playerQueueId = await findOpenQueue();
             if (!playerQueueId) {
@@ -45,20 +45,18 @@ module.exports = {
                 await leave.execute(interaction);
             }, (queueLength ? queueLength : defaultTimeout) * 60 * 1000);
 
-            const queue = (channel?.type === ChannelType.DM) ? await addPlayerToQueue(playerQueueId, user, timeout) :
-                await addPlayerToQueue(playerQueueId, user, timeout, channel);
-            if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true });
+            const queue = await addPlayerToQueue(playerQueueId, user, timeout, (channel?.type === ChannelType.DM ? null : channel));
+            if (!queue) return interaction.editReply({ content: 'The lobby is full, please wait until another is created.', ephemeral: true }).catch(console.error);
 
             const { players, lobbyInfo: { isPlaying } } = queue;
 
-            await interaction.editReply({ embeds: [queueEmbed(queue, user)] });
-            console.log(`${user.username} joined Lobby ${playerQueueId}`);
+            interaction.editReply({ embeds: [queueEmbed(queue, user)] }).catch(console.error);
+            console.log(`${escapeUnderline(user.username)} joined Lobby ${playerQueueId}`);
 
             if (players.length === 2) {
                 for (const player of players) {
                     clearTimeout(player.timeout);
                 }
-
                 queue.isPlaying = true;
                 if (!isPlaying) playSeries(playerQueueId, queue);
             }

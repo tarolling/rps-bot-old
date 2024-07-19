@@ -41,7 +41,11 @@ module.exports = async (queue) => {
 
             winnerNewRank = winnerNewRank.charAt(0).toUpperCase() + winnerNewRank.slice(1);
             winnerRank = winnerRank.charAt(0).toUpperCase() + winnerRank.slice(1);
-            await winner.send({ embeds: [promotion(winner, winnerNewRank)] });
+            try {
+                await winner.send({ embeds: [promotion(winner, winnerNewRank)] });
+            } catch (error) {
+                console.warn(`rankValidate: Unable to DM ${winner.username} (${winner.id}) - ${error}`);
+            }
         }
 
         if (loserDoc.elo <= loserThreshold && loserThreshold !== null) {
@@ -57,7 +61,11 @@ module.exports = async (queue) => {
             loserNewRank = loserNewRank.charAt(0).toUpperCase() + loserNewRank.slice(1);
             loserRank = loserRank.charAt(0).toUpperCase() + loserRank.slice(1);
 
-            await loser.send({ embeds: [demotion(loser, loserNewRank)] });
+            try {
+                await loser.send({ embeds: [demotion(loser, loserNewRank)] });
+            } catch (error) {
+                console.warn(`rankValidate: Unable to DM ${loser.username} (${loser.id}) - ${error}`);
+            }
         }
     } catch (err) {
         console.error(err);

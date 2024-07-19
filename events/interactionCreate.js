@@ -1,4 +1,4 @@
-const { Events } = require('discord.js');
+const { Events, escapeUnderline } = require('discord.js');
 
 
 module.exports = {
@@ -16,15 +16,17 @@ module.exports = {
         try {
             const start = Date.now();
             await command.execute(interaction);
-            console.log(`COMMAND: ${interaction.commandName} by ${interaction.user.username} ` +
+            console.log(`COMMAND: ${interaction.commandName} by ${escapeUnderline(interaction.user.username)} ` +
                 `(${interaction.user.id} - Guild: ${interaction.guildId}) Locale: ${interaction.locale}, ` +
                 `msecs: ${Date.now() - start}`);
         } catch (error) {
             console.error(error);
             if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+                await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true })
+                    .catch(console.error);
             } else {
-                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+                await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
+                    .catch(console.error);
             }
         }
     }

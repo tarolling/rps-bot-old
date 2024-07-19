@@ -4,7 +4,7 @@ const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
-const token = (process.argv.findIndex(s => s === 'dev') == -1) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
+const token = (process.argv.findIndex(s => s === 'dev') === -1) ? process.env.PROD_TOKEN : process.env.DEV_TOKEN;
 
 const client = new Client({
     intents: [
@@ -77,4 +77,5 @@ async function run() {
         await dbClient.close();
     }
 }
+
 run().catch(console.dir);

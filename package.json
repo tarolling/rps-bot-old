@@ -1,7 +1,7 @@
 {
   "name": "rps-bot",
   "description": "A bot that lets users play rock, paper, scissors against each other.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": "tarolling",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "mongodb": "^6.8.0"
   },
   "devDependencies": {
-    "eslint": "^9.6.0"
+    "eslint": "^9.7.0"
   },
   "nodeVersion": "21.6.2"
 }

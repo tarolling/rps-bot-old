@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, escapeMarkdown } = require('discord.js');
 const { footer } = require('./embed');
 const ranks = require('../../config/ranks.json');
 
@@ -12,10 +12,10 @@ module.exports = (user, data) => {
     const color = (Object.keys(ranks).includes(rank.toLowerCase())) ? ranks[rank.toLowerCase()].color : null;
     return new EmbedBuilder()
         .setColor(color)
-        .setTitle(user.username)
+        .setTitle(escapeMarkdown(user.username))
         .setDescription(rank)
         .addFields({ name: 'Elo', value: `${elo}`, inline: true },
-            { name: 'Club', value: `${club || 'None'}`, inline: true },
+            { name: 'Club', value: `${club}`, inline: true },
             { name: 'Career Games Played', value: `${career_games}`, inline: true },
             { name: 'Career Wins', value: `${career_wins}`, inline: true },
             { name: 'Career Losses', value: `${career_losses}`, inline: true },

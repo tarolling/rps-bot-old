@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder, userMention, escapeMarkdown } = require('discord.js');
 const { defaultColor, footer } = require('./embed');
 
 module.exports = (data) => {
@@ -7,7 +7,7 @@ module.exports = (data) => {
         .setTitle('Global Leaderboard')
         .addFields(data.map(({ player, elo }) => ({
             name: `${elo}`,
-            value: `${player.username} (<@${player.id}>)`
+            value: `${escapeMarkdown(player.username)} (${userMention(player.id)})`
         })))
         .setFooter(footer);
 };

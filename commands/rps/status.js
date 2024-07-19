@@ -9,7 +9,7 @@ module.exports = {
         .setDescription('Display the status of the queue.'),
     async execute(interaction) {
         const queue = await displayQueue();
-        if (!queue) return interaction.reply({ content: 'There are no active queues. Type `/q` to start one!', ephemeral: true });
+        if (!queue) return interaction.reply({ content: 'There are no active queues. Type `/q` to start one!', ephemeral: true }).catch(console.error);
 
         await interaction.reply({ embeds: [status(queue)] }).catch(console.error);
     }

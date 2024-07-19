@@ -62,7 +62,9 @@ module.exports = {
         ),
     async execute(interaction) {
         try {
-            await interaction.deferReply({ ephemeral: true });
+            await interaction.deferReply({ ephemeral: true })
+                .catch(console.error);
+
             const subcommand = interaction.options.getSubcommand();
 
             switch (subcommand) {
@@ -80,15 +82,22 @@ module.exports = {
                 }
                 case 'view': {
                     const club = await viewClub(interaction);
-                    if (!club) return interaction.editReply({ content: 'This club could not be found!', ephemeral: true });
-                    await interaction.editReply({ embeds: [clubEmbed(club)], ephemeral: true });
+                    if (!club) {
+                        return interaction.editReply({ content: 'This club could not be found!', ephemeral: true })
+                            .catch(console.error);
+                    }
+                    await interaction.editReply({ embeds: [clubEmbed(club)], ephemeral: true })
+                        .catch(console.error);
                     break;
                 }
                 default: break;
             }
         } catch (err) {
             console.error(err);
-            return interaction.editReply({ content: 'An error occurred while trying to join/create a club.', ephemeral: true });
+            return interaction.editReply({
+                content: 'An error occurred while trying to join/create a club.',
+                ephemeral: true
+            }).catch(console.error);
         }
     }
 };
