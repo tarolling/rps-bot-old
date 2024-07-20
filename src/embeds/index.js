@@ -1,5 +1,6 @@
 const challenge = require('./challenge');
-const club = require('./club');
+const clubInfo = require('./club-info');
+const clubList = require('./club-list');
 const demotion = require('./demotion');
 const eloResult = require('./eloResult');
 const game = require('./game');
@@ -18,7 +19,8 @@ const waiting = require('./waiting');
 
 module.exports = {
     challenge,
-    club,
+    clubInfo,
+    clubList,
     demotion,
     eloResult,
     game,
