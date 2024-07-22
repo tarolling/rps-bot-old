@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, ModalBuilder } = require('discord.js');
-const { createClub, joinClub, leaveClub, fetchClub, fetchClubs } = require('../../src/db/clubs');
+const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { createClub, joinClub, leaveClub, fetchClub, fetchClubs, fetchPlayerClub } = require('../../src/db/clubs');
 const { clubInfo: clubInfoEmbed, clubList } = require('../../src/embeds');
 
 
@@ -64,21 +64,45 @@ module.exports = {
                 )
         ),
     async execute(interaction) {
-        await interaction.deferReply({ ephemeral: true }).catch(console.error);
-
         const subcommand = interaction.options.getSubcommand();
-
         switch (subcommand) {
             case 'join': {
+                await interaction.deferReply({ ephemeral: true }).catch(console.error);
                 return joinClub(interaction);
             }
             case 'leave': {
+                await interaction.deferReply({ ephemeral: true }).catch(console.error);
                 return leaveClub(interaction);
             }
             case 'create': {
+                const clubCheck = await fetchPlayerClub(interaction.user.id);
+                if (clubCheck) {
+                    return interaction.editReply({ content: `You are already a member of ${clubCheck.name}!` }).catch(console.error);
+                }
+
+                const modal = new ModalBuilder()
+                    .setCustomId('create-club')
+                    .setTitle('Create New Club');
+
+                const clubName = new TextInputBuilder()
+                    .setCustomId('club-name')
+                    .setLabel('Club Name')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Pittsburgh Steelers')
+                    .setMinLength(3)
+                    .setMaxLength(32)
+                    .setRequired(true)
+
+                const actionRow = new ActionRowBuilder().addComponents(clubName);
+
+                modal.addComponents(actionRow);
+                await interaction.showModal(modal);
+                await interaction.awaitModalSubmit();
                 return createClub(interaction);
             }
             case 'view': {
+                await interaction.deferReply({ ephemeral: true }).catch(console.error);
+
                 const clubName = interaction.options.getString('name') ?? null;
                 if (clubName !== null) {
                     const clubDocs = await fetchClub(clubName);

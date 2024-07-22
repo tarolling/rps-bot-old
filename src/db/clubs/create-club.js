@@ -10,7 +10,6 @@ module.exports = async (interaction) => {
         }
     });
     const userId = interaction.user.id;
-    const playerQuery = { members: userId };
 
     const clubName = interaction.options.getString('name');
     const clubAbbr = interaction.options.getString('abbreviation').toUpperCase();
@@ -22,13 +21,7 @@ module.exports = async (interaction) => {
         await dbClient.connect();
         const clubCollection = dbClient.db('rps').collection('clubs');
 
-        let validation = await clubCollection.findOne(playerQuery);
-        if (validation) {
-            interaction.editReply({ content: `You are already a member of ${validation.name}!` }).catch(console.error);
-            return;
-        }
-
-        validation = await clubCollection.findOne(clubQuery);
+        const validation = await clubCollection.findOne(clubQuery);
         if (validation) {
             interaction.editReply({ content: 'This club already exists.' }).catch(console.error);
             return;
