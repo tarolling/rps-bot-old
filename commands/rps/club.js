@@ -1,5 +1,5 @@
-const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require('discord.js');
-const { createClub, joinClub, leaveClub, viewClub } = require('../../src/db/clubs');
+const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType, ModalBuilder } = require('discord.js');
+const { createClub, joinClub, leaveClub, fetchClub, fetchClubs } = require('../../src/db/clubs');
 const { clubInfo: clubInfoEmbed, clubList } = require('../../src/embeds');
 
 
@@ -79,12 +79,14 @@ module.exports = {
                 return createClub(interaction);
             }
             case 'view': {
-                const clubDocs = await viewClub(interaction, MAX_CLUBS);
-                if (clubDocs === null || clubDocs === undefined) {
-                    return interaction.editReply({ content: 'This club could not be found!', ephemeral: true })
-                        .catch(console.error);
-                }
-                if (Object.keys(clubDocs).includes('_id')) {
+                const clubName = interaction.options.getString('name') ?? null;
+                if (clubName !== null) {
+                    const clubDocs = await fetchClub(clubName);
+                    if (clubDocs === null || clubDocs === undefined) {
+                        return interaction.editReply({ content: 'This club could not be found!', ephemeral: true })
+                            .catch(console.error);
+                    }
+
                     const leaderInfo = await interaction.client.users.fetch(clubDocs.leader);
                     const newMembers = [];
                     for (const memberId of clubDocs.members) {
@@ -107,9 +109,10 @@ module.exports = {
                     return interaction.editReply({ embeds: [clubInfoEmbed(newClubInfo)], ephemeral: true }).catch(console.error);
                 }
 
+                const clubDocs = await fetchClubs(MAX_CLUBS);
                 clubDocs.sort((a, b) => b.members.length - a.members.length);
-                let clubInfo = [];
 
+                let clubInfo = [];
                 const lazyLoad = async (startIndex, endIndex) => {
                     for (let i = startIndex; i < endIndex; i++) {
                         clubInfo.push({
