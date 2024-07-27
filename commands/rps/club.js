@@ -77,7 +77,7 @@ module.exports = {
             case 'create': {
                 const clubCheck = await fetchPlayerClub(interaction.user.id);
                 if (clubCheck) {
-                    return interaction.editReply({ content: `You are already a member of ${clubCheck.name}!` }).catch(console.error);
+                    return interaction.reply({ content: `You are already a member of ${clubCheck.name}!` }).catch(console.error);
                 }
 
                 const modal = new ModalBuilder()
@@ -93,12 +93,29 @@ module.exports = {
                     .setMaxLength(32)
                     .setRequired(true)
 
-                const actionRow = new ActionRowBuilder().addComponents(clubName);
+                const abbreviation = new TextInputBuilder()
+                    .setCustomId('club-abbr')
+                    .setLabel('Club Abbreviation')
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('PIT')
+                    .setMinLength(2)
+                    .setMaxLength(4)
+                    .setRequired(true)
 
-                modal.addComponents(actionRow);
-                await interaction.showModal(modal);
-                await interaction.awaitModalSubmit();
-                return createClub(interaction);
+                const actionRowOne = new ActionRowBuilder().addComponents(clubName);
+                const actionRowTwo = new ActionRowBuilder().addComponents(abbreviation);
+
+                modal.addComponents(actionRowOne, actionRowTwo);
+                await interaction.showModal(modal).catch(console.error);
+                const submittedInfo = await interaction.awaitModalSubmit({
+                    time: 120_000,
+                    filter: i => i.user.id === interaction.user.id
+                }).catch(console.error);
+
+                if (submittedInfo) {
+                    return createClub(submittedInfo);
+                }
+                break;
             }
             case 'view': {
                 await interaction.deferReply({ ephemeral: true }).catch(console.error);

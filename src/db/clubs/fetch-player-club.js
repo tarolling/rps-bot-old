@@ -10,7 +10,7 @@ module.exports = async (userID) => {
         }
     });
 
-    const query = { members: [userID] };
+    const query = { members: userID };
 
     try {
         await dbClient.connect();
