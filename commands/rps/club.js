@@ -15,23 +15,6 @@ module.exports = {
             subcommand
                 .setName('create')
                 .setDescription('Create a new club.')
-                .addStringOption(option =>
-                    option
-                        .setName('name')
-                        .setDescription('Type in the name of your club.')
-                        .setMinLength(3)
-                        .setMaxLength(32)
-                        .setRequired(true)
-                )
-                .addStringOption(option =>
-                    option
-                        .setName('abbreviation')
-                        .setDescription(`Type in your club's abbreviation.`)
-                        .setMinLength(2)
-                        .setMaxLength(4)
-                        .setRequired(true)
-                )
-
         )
         .addSubcommand(subcommand =>
             subcommand
