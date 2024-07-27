@@ -10,10 +10,9 @@ module.exports = async (interaction) => {
         }
     });
     const userId = interaction.user.id;
-    const playerQuery = { members: userId };
 
-    const clubName = interaction.options.getString('name');
-    const clubAbbr = interaction.options.getString('abbreviation').toUpperCase();
+    const clubName = interaction.fields.getTextInputValue('club-name');
+    const clubAbbr = interaction.fields.getTextInputValue('club-abbr').toUpperCase();
     const clubQuery = { name: { $regex: clubName, $options: 'i' } };
 
     const doc = { leader: userId, name: clubName, abbreviation: clubAbbr, members: [userId] };
@@ -22,20 +21,14 @@ module.exports = async (interaction) => {
         await dbClient.connect();
         const clubCollection = dbClient.db('rps').collection('clubs');
 
-        let validation = await clubCollection.findOne(playerQuery);
+        const validation = await clubCollection.findOne(clubQuery);
         if (validation) {
-            interaction.editReply({ content: `You are already a member of ${validation.name}!` }).catch(console.error);
-            return;
-        }
-
-        validation = await clubCollection.findOne(clubQuery);
-        if (validation) {
-            interaction.editReply({ content: 'This club already exists.' }).catch(console.error);
+            interaction.reply({ content: 'This club already exists.', ephemeral: true }).catch(console.error);
             return;
         }
 
         await clubCollection.insertOne(doc);
-        interaction.editReply({ content: `You have successfully created ${clubName}!` }).catch(console.error);
+        interaction.reply({ content: `You have successfully created ${clubName}!`, ephemeral: true }).catch(console.error);
     } catch (err) {
         console.error(err);
     } finally {

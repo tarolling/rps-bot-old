@@ -1,12 +1,14 @@
 const challenge = require('./challenge');
-const club = require('./club');
+const clubInfo = require('./club-info');
+const clubLeaderboard = require('./club-leaderboard');
+const clubList = require('./club-list');
 const demotion = require('./demotion');
 const eloResult = require('./eloResult');
 const game = require('./game');
 const gameDraw = require('./gameDraw');
 const gameLoss = require('./gameLoss');
 const gameWin = require('./gameWin');
-const leaderboard = require('./leaderboard');
+const playerLeaderboard = require('./player-leaderboard');
 const leave = require('./leave');
 const promotion = require('./promotion');
 const queue = require('./queue');
@@ -18,14 +20,16 @@ const waiting = require('./waiting');
 
 module.exports = {
     challenge,
-    club,
+    clubInfo,
+    clubLeaderboard,
+    clubList,
     demotion,
     eloResult,
     game,
     gameDraw,
     gameLoss,
     gameWin,
-    leaderboard,
+    playerLeaderboard,
     leave,
     promotion,
     queue,

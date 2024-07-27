@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
 
-module.exports = async (numPlayers) => {
+module.exports = async (clubName) => {
     const dbClient = new MongoClient(process.env.DB_URI, {
         serverApi: {
             version: ServerApiVersion.v1,
@@ -9,15 +9,13 @@ module.exports = async (numPlayers) => {
             deprecationErrors: true
         }
     });
+    const query = { name: { $regex: clubName, $options: 'i' } };
 
     try {
         await dbClient.connect();
-        const collection = dbClient.db('rps').collection('players');
+        const collection = dbClient.db('rps').collection('clubs');
 
-        const players = await collection.find().sort({ elo: -1 }).limit(numPlayers).toArray();
-        if (!players || players?.length === 0) return null;
-
-        return players;
+        return await collection.findOne(query);
     } catch (err) {
         console.error(err);
     } finally {

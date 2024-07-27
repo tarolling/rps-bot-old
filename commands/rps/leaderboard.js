@@ -1,24 +1,21 @@
 const { SlashCommandBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, ComponentType } = require('discord.js');
-const { fetchLeaderboards } = require('../../src/db');
-const { leaderboard } = require('../../src/embeds');
+const { fetchPlayerLeaderboard } = require('../../src/db');
+const { playerLeaderboard } = require('../../src/embeds');
 
-const MAX_PAGES = 5;
-const MAX_PLAYERS = 50;
+const MAX_PLAYERS = 25;
 
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('lb')
-        .setDescription('View the global leaderboard.'),
+        .setDescription('View the global leaderboards.'),
     async execute(interaction) {
-        await interaction.deferReply()
+        await interaction.deferReply({ ephemeral: true })
             .catch(console.error);
-
-        const { client } = interaction;
 
         let players;
         try {
-            players = await fetchLeaderboards(MAX_PLAYERS);
+            players = await fetchPlayerLeaderboard(MAX_PLAYERS);
             if (!players) {
                 return interaction.editReply({
                     content: 'Huh. I guess there are no active players.',
@@ -33,26 +30,20 @@ module.exports = {
             }).catch(console.error);
         }
 
+        const numPerPage = 10;
+        const maxPageIndex = Math.ceil(MAX_PLAYERS / numPerPage) - 1;
         let playerInfo = [];
+        let currentPageIndex = 0;
 
-        const lazyLoad = async (startIndex, endIndex) => {
-            for (let i = startIndex; i < endIndex; i++) {
+        await (async () => {
+            for (let i = 0; i < players.length; i++) {
+                const player = await interaction.client.users.fetch(players[i].user_id);
                 playerInfo.push({
-                    player: await client.users.fetch(players[i].user_id),
+                    player: player,
                     elo: players[i].elo
                 });
             }
-        };
-
-        const numPerPage = MAX_PLAYERS / MAX_PAGES;
-        let currentPageIndex = 0;
-
-        try {
-            await lazyLoad(currentPageIndex * numPerPage, (currentPageIndex * numPerPage) + numPerPage);
-        } catch (e) {
-            console.error(`lazyLoad: ${e}`);
-            return;
-        }
+        })();
 
         const backButton = new ButtonBuilder()
             .setCustomId('back')
@@ -65,9 +56,8 @@ module.exports = {
         let row = new ActionRowBuilder()
             .addComponents(forwardButton);
 
-
         const message = await interaction.editReply({
-            embeds: [leaderboard(playerInfo.slice(currentPageIndex * numPerPage, (currentPageIndex * numPerPage) + numPerPage))],
+            embeds: [playerLeaderboard(playerInfo.slice(currentPageIndex * numPerPage, Math.min(MAX_PLAYERS, (currentPageIndex * numPerPage) + numPerPage)))],
             components: [row]
         }).catch(console.error);
 
@@ -80,12 +70,16 @@ module.exports = {
                 currentPageIndex = Math.max(0, currentPageIndex - 1);
                 row.components = (currentPageIndex === 0) ? [forwardButton] : [backButton, forwardButton];
             } else if (i.customId === 'forward') {
-                currentPageIndex = Math.min(MAX_PAGES - 1, currentPageIndex + 1);
-                if (playerInfo.length === currentPageIndex * numPerPage) await lazyLoad(currentPageIndex * numPerPage, (currentPageIndex * numPerPage) + numPerPage);
-                row.components = (currentPageIndex === MAX_PAGES - 1) ? [backButton] : [backButton, forwardButton];
+                currentPageIndex = Math.min(currentPageIndex + 1, maxPageIndex);
+                row.components = (currentPageIndex === maxPageIndex) ? [backButton] : [backButton, forwardButton];
             }
             interaction.editReply({
-                embeds: [leaderboard(playerInfo.slice(currentPageIndex * numPerPage, (currentPageIndex * numPerPage) + numPerPage))],
+                embeds: [
+                    playerLeaderboard(playerInfo.slice(
+                        currentPageIndex * numPerPage,
+                        Math.min(MAX_PLAYERS, (currentPageIndex * numPerPage) + numPerPage)
+                    ))
+                ],
                 components: [row]
             }).catch(console.error);
             collector.resetTimer({ idle: 60_000 });

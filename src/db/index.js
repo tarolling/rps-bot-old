@@ -1,6 +1,6 @@
 const adjustElo = require('./adjustElo');
 const adjustStats = require('./adjustStats');
-const fetchLeaderboards = require('./fetchLeaderboards');
+const fetchPlayerLeaderboard = require('./fetch-player-leaderboard');
 const findPlayer = require('./findPlayer');
 const rankValidate = require('./rankValidate');
 const registerPlayer = require('./registerPlayer');
@@ -9,7 +9,7 @@ const registerPlayer = require('./registerPlayer');
 module.exports = {
     adjustElo,
     adjustStats,
-    fetchLeaderboards,
+    fetchPlayerLeaderboard,
     findPlayer,
     rankValidate,
     registerPlayer,
