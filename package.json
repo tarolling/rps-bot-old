@@ -17,7 +17,7 @@
     "@discordjs/rest": "^2.3.0",
     "async-mutex": "^0.5.0",
     "browser-sync": "^3.0.2",
-    "discord-api-types": "^0.37.92",
+    "discord-api-types": "^0.37.93",
     "discord.js": "^14.15.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
