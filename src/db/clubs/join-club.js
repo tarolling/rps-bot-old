@@ -25,12 +25,18 @@ module.exports = async (interaction) => {
             return;
         }
 
-        validation = await clubCollection.findOneAndUpdate(clubQuery, { $push: playerQuery });
+        validation = await clubCollection.findOne(clubQuery);
         if (!validation) {
             interaction.editReply({ content: 'This club does not exist.' });
             return;
         }
 
+        if (validation.members.length >= 25) {
+            interaction.editReply({ content: 'This club is at the maximum member limit.' });
+            return;
+        }
+
+        await clubCollection.findOneAndUpdate(clubQuery, { $push: playerQuery });
         interaction.editReply({ content: `You have successfully joined ${validation.name}!` }).catch(console.error);
     } catch (err) {
         console.error(err);
