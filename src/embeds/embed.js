@@ -1,4 +1,4 @@
-const defaultColor = 9125135;
+const defaultColor = 11382189;
 
 const footer = {
     text: "Powered by RPS",
