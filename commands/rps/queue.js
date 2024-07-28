@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, ChannelType, escapeUnderline } = require('discord.js');
-const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manageQueues');
+const { addPlayerToQueue, findPlayerQueue, createQueue, findOpenQueue } = require('../../src/game/manage-queues');
 const { queue: queueEmbed } = require('../../src/embeds');
 const { findPlayer, registerPlayer } = require('../../src/db');
 const { defaultTimeout } = require('../../config/settings.json');
-const playSeries = require('../../src/game/playSeries');
+const playSeries = require('../../src/game/play-series');
 const leave = require('./leave');
 const { Mutex } = require('async-mutex');
 

@@ -1,16 +1,16 @@
-const adjustElo = require('./adjustElo');
-const adjustStats = require('./adjustStats');
+const adjustRating = require('./adjust-rating');
+const adjustStats = require('./adjust-stats');
 const fetchPlayerLeaderboard = require('./fetch-player-leaderboard');
-const findPlayer = require('./findPlayer');
-const rankValidate = require('./rankValidate');
-const registerPlayer = require('./registerPlayer');
+const findPlayer = require('./find-player');
+const rankValidate = require('./rank-validate');
+const registerPlayer = require('./register-player');
 
 
 module.exports = {
-    adjustElo,
+    adjustRating,
     adjustStats,
     fetchPlayerLeaderboard,
     findPlayer,
     rankValidate,
-    registerPlayer,
+    registerPlayer
 };

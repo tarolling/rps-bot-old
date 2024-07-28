@@ -1,5 +1,5 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const calculateElo = require('../game/calculateElo');
+const calculateRating = require('../game/calculate-rating');
 
 
 
@@ -35,7 +35,7 @@ module.exports = async (queue) => {
         // p1Incr = winner === players[0].user ? incr : decr;
         // p2Incr = winner === players[1].user ? incr : decr;
         // } else { // Variable elo for other ranks
-        const incArr = calculateElo(winnerElo, loserElo);
+        const incArr = calculateRating(winnerElo, loserElo);
         p1Incr = winner === players[0].user ? incArr[0] : incArr[1];
         p2Incr = winner === players[1].user ? incArr[0] : incArr[1];
         // }
