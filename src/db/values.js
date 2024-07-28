@@ -22,7 +22,8 @@ const addValues = (interaction) => {
         current_streak: 0,
         longest_streak: 0,
         career_peak_elo: defaultElo,
-        season_peak_elo: defaultElo
+        season_peak_elo: defaultElo,
+        registered: new Date()
     };
 };
 

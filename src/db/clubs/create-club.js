@@ -15,7 +15,7 @@ module.exports = async (interaction) => {
     const clubAbbr = interaction.fields.getTextInputValue('club-abbr').toUpperCase();
     const clubQuery = { name: { $regex: clubName, $options: 'i' } };
 
-    const doc = { leader: userId, name: clubName, abbreviation: clubAbbr, members: [userId] };
+    const doc = { leader: userId, name: clubName, abbreviation: clubAbbr, members: [userId], createdAt: new Date() };
 
     try {
         await dbClient.connect();
