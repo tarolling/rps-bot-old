@@ -1,7 +1,11 @@
-# Ranked RPS Bot
+<div align="center">
+    <h1>Ranked RPS Discord Bot</h1>
+    <img alt="ranked rps logo" src="https://i.imgur.com/COIj0nK.png">
+</div>
 
-Old version of Ranked RPS bot.
-If you like what you see, leave a star!
+<div align="center">
+    <h3>Current version of Ranked RPS bot. If you like what you see, leave a star!</h3>
+</div>
 
 ## Invite To Your Server
 

@@ -32,7 +32,7 @@ for (const folder of commandFolders) {
         if ('data' in command && 'execute' in command) {
             client.commands.set(command.data.name, command);
         } else {
-            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+            console.warn(`The command at ${filePath} is missing a required "data" or "execute" property`);
         }
     }
 }
@@ -67,13 +67,10 @@ const dbClient = new MongoClient(process.env.DB_URI, {
 
 async function run() {
     try {
-        // Connect the client to the server (optional starting in v4.7)
         await dbClient.connect();
-        // Send a ping to confirm a successful connection
         await dbClient.db("rps").command({ ping: 1 });
         console.log("Pinged deployment. Successfully connected to MongoDB!");
     } finally {
-        // Ensures that the client will close when you finish/error
         await dbClient.close();
     }
 }

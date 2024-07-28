@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, escapeUnderline } = require('discord.js');
-const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manageQueues');
+const { findPlayerQueue, removePlayerFromQueue } = require('../../src/game/manage-queues');
 const { leave: leaveEmbed } = require('../../src/embeds');
 
 

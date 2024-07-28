@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { displayQueue } = require('../../src/game/manageQueues');
+const { displayQueue } = require('../../src/game/manage-queues');
 const { status } = require('../../src/embeds');
 
 

@@ -1,8 +1,8 @@
 const { escapeUnderline } = require('discord.js');
-const { findPlayer, adjustElo, adjustStats, rankValidate } = require('../db');
+const { findPlayer, adjustRating, adjustStats, rankValidate } = require('../db');
 const { eloResult, results } = require('../embeds');
-const { deleteRankQueue } = require('./manageQueues');
-const playGame = require('./playGame');
+const { deleteRankQueue } = require('./manage-queues');
+const playGame = require('./play-game');
 
 
 module.exports = async (id, queue) => {
@@ -159,7 +159,7 @@ module.exports = async (id, queue) => {
             oldElo.push(oldStats.elo);
         }
 
-        await adjustElo(queue);
+        await adjustRating(queue);
         await rankValidate(queue);
         await adjustStats(queue);
 
