@@ -1,4 +1,8 @@
-# Ranked RPS Bot
+<div align="center">
+    <h1>Ranked RPS Bot</h1>
+    <img src="https://i.imgur.com/PuNJsno.png" alt="ranked rps logo">
+</div>
+<br>
 
 Old version of Ranked RPS bot.
 If you like what you see, leave a star!
