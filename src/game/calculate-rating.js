@@ -1,7 +1,7 @@
 const { K, minInc, maxInc, distributionFactor } = require('../../config/settings.json');
 
 
-module.exports = (winnerElo, loserElo, winnerSigma, loserSigma) => {
+module.exports = (winnerElo, loserElo) => {
     // sigma values will be decreased depending on each other
     let larger, smaller, expectedWin, expectedLoss;
     if (winnerElo >= loserElo) {

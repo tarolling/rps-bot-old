@@ -1,10 +1,6 @@
 <div align="center">
     <h1>Ranked RPS Bot</h1>
-    <div alt="ranked rps logo" style="background-image:url('https://i.imgur.com/PuNJsno.png');
-    height: 300px;
-    background-position: center;
-    background-size: cover;">
-    </div>
+    <img alt="ranked rps logo" src="https://i.imgur.com/COIj0nK.png">
 </div>
 
 <div align="center">
