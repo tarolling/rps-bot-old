@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Ranked RPS Bot</h1>
+    <h1>Ranked RPS Discord Bot</h1>
     <img alt="ranked rps logo" src="https://i.imgur.com/COIj0nK.png">
 </div>
 
