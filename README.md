@@ -1,19 +1,16 @@
 <div align="center">
     <h1>Ranked RPS Bot</h1>
-    <!-- <div alt="ranked rps logo" style="background-image:url('https://i.imgur.com/PuNJsno.png');
+    <div alt="ranked rps logo" style="background-image:url('https://i.imgur.com/PuNJsno.png');
     width: 100%;
-    height: 200px;
+    height: 300px;
     background-position: center;
-    /* background-size: cover; */
-    margin: 0 0 0px">
-    </div> -->
-    <img alt="ranked rps logo" src="https://i.imgur.com/PuNJsno.png"
-    style="object-fit:cover;width=500px;height=200px;">
+    background-size: cover;">
+    </div>
 </div>
-<br>
 
-Old version of Ranked RPS bot.
-If you like what you see, leave a star!
+<div align="center">
+    <h3>Current version of Ranked RPS bot. If you like what you see, leave a star!</h3>
+</div>
 
 ## Invite To Your Server
 
