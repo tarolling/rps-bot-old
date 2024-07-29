@@ -11,9 +11,6 @@ const manager = new ShardingManager('./bot.js', { execArgv: ['-r', 'dotenv/confi
 /* Top.gg stats */
 if (process.argv.findIndex(s => s === 'dev') === -1) {
     const ap = AutoPoster(process.env.TOPGG_API_TOKEN, manager);
-    ap.on('posted', (stats) => {
-        console.log(`Posted stats to Top.gg | ${stats.serverCount} servers`);
-    });
     ap.on('error', (error) => {
         console.warn(`Unable to post stats to Top.gg | ${error}`);
     });
