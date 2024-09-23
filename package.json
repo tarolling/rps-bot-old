@@ -28,7 +28,7 @@
     "topgg-autoposter": "^2.0.2"
   },
   "devDependencies": {
-    "eslint": "^9.7.0"
+    "eslint": "^9.11.1"
   },
   "nodeVersion": "21.6.2"
 }
